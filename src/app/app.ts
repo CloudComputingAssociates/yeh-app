@@ -1,12 +1,27 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+// Main App Component - Modern Angular with Material Design
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { MacroNutrientsComponent } from './macro-nutrients/macro-nutrients';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  imports: [MacroNutrientsComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div class="app-container">
+      <header class="app-header">
+        <h1 class="app-title"></h1>
+      </header>
+      
+      <main class="main-content">
+        <app-macro-nutrients 
+          [protein]="75" 
+          [fat]="45" 
+          [carbs]="22" />
+      </main>
+    </div>
+  `,
+  styleUrls: ['./app.scss']
 })
-export class App {
-  protected readonly title = signal('YehWebApp');
+export class AppComponent {
+  title = 'yeh-web-app';
 }

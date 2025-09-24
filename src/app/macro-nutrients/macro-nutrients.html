@@ -1,0 +1,49 @@
+<!-- Macro Nutrients Component Template - Material Design cards with progress bars -->
+<div class="macro-nutrients-container">
+  <mat-card class="indicators-card">
+    <mat-card-content>
+      
+      <!-- Macro Nutrients Grid -->
+      <div class="macro-grid">
+        
+        <!-- Iterate through each macro nutrient -->
+        @for (macro of macroNutrients(); track macro.name) {
+          <mat-card class="macro-card">
+            <mat-card-header>
+              <mat-card-title class="macro-title">{{ macro.name }}</mat-card-title>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <!-- Material Progress Bar -->
+              <mat-progress-bar 
+                mode="determinate" 
+                [value]="macro.percentage"
+                [color]="getColor(macro.percentage)"
+                class="macro-progress-bar">
+              </mat-progress-bar>
+              
+              <!-- Percentage Label -->
+              <div class="percentage-label">
+                <span 
+                  class="percentage-text" 
+                  [style.color]="getRawColor(macro.percentage)">
+                  {{ macro.percentage }}%
+                </span>
+              </div>
+            </mat-card-content>
+            
+          </mat-card>
+        }
+        
+      </div>
+      
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Content Area Below (optional) -->
+  <div class="content-section">
+    <ng-content></ng-content>
+  </div>
+</div>
+
+
