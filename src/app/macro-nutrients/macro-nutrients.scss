@@ -1,129 +1,237 @@
-// Macro Nutrients Component - Always horizontal layout for maximum mobile efficiency
+// src/app/macro-nutrients/macro-nutrients.scss
+
 .macro-nutrients-container {
-  padding: clamp(8px, 2vw, 40px);
+  padding: 0;
   background: white;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   box-sizing: border-box;
+  overflow: hidden;
+
+  .indicators-card {
+    padding: 0 !important;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  // Force override Material's padding
+  ::ng-deep .mat-mdc-card-content {
+    padding: 0 !important;
+    overflow: hidden;
+  }
+
+  ::ng-deep .mat-mdc-card-content:first-child {
+    padding-top: 0 !important;
+  }
+
+  ::ng-deep .mat-mdc-card-content:last-child {
+    padding-bottom: 0 !important;
+  }
+
+  // Ultra-minimal toggle spacing
+  .single-toggle {
+    text-align: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    .period-toggle-text {
+      font-size: clamp(14px, 4vw, 30px);
+      font-weight: 500;
+      color: #2563eb;
+      background-color: #bfdbfe;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin: 0;
+
+      &:hover {
+        background-color: #9333ea;
+        color: white;
+      }
+
+      &:active {
+        background-color: #7e22ce;
+      }
+    }
+  }
 
   .macro-grid {
     display: grid;
-    // ALWAYS 3 columns - never stack vertically
     grid-template-columns: repeat(3, 1fr);
-    gap: clamp(4px, 2vw, 60px);
+    gap: 32px;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+    margin: 0;
+    padding: 0 16px 2px 16px;
+    box-sizing: border-box;
 
     .macro-card {
       text-align: center;
       width: 100%;
       min-width: 0;
+      background: transparent;
+      box-shadow: none;
+      border: none;
+      padding: 0;
+      margin: 0;
       
       .macro-title {
-        // Very aggressive scaling for 3-column mobile layout
-        font-size: clamp(8px, 3.5vw, 18px);
-        font-weight: 400;
-        color: #333;
-        margin: 0 0 clamp(2px, 1vw, 16px) 0;
-        letter-spacing: 0.2px;
-        line-height: 1.1;
+        font-size: clamp(12px, 3.5vw, 24px);
+        font-weight: 500;
+        color: #374151;
+        margin: 0 0 1px 0;
+        line-height: 1;
       }
 
-      .progress-container {
+      .custom-progress-container {
         width: 100%;
+        margin: 0 0 1px 0;
         
-        .progress-track {
+        .custom-progress-track {
           width: 100%;
-          // Extra small for mobile 3-column layout
-          height: clamp(2px, 1.2vw, 10px);
+          height: 12px;
           background-color: #e5e7eb;
-          border-radius: clamp(1px, 0.6vw, 5px);
+          border-radius: 6px;
           overflow: hidden;
-          margin-bottom: clamp(2px, 0.8vw, 12px);
           position: relative;
 
-          .progress-fill {
+          .custom-progress-fill {
             height: 100%;
-            border-radius: clamp(1px, 0.6vw, 5px);
+            border-radius: 6px;
             transition: width 0.3s ease;
             position: absolute;
             top: 0;
             left: 0;
           }
         }
-
-        .percentage-label {
-          .percentage-text {
-            // Very small percentage text for mobile
-            font-size: clamp(6px, 3vw, 16px);
-            font-weight: 500;
-            color: #666;
-            line-height: 1;
-          }
-        }
       }
-    }
-  }
-}
 
-// Ultra-compact for very small phones but still 3 columns
-@media (max-width: 320px) {
-  .macro-nutrients-container {
-    padding: 4px 2px;
-    
-    .macro-grid {
-      gap: 2px;
-      
-      .macro-card {
-        .macro-title {
-          font-size: 7px;
-          margin-bottom: 1px;
-        }
+      .percentage-label {
+        margin: 0;
+        padding: 0;
         
-        .progress-container {
-          .progress-track {
-            height: 2px;
-            margin-bottom: 1px;
-            border-radius: 1px;
+        .percentage-toggle-btn {
+          background-color: #bfdbfe;
+          border: none;
+          padding: 2px 6px;
+          margin: 0;
+          cursor: pointer;
+          font-family: inherit;
+          width: auto;
+          display: inline-block;
+          outline: none;
+          border-radius: 6px;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            background-color: #9333ea;
             
-            .progress-fill {
-              border-radius: 1px;
+            .percentage-text {
+              color: white;
+            }
+          }
+
+          &:active {
+            background-color: #7e22ce;
+            
+            .percentage-text {
+              color: white;
             }
           }
           
-          .percentage-label .percentage-text {
-            font-size: 5px;
+          .percentage-text {
+            font-size: clamp(10px, 3vw, 20px);
+            font-weight: 500;
+            color: #2563eb;
+            line-height: 1;
+            display: block;
+            transition: color 0.2s ease;
           }
         }
       }
     }
   }
+
+  // Loading overlay
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #e5e7eb;
+      border-top: 2px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
 }
 
-// Extreme mobile - still horizontal but super tiny
-@media (max-width: 280px) {
+// Animation keyframes
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Ultra-compact for very small phones
+@media (max-width: 320px) {
   .macro-nutrients-container {
-    padding: 2px 1px;
+    .single-toggle .period-toggle-text {
+      font-size: 10px;
+      padding: 1px 4px;
+    }
     
     .macro-grid {
       gap: 1px;
       
       .macro-card {
         .macro-title {
-          font-size: 6px;
-          margin-bottom: 1px;
+          font-size: 10px;
         }
         
-        .progress-container {
-          .progress-track {
-            height: 1px;
-            margin-bottom: 1px;
-          }
-          
-          .percentage-label .percentage-text {
-            font-size: 4px;
-          }
+        .custom-progress-container .custom-progress-track {
+          height: 5px;
+        }
+        
+        .percentage-label .percentage-toggle-btn .percentage-text {
+          font-size: 9px;
+        }
+      }
+    }
+  }
+}
+
+// Extreme mobile
+@media (max-width: 280px) {
+  .macro-nutrients-container {
+    .single-toggle .period-toggle-text {
+      font-size: 9px;
+      padding: 1px 3px;
+    }
+    
+    .macro-grid {
+      .macro-card {
+        .macro-title {
+          font-size: 9px;
+        }
+        
+        .custom-progress-container .custom-progress-track {
+          height: 4px;
+        }
+        
+        .percentage-label .percentage-toggle-btn .percentage-text {
+          font-size: 8px;
         }
       }
     }
