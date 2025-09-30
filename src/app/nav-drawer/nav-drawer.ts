@@ -28,7 +28,7 @@ interface MenuItem {
         <div class="drawer-header">
           <div class="user-info">
             <img 
-              src="images/profile_pic.jpg" 
+              src="images/profile_pic.png" 
               alt="Profile" 
               class="drawer-profile-image" />
             <div class="user-details">

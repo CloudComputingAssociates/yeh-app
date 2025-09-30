@@ -14,7 +14,7 @@ import { NavDrawerComponent } from './nav-drawer/nav-drawer';
     <app-nav-drawer #navDrawer>
       <div class="app-container">
         <app-top-app-bar 
-          [userProfileImage]="'images/profile_pic.jpg'"
+          [userProfileImage]="'images/profile_pic.png'"
           (menuClick)="navDrawer.toggleDrawer()">
         </app-top-app-bar>
         
