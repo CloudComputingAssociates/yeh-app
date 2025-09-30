@@ -37,9 +37,10 @@
     width: 100%;
     padding: 6px 0 0 0;
     margin: 0;
+    margin-bottom: -2px;
 
     .period-toggle-text {
-      font-size: 14px;
+      font-size: clamp(14px, 3.5vw, 18px);
       font-weight: 500;
       color: #4da6ff;
       background-color: #000000;
@@ -69,7 +70,7 @@
     gap: 32px;
     width: 100%;
     margin: 0;
-    padding: 0 16px 12px 16px;
+    padding: 0 16px 8px 16px;
     box-sizing: border-box;
 
     .macro-card {
@@ -86,13 +87,13 @@
         font-size: clamp(12px, 3.5vw, 24px);
         font-weight: 500;
         color: rgba(255, 255, 255, 0.9);
-        margin: 0 0 8px 0;
+        margin: 0 0 6px 0;
         line-height: 1;
       }
 
       .custom-progress-container {
         width: 100%;
-        margin: 0 0 8px 0;
+        margin: 0 0 6px 0;
         
         .custom-progress-track {
           width: 100%;

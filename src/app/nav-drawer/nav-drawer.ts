@@ -33,7 +33,7 @@ interface MenuItem {
               class="drawer-profile-image" />
             <div class="user-details">
               <h3 class="user-name">youeatinghealthy</h3>
-              <p class="user-subtitle">Track your nutrition</p>
+              <p class="user-subtitle">What should I eat?</p>
             </div>
           </div>
           <button 
@@ -56,17 +56,6 @@ interface MenuItem {
             <mat-icon class="chevron-icon">chevron_right</mat-icon>
           </mat-list-item>
         </mat-nav-list>
-
-        <!-- Footer -->
-        <div class="drawer-footer">
-          <button 
-            mat-button 
-            (click)="navigateTo('/settings', drawer)"
-            class="settings-button">
-            <mat-icon>settings</mat-icon>
-            <span>Settings</span>
-          </button>
-        </div>
       </mat-sidenav>
 
       <!-- Main Content -->
