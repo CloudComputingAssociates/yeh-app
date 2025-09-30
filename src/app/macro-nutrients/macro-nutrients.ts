@@ -36,8 +36,8 @@ export interface MacroDisplayData {
             <span 
               class="period-toggle-text"
               (click)="toggleTimePeriod()"
-              [attr.aria-label]="'Toggle between day and week view. Currently showing: ' + (currentTimePeriod === 'day' ? 'Day' : 'Week')">
-              {{ currentTimePeriod === 'day' ? 'Day' : 'Week' }}
+              [attr.aria-label]="'Toggle between today and week view. Currently showing: ' + (currentTimePeriod === 'day' ? 'Today' : 'Week')">
+              {{ currentTimePeriod === 'day' ? 'Today' : 'Week' }}
             </span>
           </div>
 
@@ -194,7 +194,7 @@ export class MacroNutrientsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Toggle between time periods (Day/Week)
+   * Toggle between time periods (Today/Week)
    */
   toggleTimePeriod(): void {
     const newPeriod: TimePeriod = this.currentTimePeriod === 'day' ? 'week' : 'day';

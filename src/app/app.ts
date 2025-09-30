@@ -1,23 +1,28 @@
 // src/app/app.ts
 // Main App Component - Modern Angular with Material Design
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { MacroNutrientsComponent } from './macro-nutrients/macro-nutrients';
+import { TopAppBarComponent } from './top-app-bar/top-app-bar';
+import { NavDrawerComponent } from './nav-drawer/nav-drawer';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MacroNutrientsComponent],
+  imports: [MacroNutrientsComponent, TopAppBarComponent, NavDrawerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="app-container">
-      <header class="app-header">
-        <h1 class="app-title"></h1>
-      </header>
-      
-      <main class="main-content">
-        <app-macro-nutrients />
-      </main>
-    </div>
+    <app-nav-drawer #navDrawer>
+      <div class="app-container">
+        <app-top-app-bar 
+          [userProfileImage]="'images/profile_pic.jpg'"
+          (menuClick)="navDrawer.toggleDrawer()">
+        </app-top-app-bar>
+        
+        <main class="main-content">
+          <app-macro-nutrients />
+        </main>
+      </div>
+    </app-nav-drawer>
   `,
   styleUrls: ['./app.scss']
 })
