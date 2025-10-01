@@ -71,10 +71,11 @@ export class NavDrawerComponent {
   @Output() drawerToggle = new EventEmitter<void>();
 
   menuItems: MenuItem[] = [
-    { label: 'My Foods', icon: '🍽️', route: '/my-foods' },
-    { label: 'Planner', icon: '📅', route: '/planner' },
-    { label: 'Recipes', icon: '📖', route: '/recipes' },
-    { label: 'Videos', icon: '🎥', route: '/videos' }
+    { label: 'Home', icon: '🏠', route: '/' },
+    { label: 'Foods', icon: '🍽️', route: '/foods' },
+    { label: 'Plan', icon: '📋', route: '/plan' },
+    { label: 'Prep', icon: '👨‍🍳', route: '/prep' },
+    { label: 'Trend', icon: '📈', route: '/trend' }  // Also fixed typo: 'trand' → 'trend'
   ];
 
   constructor(private router: Router) {}
