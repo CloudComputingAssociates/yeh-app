@@ -33,25 +33,38 @@
   .main-content {
     flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 2px 16px 16px 16px;
+    flex-direction: column;
+    padding: 2px 16px 0 16px;
     background-color: #000000;
+    min-height: 0; // Important for flex children to respect container height
+    
+    // Macro nutrients - fixed height
+    app-macro-nutrients {
+      flex-shrink: 0;
+      margin-bottom: 16px;
+    }
+    
+    // Chat display - grows to fill remaining space
+    app-chat-display {
+      flex: 1;
+      min-height: 0; // Allows scrolling within this component
+      margin-bottom: 16px;
+      display: flex;
+    }
+    
+    // Chat input - fixed height at bottom
+    app-chat-input {
+      flex-shrink: 0;
+    }
     
     // Tablet padding
     @media (min-width: 768px) {
-      padding: 2px 32px 32px 32px;
+      padding: 2px 32px 0 32px;
     }
     
     // Desktop padding
     @media (min-width: 1024px) {
-      padding: 2px 48px 48px 48px;
-    }
-    
-    // Center content with max width
-    > * {
-      width: 100%;
-      max-width: 1200px;
+      padding: 2px 48px 0 48px;
     }
   }
 }

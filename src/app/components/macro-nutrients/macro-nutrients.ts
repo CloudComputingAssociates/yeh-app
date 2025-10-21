@@ -1,12 +1,12 @@
-// src/app/macro-nutrients/macro-nutrients.ts
+// src/app/components/macro-nutrients/macro-nutrients.ts
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UserProfileService } from '../services/user-profile.service';
-import { TimePeriod, NutritionResponse } from '../models/nutrition.model';
+import { UserProfileService } from '../../services/user-profile.service';
+import { TimePeriod, NutritionResponse } from '../../models/nutrition.model';
 
 export interface MacroNutrient {
   name: string;
@@ -147,6 +147,7 @@ export class MacroNutrientsComponent implements OnInit, OnDestroy {
 
   /**
    * Transform nutrition response data for component display
+   * Order: Protein, Carbs, Fat
    */
   private transformNutritionData(
     data: NutritionResponse, 
@@ -163,21 +164,21 @@ export class MacroNutrientsComponent implements OnInit, OnDestroy {
         )
       },
       {
-        name: 'Fat',
-        actual: timePeriod === 'day' ? data.nutrients.fat['actual-day'] : data.nutrients.fat['actual-week'],
-        target: data.nutrients.fat['target-grams'],
-        percentage: this.calculatePercentage(
-          timePeriod === 'day' ? data.nutrients.fat['actual-day'] : data.nutrients.fat['actual-week'],
-          data.nutrients.fat['target-grams']
-        )
-      },
-      {
         name: 'Carbs',
         actual: timePeriod === 'day' ? data.nutrients.carb['actual-day'] : data.nutrients.carb['actual-week'],
         target: data.nutrients.carb['target-grams'],
         percentage: this.calculatePercentage(
           timePeriod === 'day' ? data.nutrients.carb['actual-day'] : data.nutrients.carb['actual-week'],
           data.nutrients.carb['target-grams']
+        )
+      },
+      {
+        name: 'Fat',
+        actual: timePeriod === 'day' ? data.nutrients.fat['actual-day'] : data.nutrients.fat['actual-week'],
+        target: data.nutrients.fat['target-grams'],
+        percentage: this.calculatePercentage(
+          timePeriod === 'day' ? data.nutrients.fat['actual-day'] : data.nutrients.fat['actual-week'],
+          data.nutrients.fat['target-grams']
         )
       }
     ];
