@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "YehApp": {
+    "yeh-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
