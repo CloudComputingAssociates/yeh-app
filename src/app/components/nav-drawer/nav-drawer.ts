@@ -32,7 +32,7 @@ interface MenuItem {
               alt="Profile" 
               class="drawer-profile-image" />
             <div class="user-details">
-              <h3 class="user-name">youeatinghealthy</h3>
+              <h3 class="user-name">You Eating Healthy</h3>
               <p class="user-subtitle">What should I eat?</p>
             </div>
           </div>
