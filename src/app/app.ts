@@ -1,6 +1,6 @@
 // src/app/app.ts
-// Main App Component - Modern Angular with Material Design
-import { Component, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RouterOutlet } from '@angular/router';  // ADD THIS
 import { MacroNutrientsComponent } from './components/macro-nutrients/macro-nutrients';
 import { TopAppBarComponent } from './components/top-app-bar/top-app-bar';
 import { NavDrawerComponent } from './components/nav-drawer/nav-drawer';
@@ -11,6 +11,7 @@ import { ChatInputComponent } from './components/chat/chat-input';
   selector: 'app-root',
   standalone: true,
   imports: [
+    RouterOutlet,  // ADD THIS
     MacroNutrientsComponent, 
     TopAppBarComponent, 
     NavDrawerComponent,
@@ -19,6 +20,8 @@ import { ChatInputComponent } from './components/chat/chat-input';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <router-outlet />  <!-- ADD THIS - it will render CallbackComponent when at /callback -->
+    
     <app-nav-drawer #navDrawer>
       <div class="app-container">
         <app-top-app-bar 
