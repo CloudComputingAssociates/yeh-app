@@ -61,10 +61,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "YehWebApp:build:production"
+              "buildTarget": "yeh-app:build:production"
             },
             "development": {
-              "buildTarget": "YehWebApp:build:development"
+              "buildTarget": "yeh-app:build:development"
             }
           },
           "defaultConfiguration": "development"

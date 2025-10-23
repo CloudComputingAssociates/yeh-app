@@ -1,14 +1,13 @@
-// src/app/top-app-bar/top-app-bar.ts
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
+import { ProfileMenuComponent } from '../profile-menu/profile-menu';
 
 @Component({
   selector: 'app-top-app-bar',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [MatIconModule, MatButtonModule, ProfileMenuComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="top-app-bar">
       <div class="app-bar-content">
@@ -22,31 +21,16 @@ import { Router } from '@angular/router';
         
         <h1 class="app-title">youeatinghealthy</h1>
         
-        <button 
-          class="profile-button" 
-          (click)="navigateToProfile()"
-          aria-label="View profile">
-          <img 
-            [src]="userProfileImage" 
-            alt="User profile"
-            class="profile-image" />
-        </button>
+        <app-profile-menu />
       </div>
     </header>
   `,
   styleUrls: ['./top-app-bar.scss']
 })
 export class TopAppBarComponent {
-  @Input() userProfileImage: string = '/images/profile_pic.jpg';
   @Output() menuClick = new EventEmitter<void>();
-  
-  constructor(private router: Router) {}
 
   onMenuClick(): void {
     this.menuClick.emit();
-  }
-
-  navigateToProfile(): void {
-    this.router.navigate(['/profile']);
   }
 }
