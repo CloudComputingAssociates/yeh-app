@@ -58,7 +58,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class ChatInputComponent {
   messageText = '';
-  placeholder = signal('Chat with YEH ...');
+  placeholder = signal('yeh? ');
   isTalkMode = signal(false);
 
   messageSubmit = output<string>();
