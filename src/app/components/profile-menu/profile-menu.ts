@@ -56,7 +56,7 @@ import { AuthService } from '@auth0/auth0-angular';
   styleUrls: ['./profile-menu.scss']
 })
 export class ProfileMenuComponent {
-  @Input() defaultImage = 'images/profile_pic.png';
+  @Input() defaultImage = 'images/yeh_logo_dark.png';
   auth = inject(AuthService);
 
   login(): void {
