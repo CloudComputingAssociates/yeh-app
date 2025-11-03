@@ -128,9 +128,13 @@ export class MembershipGateComponent implements OnInit {
 
   ngOnInit(): void {
     // Fetch products on component initialization
+    console.log('MembershipGate: Fetching products...');
     this.subscriptionService.getProducts().subscribe({
+      next: (response) => {
+        console.log('MembershipGate: Products loaded successfully', response);
+      },
       error: (err) => {
-        console.error('Error loading products:', err);
+        console.error('MembershipGate: Error loading products:', err);
         this.errorMessage.set('Unable to load pricing. Please refresh the page.');
       }
     });
@@ -157,6 +161,7 @@ export class MembershipGateComponent implements OnInit {
    * If user is authenticated, create Stripe checkout session
    */
   handleJoinNow(): void {
+    console.log('MembershipGate: Join Now button clicked!');
     this.errorMessage.set(null);
     this.isProcessing.set(true);
 
