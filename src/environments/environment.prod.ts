@@ -2,5 +2,5 @@
 // Production environment configuration
 export const environment = {
   production: true,
-  apiUrl: 'https://api.youreatinghealthy.com' // Update this to your production API URL
+  apiUrl: 'https://yehapi.cloudcomputingassociates.net:4443/api'
 };
