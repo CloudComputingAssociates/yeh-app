@@ -15,7 +15,9 @@ export const appConfig: ApplicationConfig = {
       clientId: '9KHWGCfSSg9wUr1oREiUYIgP15EDIppJ',
       authorizationParams: {
         redirect_uri: window.location.origin
-      }
+      },
+      useRefreshTokens: true,
+      cacheLocation: 'localstorage'
     })
   ]
 };
