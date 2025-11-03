@@ -6,10 +6,20 @@ import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+// Backend API response format
+interface BackendSubscriptionResponse {
+  hasActiveSubscription: boolean;
+  subscriptionTier?: string;
+  subscriptionStatus?: string;
+  expiresAt?: string;
+}
+
+// Frontend subscription status interface
 export interface SubscriptionStatus {
   hasActiveSubscription: boolean;
   subscriptionType?: 'monthly' | 'annual';
   status?: 'active' | 'cancelled' | 'expired' | 'trialing';
+  expiresAt?: string;
 }
 
 @Injectable({
@@ -59,8 +69,15 @@ export class SubscriptionService {
         }
 
         // User is authenticated - check subscription status from backend
-        return this.http.get<SubscriptionStatus>(`${this.API_BASE_URL}/api/subscriptions/status`).pipe(
-          tap(status => {
+        return this.http.get<BackendSubscriptionResponse>(`${this.API_BASE_URL}/api/users/subscription-status`).pipe(
+          tap(backendResponse => {
+            // Map backend response to frontend format
+            const status: SubscriptionStatus = {
+              hasActiveSubscription: backendResponse.hasActiveSubscription,
+              subscriptionType: backendResponse.subscriptionTier as 'monthly' | 'annual',
+              status: backendResponse.subscriptionStatus as 'active' | 'cancelled' | 'expired' | 'trialing',
+              expiresAt: backendResponse.expiresAt
+            };
             this.subscriptionStatusSignal.set(status);
             this.loadingSignal.set(false);
           }),
@@ -91,13 +108,13 @@ export class SubscriptionService {
 
   /**
    * Create a Stripe checkout session for subscription
-   * @param priceId - Stripe price ID (monthly or annual)
+   * @param planType - Subscription plan type ('monthly' or 'annual')
    * @returns Observable with checkout session URL
    */
-  createCheckoutSession(priceId: string): Observable<{ url: string }> {
-    return this.http.post<{ url: string }>(
-      `${this.API_BASE_URL}/api/subscriptions/checkout`,
-      { priceId }
+  createCheckoutSession(planType: 'monthly' | 'annual'): Observable<{ url: string }> {
+    return this.http.post<{ sessionId: string; url: string }>(
+      `${this.API_BASE_URL}/api/stripe/create-checkout-session`,
+      { planType }
     ).pipe(
       catchError(error => {
         console.error('Error creating checkout session:', error);
