@@ -1,6 +1,6 @@
 // src/app/app.ts
 // Main App Component - Modern Angular with Material Design
-import { Component, ChangeDetectionStrategy, inject, OnInit, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
 import { MacroNutrientsComponent } from './components/macro-nutrients/macro-nutrients';
@@ -57,21 +57,6 @@ export class AppComponent implements OnInit {
   auth = inject(AuthService);
   subscriptionService = inject(SubscriptionService);
   title = 'yeh-web-app';
-
-  constructor() {
-    // Check subscription status whenever authentication state changes
-    effect(() => {
-      this.auth.isAuthenticated$.subscribe(isAuthenticated => {
-        if (isAuthenticated) {
-          // User is authenticated - check their subscription status
-          this.subscriptionService.checkSubscriptionStatus().subscribe();
-        } else {
-          // User is not authenticated - clear subscription status
-          this.subscriptionService.clearStatus();
-        }
-      });
-    });
-  }
 
   ngOnInit(): void {
     // Initial subscription status check

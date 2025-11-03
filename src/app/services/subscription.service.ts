@@ -22,6 +22,17 @@ export interface SubscriptionStatus {
   expiresAt?: string;
 }
 
+// Stripe product/price interface
+export interface StripeProduct {
+  id: string;
+  name: string;
+  priceId: string;
+  amount: number; // in cents
+  currency: string;
+  interval: 'month' | 'year';
+  discount?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,11 +47,13 @@ export class SubscriptionService {
   private subscriptionStatusSignal = signal<SubscriptionStatus | null>(null);
   private loadingSignal = signal<boolean>(false);
   private errorSignal = signal<string | null>(null);
+  private productsSignal = signal<StripeProduct[]>([]);
 
   // Public computed signals
   readonly subscriptionStatus = this.subscriptionStatusSignal.asReadonly();
   readonly isLoading = this.loadingSignal.asReadonly();
   readonly error = this.errorSignal.asReadonly();
+  readonly products = this.productsSignal.asReadonly();
 
   // Computed: should show membership gate
   readonly shouldShowMembershipGate = computed(() => {
@@ -69,7 +82,7 @@ export class SubscriptionService {
         }
 
         // User is authenticated - check subscription status from backend
-        return this.http.get<BackendSubscriptionResponse>(`${this.API_BASE_URL}/api/users/subscription-status`).pipe(
+        return this.http.get<BackendSubscriptionResponse>(`${this.API_BASE_URL}/api/subscriptions/status`).pipe(
           tap(backendResponse => {
             // Map backend response to frontend format
             const status: SubscriptionStatus = {
@@ -107,14 +120,32 @@ export class SubscriptionService {
   }
 
   /**
+   * Get available subscription products from backend
+   * @returns Observable with product list
+   */
+  getProducts(): Observable<{ products: StripeProduct[] }> {
+    return this.http.get<{ products: StripeProduct[] }>(
+      `${this.API_BASE_URL}/api/subscriptions/products`
+    ).pipe(
+      tap(response => {
+        this.productsSignal.set(response.products);
+      }),
+      catchError(error => {
+        console.error('Error fetching products:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
    * Create a Stripe checkout session for subscription
-   * @param planType - Subscription plan type ('monthly' or 'annual')
+   * @param priceId - Stripe price ID from backend
    * @returns Observable with checkout session URL
    */
-  createCheckoutSession(planType: 'monthly' | 'annual'): Observable<{ url: string }> {
+  createCheckoutSession(priceId: string): Observable<{ url: string }> {
     return this.http.post<{ sessionId: string; url: string }>(
-      `${this.API_BASE_URL}/api/stripe/create-checkout-session`,
-      { planType }
+      `${this.API_BASE_URL}/api/subscriptions/checkout`,
+      { priceId }
     ).pipe(
       catchError(error => {
         console.error('Error creating checkout session:', error);

@@ -1,5 +1,5 @@
 // src/app/components/membership-gate/membership-gate.ts
-import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -30,44 +30,53 @@ import { tap } from 'rxjs/operators';
             Get personalized guidance, understand your food choices, and track your progress.
           </p>
 
-          <div class="pricing-section">
-            <div class="pricing-options">
-              <div
-                class="price-option"
-                [class.selected]="selectedPlan() === 'monthly'"
-                (click)="selectPlan('monthly')">
-                <div class="price-label">Monthly</div>
-                <div class="price-amount">$9.99<span class="price-period">/mo</span></div>
-              </div>
+          @if (monthlyProduct() && annualProduct()) {
+            <div class="pricing-section">
+              <div class="pricing-options">
+                <div
+                  class="price-option"
+                  [class.selected]="selectedPlan() === 'monthly'"
+                  (click)="selectPlan('monthly')">
+                  <div class="price-label">Monthly</div>
+                  <div class="price-amount">{{ formatPrice(monthlyProduct()!.amount) }}<span class="price-period">/mo</span></div>
+                </div>
 
-              <div
-                class="price-option featured"
-                [class.selected]="selectedPlan() === 'annual'"
-                (click)="selectPlan('annual')">
-                <div class="save-badge">Save 17%</div>
-                <div class="price-label">Annual</div>
-                <div class="price-amount">$99.99<span class="price-period">/yr</span></div>
+                <div
+                  class="price-option featured"
+                  [class.selected]="selectedPlan() === 'annual'"
+                  (click)="selectPlan('annual')">
+                  @if (discountPercent() > 0) {
+                    <div class="save-badge">Save {{ discountPercent() }}%</div>
+                  }
+                  <div class="price-label">Annual</div>
+                  <div class="price-amount">{{ formatPrice(annualProduct()!.amount) }}<span class="price-period">/yr</span></div>
+                </div>
               </div>
             </div>
-          </div>
 
-          @if (isProcessing()) {
-            <button
-              mat-raised-button
-              color="primary"
-              class="join-button"
-              disabled>
-              <mat-spinner diameter="24"></mat-spinner>
-              Processing...
-            </button>
+            @if (isProcessing()) {
+              <button
+                mat-raised-button
+                color="primary"
+                class="join-button"
+                disabled>
+                <mat-spinner diameter="24"></mat-spinner>
+                Processing...
+              </button>
+            } @else {
+              <button
+                mat-raised-button
+                color="primary"
+                class="join-button"
+                (click)="handleJoinNow()">
+                Join Now
+              </button>
+            }
           } @else {
-            <button
-              mat-raised-button
-              color="primary"
-              class="join-button"
-              (click)="handleJoinNow()">
-              Join Now
-            </button>
+            <div class="loading-prices">
+              <mat-spinner diameter="40"></mat-spinner>
+              <p>Loading pricing...</p>
+            </div>
           }
 
           @if (errorMessage()) {
@@ -83,7 +92,7 @@ import { tap } from 'rxjs/operators';
   `,
   styleUrls: ['./membership-gate.scss']
 })
-export class MembershipGateComponent {
+export class MembershipGateComponent implements OnInit {
   private auth = inject(AuthService);
   private subscriptionService = inject(SubscriptionService);
 
@@ -91,6 +100,48 @@ export class MembershipGateComponent {
   selectedPlan = signal<'monthly' | 'annual'>('annual'); // Default to annual (best value)
   isProcessing = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
+
+  // Computed products from service
+  products = this.subscriptionService.products;
+
+  monthlyProduct = computed(() =>
+    this.products().find(p => p.interval === 'month')
+  );
+
+  annualProduct = computed(() =>
+    this.products().find(p => p.interval === 'year')
+  );
+
+  // Calculate discount percentage dynamically
+  discountPercent = computed(() => {
+    const monthly = this.monthlyProduct();
+    const annual = this.annualProduct();
+
+    if (!monthly || !annual) return 0;
+
+    const monthlyYearlyCost = monthly.amount * 12;
+    const savings = monthlyYearlyCost - annual.amount;
+    const percent = Math.round((savings / monthlyYearlyCost) * 100);
+
+    return percent > 0 ? percent : 0;
+  });
+
+  ngOnInit(): void {
+    // Fetch products on component initialization
+    this.subscriptionService.getProducts().subscribe({
+      error: (err) => {
+        console.error('Error loading products:', err);
+        this.errorMessage.set('Unable to load pricing. Please refresh the page.');
+      }
+    });
+  }
+
+  /**
+   * Format price from cents to dollars
+   */
+  formatPrice(cents: number): string {
+    return `$${(cents / 100).toFixed(2)}`;
+  }
 
   /**
    * Select a pricing plan
@@ -141,10 +192,18 @@ export class MembershipGateComponent {
    * Create a Stripe checkout session via backend API
    */
   private createCheckoutSession(): void {
-    // Send plan type to backend - backend will look up the correct Stripe price ID
-    const planType = this.selectedPlan(); // 'monthly' or 'annual'
+    // Get the selected product
+    const product = this.selectedPlan() === 'monthly'
+      ? this.monthlyProduct()
+      : this.annualProduct();
 
-    this.subscriptionService.createCheckoutSession(planType).subscribe({
+    if (!product) {
+      this.errorMessage.set('Selected plan not available. Please try again.');
+      this.isProcessing.set(false);
+      return;
+    }
+
+    this.subscriptionService.createCheckoutSession(product.priceId).subscribe({
       next: (response) => {
         // Redirect to Stripe checkout page
         if (response.url) {
