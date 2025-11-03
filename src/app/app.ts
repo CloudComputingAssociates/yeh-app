@@ -42,12 +42,10 @@ import { SubscriptionService } from './services/subscription.service';
         </div>
       </app-nav-drawer>
 
-      @if (subscriptionService.isLoading()) {
-        <app-loading-overlay />
-      }
-
       @if (shouldShowGate()) {
         <app-membership-gate />
+      } @else if (subscriptionService.isLoading()) {
+        <app-loading-overlay />
       }
     </div>
   `,
