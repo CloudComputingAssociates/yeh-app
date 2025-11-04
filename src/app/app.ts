@@ -2,6 +2,7 @@
 // Main App Component - Modern Angular with Material Design
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { take } from 'rxjs/operators';
 import { MacroNutrientsComponent } from './components/macro-nutrients/macro-nutrients';
 import { TopAppBarComponent } from './components/top-app-bar/top-app-bar';
 import { NavDrawerComponent } from './components/nav-drawer/nav-drawer';
@@ -61,9 +62,11 @@ export class AppComponent implements OnInit {
 
   /**
    * Determines if the membership gate should be shown
-   * Shows gate if:
-   * - User is NOT authenticated (needs to sign up), OR
-   * - User IS authenticated but does NOT have an active subscription
+   * Shows gate ONLY if:
+   * - User IS authenticated AND
+   * - User does NOT have an active subscription
+   *
+   * Does NOT show gate for unauthenticated users (they see login button instead)
    */
   shouldShowGate(): boolean {
     // If we're still loading subscription status, don't show gate yet
@@ -73,7 +76,12 @@ export class AppComponent implements OnInit {
 
     const status = this.subscriptionService.subscriptionStatus();
 
-    // Show gate if status is null (no data yet) or user doesn't have active subscription
-    return status !== null && !status.hasActiveSubscription;
+    // Only show gate for authenticated users without subscription
+    // isAuthenticated$ is async, so we need to check it synchronously
+    let isAuthenticated = false;
+    this.auth.isAuthenticated$.pipe(take(1)).subscribe((auth: boolean) => isAuthenticated = auth);
+
+    // Show gate only if authenticated AND no active subscription
+    return isAuthenticated && status !== null && !status.hasActiveSubscription;
   }
 }
