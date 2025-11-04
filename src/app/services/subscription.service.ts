@@ -98,16 +98,32 @@ export class SubscriptionService {
             console.error('Error checking subscription status:', error);
 
             // 401 = Authentication failed (invalid/expired token)
-            // Clear local state and reload to reinitialize Auth0
+            // Clear Auth0 state completely to prevent loop
             if (error.status === 401) {
-              console.warn('Auth token invalid/expired - clearing auth state and reloading');
+              console.warn('Auth token invalid/expired - clearing all Auth0 state');
               this.subscriptionStatusSignal.set(null);
               this.loadingSignal.set(false);
-              // Clear Auth0 tokens from localStorage
-              localStorage.removeItem('@@auth0spajs@@::9KHWGCfSSg9wUr1oREiUYIgP15EDIppJ::@@user@@');
-              localStorage.removeItem('@@auth0spajs@@::9KHWGCfSSg9wUr1oREiUYIgP15EDIppJ::https://dev-sj1bmj8255bwte7r.us.auth0.com/::openid profile email');
-              // Reload page to reinitialize Auth0 SDK
-              window.location.reload();
+
+              // Clear ALL Auth0 keys from localStorage to prevent loop
+              const keysToRemove: string[] = [];
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('@@auth0spajs@@')) {
+                  keysToRemove.push(key);
+                }
+              }
+              keysToRemove.forEach(key => localStorage.removeItem(key));
+
+              // Reload page only once (check if we just reloaded to prevent loop)
+              const hasReloaded = sessionStorage.getItem('auth_reload_attempted');
+              if (!hasReloaded) {
+                sessionStorage.setItem('auth_reload_attempted', 'true');
+                window.location.reload();
+              } else {
+                // Already tried reloading, don't loop - just clear the flag
+                sessionStorage.removeItem('auth_reload_attempted');
+              }
+
               return of(null as unknown as SubscriptionStatus);
             }
 
