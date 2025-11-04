@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '@auth0/auth0-angular';
 import { SubscriptionService } from '../../services/subscription.service';
-import { tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-membership-gate',
@@ -167,11 +167,12 @@ export class MembershipGateComponent implements OnInit {
 
     // Check if user is authenticated (take first value only)
     this.auth.isAuthenticated$.pipe(
+      take(1),
       tap(isAuthenticated => {
-        console.log('User authenticated:', isAuthenticated);
+        console.log('MembershipGate: User authenticated:', isAuthenticated);
         if (!isAuthenticated) {
           // User needs to sign up first - redirect to Auth0
-          console.log('Redirecting to Auth0 login');
+          console.log('MembershipGate: Redirecting to Auth0 login');
           this.auth.loginWithRedirect({
             appState: {
               target: '/checkout',
@@ -180,13 +181,13 @@ export class MembershipGateComponent implements OnInit {
           });
         } else {
           // User is authenticated - create Stripe checkout session
-          console.log('Creating checkout session for plan:', this.selectedPlan());
+          console.log('MembershipGate: Creating checkout session for plan:', this.selectedPlan());
           this.createCheckoutSession();
         }
       })
     ).subscribe({
       error: (err) => {
-        console.error('Error checking auth status:', err);
+        console.error('MembershipGate: Error checking auth status:', err);
         this.errorMessage.set('Authentication check failed. Please try again.');
         this.isProcessing.set(false);
       }

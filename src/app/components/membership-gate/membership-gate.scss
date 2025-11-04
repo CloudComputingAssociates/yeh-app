@@ -102,8 +102,8 @@ mat-card-content {
 }
 
 .price-option.featured {
-  border-color: #4da6ff;
-  background: linear-gradient(135deg, #2a2a2a 0%, #1a3a4a 100%);
+  // Subtle hint that this is featured, but don't make it look selected
+  position: relative; // For save-badge positioning
 }
 
 .save-badge {
