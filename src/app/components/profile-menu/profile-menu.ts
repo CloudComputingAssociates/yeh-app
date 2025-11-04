@@ -12,11 +12,14 @@ import { AuthService } from '@auth0/auth0-angular';
   imports: [AsyncPipe, MatIconModule, MatButtonModule, MatMenuModule, MatDividerModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    @if (auth.isAuthenticated$ | async) {
+    @if (auth.isLoading$ | async) {
+      <!-- While Auth0 is loading, show nothing to avoid flicker -->
+      <div class="auth-loading"></div>
+    } @else if (auth.isAuthenticated$ | async) {
       <button class="profile-btn" [matMenuTriggerFor]="menu">
         <img [src]="defaultImage" alt="Profile" class="profile-img" />
       </button>
-      
+
       <mat-menu #menu="matMenu" class="profile-menu" [overlapTrigger]="false">
         @if (auth.user$ | async; as user) {
           <div class="user-info">
@@ -27,21 +30,21 @@ import { AuthService } from '@auth0/auth0-angular';
             </div>
           </div>
         }
-        
+
         <mat-divider></mat-divider>
-        
+
         <button mat-menu-item class="menu-item">
           <mat-icon>person</mat-icon>
           <span>Profile</span>
         </button>
-        
+
         <button mat-menu-item class="menu-item">
           <mat-icon>settings</mat-icon>
           <span>Settings</span>
         </button>
-        
+
         <mat-divider></mat-divider>
-        
+
         <button mat-menu-item class="menu-item" (click)="logout()">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>
