@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '@auth0/auth0-angular';
+import { SubscriptionService } from '../../services/subscription.service';
 
 @Component({
   selector: 'app-profile-menu',
@@ -61,12 +62,15 @@ import { AuthService } from '@auth0/auth0-angular';
 export class ProfileMenuComponent {
   @Input() defaultImage = 'images/yeh_logo_dark.png';
   auth = inject(AuthService);
+  subscriptionService = inject(SubscriptionService);
 
   login(): void {
     this.auth.loginWithRedirect();
   }
 
   logout(): void {
+    // Clear subscription state before logging out
+    this.subscriptionService.clearStatus();
     this.auth.logout({ logoutParams: { returnTo: window.location.origin } });
   }
 }
