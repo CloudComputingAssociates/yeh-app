@@ -98,10 +98,18 @@ export class SubscriptionService {
             console.error('Error checking subscription status:', error);
 
             // 401 = Authentication failed (invalid/expired token)
-            // Don't show gate for auth errors - user needs to re-authenticate
+            // Clear auth state and force logout so user sees Login button
             if (error.status === 401) {
+              console.warn('Auth token invalid/expired - logging out');
               this.subscriptionStatusSignal.set(null);
               this.loadingSignal.set(false);
+              // Force logout to clear stale tokens and show Login button
+              this.auth.logout({
+                logoutParams: {
+                  returnTo: window.location.origin
+                },
+                openUrl: false // Don't redirect to Auth0, just clear local state
+              });
               return of(null as unknown as SubscriptionStatus);
             }
 
