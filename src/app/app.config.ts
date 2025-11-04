@@ -17,7 +17,8 @@ export const appConfig: ApplicationConfig = {
       domain: 'dev-sj1bmj8255bwte7r.us.auth0.com',
       clientId: '9KHWGCfSSg9wUr1oREiUYIgP15EDIppJ',
       authorizationParams: {
-        redirect_uri: window.location.origin
+        redirect_uri: window.location.origin,
+        audience: 'https://yehapi.cloudcomputingassociates.net'
       },
       useRefreshTokens: true,
       cacheLocation: 'localstorage',
