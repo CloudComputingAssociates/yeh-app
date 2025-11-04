@@ -98,18 +98,16 @@ export class SubscriptionService {
             console.error('Error checking subscription status:', error);
 
             // 401 = Authentication failed (invalid/expired token)
-            // Clear auth state and force logout so user sees Login button
+            // Clear local state and reload to reinitialize Auth0
             if (error.status === 401) {
-              console.warn('Auth token invalid/expired - logging out');
+              console.warn('Auth token invalid/expired - clearing auth state and reloading');
               this.subscriptionStatusSignal.set(null);
               this.loadingSignal.set(false);
-              // Force logout to clear stale tokens and show Login button
-              this.auth.logout({
-                logoutParams: {
-                  returnTo: window.location.origin
-                },
-                openUrl: false // Don't redirect to Auth0, just clear local state
-              });
+              // Clear Auth0 tokens from localStorage
+              localStorage.removeItem('@@auth0spajs@@::9KHWGCfSSg9wUr1oREiUYIgP15EDIppJ::@@user@@');
+              localStorage.removeItem('@@auth0spajs@@::9KHWGCfSSg9wUr1oREiUYIgP15EDIppJ::https://dev-sj1bmj8255bwte7r.us.auth0.com/::openid profile email');
+              // Reload page to reinitialize Auth0 SDK
+              window.location.reload();
               return of(null as unknown as SubscriptionStatus);
             }
 
