@@ -70,6 +70,22 @@ export class AppComponent implements OnInit {
       }
       // If not authenticated, do nothing - user will see login button
     });
+
+    // Listen for visibility change to refresh subscription status when user returns from Stripe
+    // This handles the case where user completes payment and returns to the app
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        // Page became visible again - user might have returned from Stripe
+        // Wait a moment for webhooks to process, then refresh
+        setTimeout(() => {
+          this.auth.isAuthenticated$.pipe(take(1)).subscribe((isAuth: boolean) => {
+            if (isAuth) {
+              this.subscriptionService.checkSubscriptionStatus().subscribe();
+            }
+          });
+        }, 2000); // Wait 2 seconds for webhook to process
+      }
+    });
   }
 
   /**
