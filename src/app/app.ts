@@ -1,7 +1,6 @@
 // src/app/app.ts
 // Main App Component - Modern Angular with Material Design
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
 import { MacroNutrientsComponent } from './components/macro-nutrients/macro-nutrients';
 import { TopAppBarComponent } from './components/top-app-bar/top-app-bar';
@@ -16,7 +15,6 @@ import { SubscriptionService } from './services/subscription.service';
   selector: 'app-root',
   standalone: true,
   imports: [
-    AsyncPipe,
     MacroNutrientsComponent,
     TopAppBarComponent,
     NavDrawerComponent,

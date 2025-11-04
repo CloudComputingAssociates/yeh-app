@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideAuth0 } from '@auth0/auth0-angular';
 import { routes } from './app.routes';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,7 +18,13 @@ export const appConfig: ApplicationConfig = {
         redirect_uri: window.location.origin
       },
       useRefreshTokens: true,
-      cacheLocation: 'localstorage'
+      cacheLocation: 'localstorage',
+      httpInterceptor: {
+        allowedList: [
+          // Allow all API calls - attach token if user is authenticated, allow through if not
+          `${environment.apiUrl}/*`
+        ]
+      }
     })
   ]
 };
