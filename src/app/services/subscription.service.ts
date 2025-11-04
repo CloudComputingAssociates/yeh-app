@@ -97,22 +97,27 @@ export class SubscriptionService {
           catchError((error: HttpErrorResponse) => {
             console.error('Error checking subscription status:', error);
 
-            // If we get 404 or similar, assume no active subscription
-            if (error.status === 404 || error.status === 401) {
+            // 401 = Authentication failed (invalid/expired token)
+            // Don't show gate for auth errors - user needs to re-authenticate
+            if (error.status === 401) {
+              this.subscriptionStatusSignal.set(null);
+              this.loadingSignal.set(false);
+              return of(null as unknown as SubscriptionStatus);
+            }
+
+            // 404 = User exists but no subscription record
+            if (error.status === 404) {
               const noSubStatus: SubscriptionStatus = { hasActiveSubscription: false };
               this.subscriptionStatusSignal.set(noSubStatus);
               this.loadingSignal.set(false);
               return of(noSubStatus);
             }
 
-            // For other errors, set error state
+            // For other errors, set error state but don't show gate
             this.errorSignal.set(error.message || 'Failed to check subscription status');
             this.loadingSignal.set(false);
-
-            // Return a default "no subscription" state on error
-            const defaultStatus: SubscriptionStatus = { hasActiveSubscription: false };
-            this.subscriptionStatusSignal.set(defaultStatus);
-            return of(defaultStatus);
+            this.subscriptionStatusSignal.set(null);
+            return of(null as unknown as SubscriptionStatus);
           })
         );
       })
