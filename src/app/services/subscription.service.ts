@@ -97,36 +97,6 @@ export class SubscriptionService {
           catchError((error: HttpErrorResponse) => {
             console.error('Error checking subscription status:', error);
 
-            // 401 = Authentication failed (invalid/expired token)
-            // Clear Auth0 state completely to prevent loop
-            if (error.status === 401) {
-              console.warn('Auth token invalid/expired - clearing all Auth0 state');
-              this.subscriptionStatusSignal.set(null);
-              this.loadingSignal.set(false);
-
-              // Clear ALL Auth0 keys from localStorage to prevent loop
-              const keysToRemove: string[] = [];
-              for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && key.startsWith('@@auth0spajs@@')) {
-                  keysToRemove.push(key);
-                }
-              }
-              keysToRemove.forEach(key => localStorage.removeItem(key));
-
-              // Reload page only once (check if we just reloaded to prevent loop)
-              const hasReloaded = sessionStorage.getItem('auth_reload_attempted');
-              if (!hasReloaded) {
-                sessionStorage.setItem('auth_reload_attempted', 'true');
-                window.location.reload();
-              } else {
-                // Already tried reloading, don't loop - just clear the flag
-                sessionStorage.removeItem('auth_reload_attempted');
-              }
-
-              return of(null as unknown as SubscriptionStatus);
-            }
-
             // 404 = User exists but no subscription record
             if (error.status === 404) {
               const noSubStatus: SubscriptionStatus = { hasActiveSubscription: false };
@@ -135,7 +105,8 @@ export class SubscriptionService {
               return of(noSubStatus);
             }
 
-            // For other errors, set error state but don't show gate
+            // For ANY error (including 401), just set status to null and don't show gate
+            // Let Auth0 handle authentication state - we shouldn't interfere
             this.errorSignal.set(error.message || 'Failed to check subscription status');
             this.loadingSignal.set(false);
             this.subscriptionStatusSignal.set(null);
