@@ -2,7 +2,8 @@
 // Main App Component - Modern Angular with Material Design
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { take } from 'rxjs/operators';
+import { take, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { MacroNutrientsComponent } from './components/macro-nutrients/macro-nutrients';
 import { TopAppBarComponent } from './components/top-app-bar/top-app-bar';
 import { NavDrawerComponent } from './components/nav-drawer/nav-drawer';
@@ -56,8 +57,23 @@ export class AppComponent implements OnInit {
   title = 'yeh-web-app';
 
   ngOnInit(): void {
-    // Initial subscription status check
-    this.subscriptionService.checkSubscriptionStatus().subscribe();
+    // Wait for Auth0 to finish loading, then check subscription status only if authenticated
+    this.auth.isLoading$.pipe(
+      take(1),
+      switchMap((isLoading: boolean) => {
+        if (!isLoading) {
+          // Auth0 finished loading, check if user is authenticated
+          return this.auth.isAuthenticated$.pipe(take(1));
+        }
+        return of(false);
+      })
+    ).subscribe((isAuthenticated: boolean) => {
+      if (isAuthenticated) {
+        // Only check subscription status if user is authenticated
+        this.subscriptionService.checkSubscriptionStatus().subscribe();
+      }
+      // If not authenticated, do nothing - user will see login button
+    });
   }
 
   /**
