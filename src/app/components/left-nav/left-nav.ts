@@ -72,7 +72,6 @@ export class LeftNavComponent {
 
   menuItems: MenuItem[] = [
     { label: 'Plan', icon: '📋', tabId: 'plan' },
-    { label: 'Prepare', icon: '🍽️', tabId: 'prepare' },
     { label: 'Progress', icon: '📈', tabId: 'progress' },
     { label: 'Shop', icon: '🛒', tabId: 'shop' }
   ];

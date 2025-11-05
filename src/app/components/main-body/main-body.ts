@@ -38,10 +38,6 @@ import { PlanComponent } from '../plan/plan';
                 <app-chat />
               } @else if (tab.id === 'plan') {
                 <app-plan />
-              } @else if (tab.id === 'prepare') {
-                <div class="placeholder-content">
-                  <p class="placeholder-text">Prepare view - Coming soon</p>
-                </div>
               } @else if (tab.id === 'progress') {
                 <div class="placeholder-content">
                   <p class="placeholder-text">Progress view - Coming soon</p>
