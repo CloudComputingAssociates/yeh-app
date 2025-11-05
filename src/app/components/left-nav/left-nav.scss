@@ -93,11 +93,15 @@
       align-items: center;
       gap: 16px;
       border-bottom: 1px solid #4a4a4a;
-      transition: background-color 0.2s ease;
+      transition: all 0.2s ease;
       background-color: transparent;
 
       &:hover {
         background-color: #4a4a4a;
+
+        .menu-label {
+          color: #6bb8ff;  // Lighter blue on hover
+        }
       }
 
       .menu-icon {
@@ -110,7 +114,8 @@
         flex: 1;
         font-size: 16px;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.9);
+        color: #4da6ff;  // Blue - clickable
+        transition: color 0.2s ease;
       }
 
       .chevron-icon {
