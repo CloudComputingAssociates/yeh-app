@@ -3,12 +3,12 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { take, switchMap, filter } from 'rxjs/operators';
-import { MacroNutrientsComponent } from './components/macro-nutrients/macro-nutrients';
+import { MacrosComponent } from './components/macros/macros';
 import { AppBarComponent } from './components/app-bar/app-bar';
 import { LeftNavComponent } from './components/left-nav/left-nav';
 import { MainBodyComponent } from './components/main-body/main-body';
 import { ChatInputComponent } from './components/chat-input/chat-input';
-import { MembershipGateComponent } from './components/membership-gate/membership-gate';
+import { PaywallComponent } from './components/paywall/paywall';
 import { LoadingOverlayComponent } from './components/loading-overlay/loading-overlay';
 import { SubscriptionService } from './services/subscription.service';
 
@@ -16,12 +16,12 @@ import { SubscriptionService } from './services/subscription.service';
   selector: 'app-root',
   standalone: true,
   imports: [
-    MacroNutrientsComponent,
+    MacrosComponent,
     AppBarComponent,
     LeftNavComponent,
     MainBodyComponent,
     ChatInputComponent,
-    MembershipGateComponent,
+    PaywallComponent,
     LoadingOverlayComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,7 +34,7 @@ import { SubscriptionService } from './services/subscription.service';
           </app-app-bar>
 
           <main class="main-content">
-            <app-macro-nutrients />
+            <app-macros />
             <app-main-body />
             <app-chat-input />
           </main>
@@ -42,7 +42,7 @@ import { SubscriptionService } from './services/subscription.service';
       </app-left-nav>
 
       @if (shouldShowGate()) {
-        <app-membership-gate />
+        <app-paywall />
       } @else if (subscriptionService.isLoading()) {
         <app-loading-overlay />
       }

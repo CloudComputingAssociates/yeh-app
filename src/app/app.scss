@@ -66,8 +66,8 @@
     background-color: #000000;
     min-height: 0; // Important for flex children to respect container height
     
-    // Macro nutrients - fixed height
-    app-macro-nutrients {
+    // Macros - fixed height
+    app-macros {
       flex-shrink: 0;
       margin-bottom: 16px;
     }
