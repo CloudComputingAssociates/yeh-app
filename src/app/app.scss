@@ -72,8 +72,8 @@
       margin-bottom: 16px;
     }
     
-    // Chat display - grows to fill remaining space
-    app-chat-display {
+    // Main body - grows to fill remaining space
+    app-main-body {
       flex: 1;
       min-height: 0; // Allows scrolling within this component
       margin-bottom: 16px;

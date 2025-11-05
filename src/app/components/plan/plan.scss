@@ -1,0 +1,33 @@
+// src/app/components/plan/plan.scss
+.plan-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #000000;
+
+  .plan-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+
+    .placeholder-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 8px;
+
+      .placeholder-text {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      .placeholder-subtext {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 14px;
+      }
+    }
+  }
+}

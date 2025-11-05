@@ -6,8 +6,8 @@ import { take, switchMap, filter } from 'rxjs/operators';
 import { MacroNutrientsComponent } from './components/macro-nutrients/macro-nutrients';
 import { TopAppBarComponent } from './components/top-app-bar/top-app-bar';
 import { NavDrawerComponent } from './components/nav-drawer/nav-drawer';
-import { ChatDisplayComponent } from './components/chat/display';
-import { ChatInputComponent } from './components/chat/chat-input';
+import { MainBodyComponent } from './components/main-body/main-body';
+import { ChatInputComponent } from './components/chat-input/chat-input';
 import { MembershipGateComponent } from './components/membership-gate/membership-gate';
 import { LoadingOverlayComponent } from './components/loading-overlay/loading-overlay';
 import { SubscriptionService } from './services/subscription.service';
@@ -19,7 +19,7 @@ import { SubscriptionService } from './services/subscription.service';
     MacroNutrientsComponent,
     TopAppBarComponent,
     NavDrawerComponent,
-    ChatDisplayComponent,
+    MainBodyComponent,
     ChatInputComponent,
     MembershipGateComponent,
     LoadingOverlayComponent
@@ -35,7 +35,7 @@ import { SubscriptionService } from './services/subscription.service';
 
           <main class="main-content">
             <app-macro-nutrients />
-            <app-chat-display />
+            <app-main-body />
             <app-chat-input />
           </main>
         </div>

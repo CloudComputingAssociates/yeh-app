@@ -1,15 +1,15 @@
 // src/app/nav-drawer/nav-drawer.ts
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { Router } from '@angular/router';
+import { TabService } from '../../services/tab.service';
 
 interface MenuItem {
   label: string;
   icon: string;
-  route: string;
+  tabId: string;
 }
 
 @Component({
@@ -47,9 +47,9 @@ interface MenuItem {
 
         <!-- Menu Items -->
         <mat-nav-list class="menu-list">
-          <mat-list-item 
+          <mat-list-item
             *ngFor="let item of menuItems"
-            (click)="navigateTo(item.route, drawer)"
+            (click)="navigateTo(item.tabId, drawer)"
             class="menu-item">
             <span class="menu-icon">{{ item.icon }}</span>
             <span class="menu-label">{{ item.label }}</span>
@@ -71,20 +71,28 @@ export class NavDrawerComponent {
   @Output() drawerToggle = new EventEmitter<void>();
 
   menuItems: MenuItem[] = [
-    { label: 'Home', icon: '🏠', route: '/' },
-    { label: 'Food plan', icon: '📋', route: '/foods' },
-    { label: 'Prepare', icon: '🍽️', route: '/prep' },
-    { label: 'Progress', icon: '📈', route: '/trend' }
+    { label: 'Home', icon: '🏠', tabId: 'chat' },
+    { label: 'Food plan', icon: '📋', tabId: 'plan' },
+    { label: 'Prepare', icon: '🍽️', tabId: 'prepare' },
+    { label: 'Progress', icon: '📈', tabId: 'progress' },
+    { label: 'Shop', icon: '🛒', tabId: 'shop' }
   ];
 
-  constructor(private router: Router) {}
+  tabService = inject(TabService);
 
   toggleDrawer(): void {
     this.drawer.toggle();
   }
 
-  navigateTo(route: string, drawer: MatSidenav): void {
-    this.router.navigate([route]);
+  navigateTo(tabId: string, drawer: MatSidenav): void {
+    if (tabId === 'chat') {
+      this.tabService.switchToChat();
+    } else {
+      const menuItem = this.menuItems.find(item => item.tabId === tabId);
+      if (menuItem) {
+        this.tabService.openTab(tabId, menuItem.label);
+      }
+    }
     drawer.close();
   }
 }
