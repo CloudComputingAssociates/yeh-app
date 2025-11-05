@@ -30,13 +30,7 @@ import { PlanComponent } from '../plan/plan';
         @for (tab of tabService.tabs(); track tab.id; let i = $index) {
           <mat-tab>
             <ng-template mat-tab-label>
-              <button
-                class="tab-toggle-btn"
-                [class.active]="tabService.activeTabIndex() === i"
-                (click)="toggleTab($event, tab.id, tab.label)"
-                [attr.aria-label]="tab.label + ' tab'">
-                {{ tab.label }}
-              </button>
+              <span class="tab-label-text">{{ tab.label }}</span>
             </ng-template>
 
             <div class="tab-content">
@@ -68,11 +62,6 @@ import { PlanComponent } from '../plan/plan';
 })
 export class MainBodyComponent {
   tabService = inject(TabService);
-
-  toggleTab(event: Event, tabId: string, label: string): void {
-    event.stopPropagation();
-    this.tabService.toggleTab(tabId, label);
-  }
 
   onTabIndexChange(index: number): void {
     // When user manually clicks a tab, update the service

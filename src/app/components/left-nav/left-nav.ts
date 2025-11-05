@@ -50,7 +50,8 @@ interface MenuItem {
           <mat-list-item
             *ngFor="let item of menuItems"
             (click)="navigateTo(item.tabId, drawer)"
-            class="menu-item">
+            class="menu-item"
+            [class.active]="isTabOpen(item.tabId)">
             <span class="menu-icon">{{ item.icon }}</span>
             <span class="menu-label">{{ item.label }}</span>
           </mat-list-item>
@@ -80,6 +81,10 @@ export class LeftNavComponent {
 
   toggleDrawer(): void {
     this.drawer.toggle();
+  }
+
+  isTabOpen(tabId: string): boolean {
+    return this.tabService.tabs().some(tab => tab.id === tabId);
   }
 
   navigateTo(tabId: string, drawer: MatSidenav): void {
