@@ -41,7 +41,7 @@
   min-width: auto !important;  // Auto width to fit content
   flex-grow: 0 !important;     // Don't grow to fill space
   flex-basis: auto !important; // Don't stretch
-  padding: 0 12px !important;  // Balanced padding
+  padding: 0 20px !important;  // Increased padding for more white space (was 12px)
   height: 48px;
   position: relative;
   background: linear-gradient(180deg, #484848 0%, #353535 100%);  // Lighter gradient for inactive tabs
@@ -159,7 +159,7 @@
 // Responsive
 @media (max-width: 480px) {
   ::ng-deep .mat-mdc-tab {
-    padding: 0 10px !important;  // Tighter on mobile
+    padding: 0 16px !important;  // Increased from 10px for better spacing
     height: 44px;
   }
 

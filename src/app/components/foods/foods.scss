@@ -4,9 +4,11 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  max-height: 100%;  // Don't expand beyond parent
   background-color: #3a3a3a;
   gap: 8px;
   padding: 0;
+  overflow: hidden;  // Prevent expansion
 }
 
 .search-controls {
@@ -16,6 +18,7 @@
   padding: 8px;
   background-color: #2a2a2a;
   border-bottom: 1px solid #4a4a4a;
+  flex-shrink: 0;  // Don't shrink search controls
 }
 
 .search-input {
@@ -146,6 +149,7 @@
 .foods-list-container {
   flex: 1;
   min-height: 0;
+  max-height: 100%;  // Don't expand beyond available space
   background-color: #2a2a2a;
   overflow: hidden;
   display: flex;
