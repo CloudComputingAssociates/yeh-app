@@ -40,7 +40,7 @@ import { MatButtonModule } from '@angular/material/button';
           [class.active]="isTalkMode()"
           (click)="toggleTalkMode()"
           [attr.aria-label]="isTalkMode() ? 'Exit conversation mode' : 'Enter conversation mode'">
-          <img src="images/speak-icon.png" alt="Talk to me" class="talk-icon" />
+          <img src="/images/speak-icon.png" alt="Talk to me" class="talk-icon" />
         </button>
 
       </div>
