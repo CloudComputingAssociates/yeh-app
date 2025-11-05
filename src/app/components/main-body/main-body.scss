@@ -51,9 +51,23 @@
   transition: all 0.2s ease;
   box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.3);  // Inset shadow for depth
 
+  // Force white text on all child elements
+  .mdc-tab__text-label,
+  .tab-label-text,
+  span,
+  button {
+    color: rgba(255, 255, 255, 0.6) !important;
+  }
+
   &:hover {
     background-color: #333333;
     color: rgba(255, 255, 255, 0.8) !important;
+
+    .mdc-tab__text-label,
+    .tab-label-text,
+    span {
+      color: rgba(255, 255, 255, 0.8) !important;
+    }
   }
 }
 
@@ -64,6 +78,13 @@
   border-bottom: 1px solid #3a3a3a;  // Connect to content area seamlessly
   z-index: 1;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);  // Raised look
+
+  // Force white text on all child elements for active tab
+  .mdc-tab__text-label,
+  .tab-label-text,
+  span {
+    color: #ffffff !important;
+  }
 }
 
 // Fix the indicator to not show (we're using background instead)
