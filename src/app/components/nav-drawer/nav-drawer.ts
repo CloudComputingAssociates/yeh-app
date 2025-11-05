@@ -72,10 +72,9 @@ export class NavDrawerComponent {
 
   menuItems: MenuItem[] = [
     { label: 'Home', icon: '🏠', route: '/' },
-    { label: 'Foods', icon: '🍽️', route: '/foods' },
-    { label: 'Plan', icon: '📋', route: '/plan' },
-    { label: 'Prep', icon: '👨‍🍳', route: '/prep' },
-    { label: 'Trend', icon: '📈', route: '/trend' }  // Also fixed typo: 'trand' → 'trend'
+    { label: 'Food plan', icon: '📋', route: '/foods' },
+    { label: 'Prepare', icon: '🍽️', route: '/prep' },
+    { label: 'Progress', icon: '📈', route: '/trend' }
   ];
 
   constructor(private router: Router) {}
