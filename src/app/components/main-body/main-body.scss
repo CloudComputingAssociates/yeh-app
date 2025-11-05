@@ -37,30 +37,33 @@
 }
 
 ::ng-deep .mat-mdc-tab {
-  color: #ffffff !important;  // White text
+  color: rgba(255, 255, 255, 0.6) !important;  // Dimmed white text for inactive
   min-width: auto !important;  // Auto width to fit content
   flex-grow: 0 !important;     // Don't grow to fill space
   flex-basis: auto !important; // Don't stretch
   padding: 0 20px !important;  // Horizontal padding for content
   height: 48px;
-  background-color: #2a2a2a;  // Darker background for inactive tabs
+  background-color: #2a2a2a;  // Darker grey for inactive tabs
   border-radius: 8px 8px 0 0;  // Rounded top corners
   margin-bottom: -1px;  // Overlap bottom border
-  border: 1px solid #4a4a4a;
+  border: 1px solid #1a1a1a;
   border-bottom: none;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.3);  // Inset shadow for depth
 
   &:hover {
     background-color: #333333;
+    color: rgba(255, 255, 255, 0.8) !important;
   }
 }
 
 ::ng-deep .mat-mdc-tab.mdc-tab--active {
-  background-color: #000000 !important;  // Black background for active tab
-  color: #4da6ff !important;  // Blue text for active
-  border-color: #4da6ff;
-  border-bottom: 1px solid #000000;  // Connect to content area
+  background-color: #3a3a3a !important;  // Match grey background
+  color: #ffffff !important;  // Bright white text for active
+  border-color: #4a4a4a;
+  border-bottom: 1px solid #3a3a3a;  // Connect to content area seamlessly
   z-index: 1;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);  // Raised look
 }
 
 // Fix the indicator to not show (we're using background instead)
