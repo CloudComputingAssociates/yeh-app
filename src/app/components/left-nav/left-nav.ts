@@ -71,7 +71,6 @@ export class LeftNavComponent {
   @Output() drawerToggle = new EventEmitter<void>();
 
   menuItems: MenuItem[] = [
-    { label: 'Home', icon: '🏠', tabId: 'chat' },
     { label: 'Plan', icon: '📋', tabId: 'plan' },
     { label: 'Prepare', icon: '🍽️', tabId: 'prepare' },
     { label: 'Progress', icon: '📈', tabId: 'progress' },

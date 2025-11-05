@@ -83,8 +83,9 @@
   flex-shrink: 0;
   width: 56px;
   height: 48px;
-  background-color: #3a3a3a;
-  border: 2px solid #5a5a5a;  // Thicker, lighter border for better visibility
+  background: linear-gradient(180deg, #484848 0%, #3a3a3a 100%);  // Lighter face, gradient for 3D
+  border: 1px solid #505050;  // Subtle border
+  border-bottom-color: #2a2a2a;  // Darker bottom for depth
   border-radius: 8px;
   color: #ffffff;  // White - clickable
   font-size: 9px;
@@ -94,19 +95,29 @@
   transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.15);  // Stronger raised look
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 -1px 0 rgba(255, 255, 255, 0.1) inset,
+    0 1px 0 rgba(0, 0, 0, 0.2) inset;  // True 3D raised effect
 
   &:hover {
-    background-color: #444444;
-    border-color: #6a6a6a;
-    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.7), inset 0 2px 0 rgba(255, 255, 255, 0.2);
+    background: linear-gradient(180deg, #505050 0%, #424242 100%);
+    border-color: #585858;
+    border-bottom-color: #303030;
+    box-shadow:
+      0 3px 6px rgba(0, 0, 0, 0.4),
+      0 -1px 0 rgba(255, 255, 255, 0.15) inset,
+      0 1px 0 rgba(0, 0, 0, 0.2) inset;
   }
 
   &.active {
-    background-color: #4da6ff;
+    background: linear-gradient(180deg, #5ab3ff 0%, #4da6ff 100%);
     color: #000000;
     border-color: #4da6ff;
-    box-shadow: 0 2px 8px rgba(77, 166, 255, 0.5), inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow:
+      0 2px 8px rgba(77, 166, 255, 0.5),
+      0 -1px 0 rgba(255, 255, 255, 0.3) inset,
+      0 1px 0 rgba(0, 0, 0, 0.1) inset;
   }
 
   &:focus-visible {
