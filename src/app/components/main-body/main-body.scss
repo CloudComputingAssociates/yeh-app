@@ -25,17 +25,20 @@
 }
 
 ::ng-deep .mat-mdc-tab-header {
-  background-color: #000000;
+  background-color: #3a3a3a;
   border-bottom: 1px solid #4a4a4a;
 }
 
 ::ng-deep .mat-mdc-tab-labels {
-  background-color: #000000;
+  background-color: #3a3a3a;
+  justify-content: flex-start;  // Left-align tabs
 }
 
 ::ng-deep .mat-mdc-tab {
   color: rgba(255, 255, 255, 0.7);
-  min-width: 80px;
+  min-width: auto;  // Auto width to fit content
+  flex-grow: 0;     // Don't grow to fill space
+  padding: 0 16px;  // Horizontal padding for content
 }
 
 ::ng-deep .mat-mdc-tab.mdc-tab--active {
