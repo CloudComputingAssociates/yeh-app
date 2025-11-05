@@ -27,22 +27,49 @@
 ::ng-deep .mat-mdc-tab-header {
   background-color: #3a3a3a;
   border-bottom: 1px solid #4a4a4a;
+  padding-left: 8px;  // Add left padding to start tabs from left
 }
 
 ::ng-deep .mat-mdc-tab-labels {
   background-color: #3a3a3a;
-  justify-content: flex-start;  // Left-align tabs
+  justify-content: flex-start !important;  // Force left-align tabs
+  gap: 4px;  // Small gap between tabs
 }
 
 ::ng-deep .mat-mdc-tab {
-  color: rgba(255, 255, 255, 0.7);
-  min-width: auto;  // Auto width to fit content
-  flex-grow: 0;     // Don't grow to fill space
-  padding: 0 16px;  // Horizontal padding for content
+  color: #ffffff !important;  // White text
+  min-width: auto !important;  // Auto width to fit content
+  flex-grow: 0 !important;     // Don't grow to fill space
+  flex-basis: auto !important; // Don't stretch
+  padding: 0 20px !important;  // Horizontal padding for content
+  height: 48px;
+  background-color: #2a2a2a;  // Darker background for inactive tabs
+  border-radius: 8px 8px 0 0;  // Rounded top corners
+  margin-bottom: -1px;  // Overlap bottom border
+  border: 1px solid #4a4a4a;
+  border-bottom: none;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #333333;
+  }
 }
 
 ::ng-deep .mat-mdc-tab.mdc-tab--active {
-  color: #4da6ff;
+  background-color: #000000 !important;  // Black background for active tab
+  color: #4da6ff !important;  // Blue text for active
+  border-color: #4da6ff;
+  border-bottom: 1px solid #000000;  // Connect to content area
+  z-index: 1;
+}
+
+// Fix the indicator to not show (we're using background instead)
+::ng-deep .mat-mdc-tab-header-pagination {
+  display: none;
+}
+
+::ng-deep .mdc-tab-indicator {
+  display: none !important;
 }
 
 ::ng-deep .mat-mdc-tab-body-wrapper {
