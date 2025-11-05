@@ -33,7 +33,7 @@
 ::ng-deep .mat-mdc-tab-labels {
   background-color: #3a3a3a;
   justify-content: flex-start !important;  // Force left-align tabs
-  gap: 4px;  // Small gap between tabs
+  gap: 2px;  // Minimal gap between tabs
 }
 
 ::ng-deep .mat-mdc-tab {
@@ -41,8 +41,9 @@
   min-width: auto !important;  // Auto width to fit content
   flex-grow: 0 !important;     // Don't grow to fill space
   flex-basis: auto !important; // Don't stretch
-  padding: 0 20px !important;  // Horizontal padding for content
+  padding: 0 32px 0 12px !important;  // Less left padding, more right for close button
   height: 48px;
+  position: relative;
   background: linear-gradient(180deg, #484848 0%, #353535 100%);  // Lighter gradient for inactive tabs
   border-radius: 8px 8px 0 0;  // Rounded top corners
   margin-bottom: -1px;  // Overlap bottom border
@@ -130,25 +131,29 @@
 .tab-label-text {
   font-size: 14px;
   font-weight: 500;
-  margin-right: 4px;
+  margin-right: 2px;
 }
 
 .tab-close-btn {
-  width: 44px;  // Mobile-friendly touch target
-  height: 44px; // Mobile-friendly touch target
-  margin-left: 8px;
-  position: relative;
-  top: 2px;  // Slightly raised position
+  width: 20px !important;  // Compact close button
+  height: 20px !important;
+  min-width: 20px !important;
+  padding: 0 !important;
+  margin-left: 6px;
+  position: absolute;
+  top: 4px;
+  right: 4px;
 
   mat-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    color: rgba(255, 255, 255, 0.6);
   }
 
   &:hover mat-icon {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
   }
 }
 
@@ -176,18 +181,27 @@
 
 // Responsive
 @media (max-width: 480px) {
+  ::ng-deep .mat-mdc-tab {
+    padding: 0 28px 0 8px !important;  // Even tighter on mobile
+    height: 44px;
+  }
+
   .tab-label-text {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .tab-close-btn {
-    width: 32px;
-    height: 32px;
-    
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    top: 3px;
+    right: 3px;
+
     mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
+      font-size: 12px;
+      width: 12px;
+      height: 12px;
+      line-height: 12px;
     }
   }
 }

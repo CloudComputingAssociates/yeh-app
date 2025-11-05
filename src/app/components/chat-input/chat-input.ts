@@ -15,11 +15,12 @@ import { MatButtonModule } from '@angular/material/button';
       <div class="input-wrapper">
         
         <!-- Mic Button (Left) -->
-        <button 
-          mat-icon-button 
+        <button
+          mat-icon-button
           class="input-icon-btn mic-btn"
-          (click)="onMicClick()"
-          [attr.aria-label]="'Record voice message'">
+          [class.active]="isMicActive()"
+          (click)="toggleMic()"
+          [attr.aria-label]="isMicActive() ? 'Stop recording' : 'Start recording'">
           <mat-icon>mic</mat-icon>
         </button>
 
@@ -39,7 +40,8 @@ import { MatButtonModule } from '@angular/material/button';
           [class.active]="isTalkMode()"
           (click)="toggleTalkMode()"
           [attr.aria-label]="isTalkMode() ? 'Exit conversation mode' : 'Enter conversation mode'">
-          TALK
+          <span class="talk-line-1">Talk</span>
+          <span class="talk-line-2">to me</span>
         </button>
 
       </div>
@@ -51,13 +53,16 @@ export class ChatInputComponent {
   messageText = '';
   placeholder = signal('yeh? ');
   isTalkMode = signal(false);
+  isMicActive = signal(false);
 
   messageSubmit = output<string>();
-  voiceRecord = output<void>();
+  voiceRecord = output<boolean>();
   talkModeToggle = output<boolean>();
 
-  onMicClick(): void {
-    this.voiceRecord.emit();
+  toggleMic(): void {
+    const newMode = !this.isMicActive();
+    this.isMicActive.set(newMode);
+    this.voiceRecord.emit(newMode);
   }
 
   toggleTalkMode(): void {

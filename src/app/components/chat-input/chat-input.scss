@@ -37,7 +37,7 @@
     color: #ffffff;  // White - clickable
   }
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled):not(.active) {
     background: linear-gradient(180deg, #606060 0%, #454545 100%);
     border-top-color: #757575;
     border-left-color: #656565;
@@ -53,15 +53,17 @@
     }
   }
 
-  &:active:not(:disabled) {
-    background: linear-gradient(180deg, #2a2a2a 0%, #353535 100%);  // Inverted gradient when pressed
-    border-top-color: #2a2a2a;
-    border-left-color: #353535;
-    border-right-color: #353535;
-    border-bottom-color: #4a4a4a;
+  &.active {
+    background: linear-gradient(180deg, #5ab3ff 0%, #4da6ff 100%);
+    border-color: #4da6ff;
     box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.3) inset,
-      0 -1px 0 rgba(255, 255, 255, 0.05) inset;
+      0 2px 8px rgba(77, 166, 255, 0.5),
+      0 -1px 0 rgba(255, 255, 255, 0.3) inset,
+      0 1px 0 rgba(0, 0, 0, 0.1) inset;
+
+    mat-icon {
+      color: #000000;  // Black icon when active
+    }
   }
 
   &:disabled {
@@ -130,8 +132,20 @@
     0 4px 8px rgba(0, 0, 0, 0.5),  // Stronger drop shadow
     0 -2px 0 rgba(255, 255, 255, 0.2) inset,  // Brighter top highlight
     0 2px 0 rgba(0, 0, 0, 0.3) inset;  // Darker bottom shadow
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px;
 
-  &:hover {
+  .talk-line-1,
+  .talk-line-2 {
+    display: block;
+    line-height: 1;
+  }
+
+  &:hover:not(.active) {
     background: linear-gradient(180deg, #606060 0%, #454545 100%);
     border-top-color: #757575;
     border-left-color: #656565;
