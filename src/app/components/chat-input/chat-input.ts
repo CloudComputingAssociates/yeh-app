@@ -34,21 +34,12 @@ import { MatButtonModule } from '@angular/material/button';
           rows="2"></textarea>
 
         <!-- Talk Button (Right) -->
-        <button 
+        <button
           class="talk-btn"
           [class.active]="isTalkMode()"
           (click)="toggleTalkMode()"
           [attr.aria-label]="isTalkMode() ? 'Exit conversation mode' : 'Enter conversation mode'">
           TALK
-        </button>
-
-        <!-- Camera Button (Right, Disabled) -->
-        <button 
-          mat-icon-button 
-          class="input-icon-btn camera-btn"
-          [disabled]="true"
-          [attr.aria-label]="'Upload image (coming soon)'">
-          <mat-icon>photo_camera</mat-icon>
         </button>
 
       </div>

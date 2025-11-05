@@ -18,31 +18,60 @@
   flex-shrink: 0;
   width: 48px;
   height: 48px;
-  color: rgba(255, 255, 255, 0.8);
+  background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);  // Much lighter top for strong 3D
+  border-top: 1px solid #6a6a6a;  // Light top edge
+  border-left: 1px solid #5a5a5a;
+  border-right: 1px solid #5a5a5a;
+  border-bottom: 2px solid #1a1a1a;  // Much darker, thicker bottom for strong shadow
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.5),  // Stronger drop shadow
+    0 -2px 0 rgba(255, 255, 255, 0.2) inset,  // Brighter top highlight
+    0 2px 0 rgba(0, 0, 0, 0.3) inset;  // Darker bottom shadow
 
   mat-icon {
     font-size: 24px;
     width: 24px;
     height: 24px;
+    color: #ffffff;  // White - clickable
   }
 
   &:hover:not(:disabled) {
-    color: #4da6ff;
-    background-color: rgba(77, 166, 255, 0.1);
+    background: linear-gradient(180deg, #606060 0%, #454545 100%);
+    border-top-color: #757575;
+    border-left-color: #656565;
+    border-right-color: #656565;
+    border-bottom-color: #202020;
+    box-shadow:
+      0 5px 10px rgba(0, 0, 0, 0.6),
+      0 -2px 0 rgba(255, 255, 255, 0.25) inset,
+      0 2px 0 rgba(0, 0, 0, 0.3) inset;
+
+    mat-icon {
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  &:active:not(:disabled) {
+    background: linear-gradient(180deg, #2a2a2a 0%, #353535 100%);  // Inverted gradient when pressed
+    border-top-color: #2a2a2a;
+    border-left-color: #353535;
+    border-right-color: #353535;
+    border-bottom-color: #4a4a4a;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.3) inset,
+      0 -1px 0 rgba(255, 255, 255, 0.05) inset;
   }
 
   &:disabled {
-    color: rgba(255, 255, 255, 0.3);
+    opacity: 0.5;
     cursor: not-allowed;
   }
 }
 
 .mic-btn {
-  // Specific mic styles if needed
-}
-
-.camera-btn {
-  opacity: 0.4;
+  // Mic button uses base input-icon-btn styles
 }
 
 .message-input {
@@ -83,9 +112,11 @@
   flex-shrink: 0;
   width: 56px;
   height: 48px;
-  background: linear-gradient(180deg, #484848 0%, #3a3a3a 100%);  // Lighter face, gradient for 3D
-  border: 1px solid #505050;  // Subtle border
-  border-bottom-color: #2a2a2a;  // Darker bottom for depth
+  background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);  // Much lighter top for strong 3D
+  border-top: 1px solid #6a6a6a;  // Light top edge
+  border-left: 1px solid #5a5a5a;
+  border-right: 1px solid #5a5a5a;
+  border-bottom: 2px solid #1a1a1a;  // Much darker, thicker bottom for strong shadow
   border-radius: 8px;
   color: #ffffff;  // White - clickable
   font-size: 9px;
@@ -96,18 +127,20 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 -1px 0 rgba(255, 255, 255, 0.1) inset,
-    0 1px 0 rgba(0, 0, 0, 0.2) inset;  // True 3D raised effect
+    0 4px 8px rgba(0, 0, 0, 0.5),  // Stronger drop shadow
+    0 -2px 0 rgba(255, 255, 255, 0.2) inset,  // Brighter top highlight
+    0 2px 0 rgba(0, 0, 0, 0.3) inset;  // Darker bottom shadow
 
   &:hover {
-    background: linear-gradient(180deg, #505050 0%, #424242 100%);
-    border-color: #585858;
-    border-bottom-color: #303030;
+    background: linear-gradient(180deg, #606060 0%, #454545 100%);
+    border-top-color: #757575;
+    border-left-color: #656565;
+    border-right-color: #656565;
+    border-bottom-color: #202020;
     box-shadow:
-      0 3px 6px rgba(0, 0, 0, 0.4),
-      0 -1px 0 rgba(255, 255, 255, 0.15) inset,
-      0 1px 0 rgba(0, 0, 0, 0.2) inset;
+      0 5px 10px rgba(0, 0, 0, 0.6),
+      0 -2px 0 rgba(255, 255, 255, 0.25) inset,
+      0 2px 0 rgba(0, 0, 0, 0.3) inset;
   }
 
   &.active {
