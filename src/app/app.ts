@@ -4,8 +4,8 @@ import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/cor
 import { AuthService } from '@auth0/auth0-angular';
 import { take, switchMap, filter } from 'rxjs/operators';
 import { MacroNutrientsComponent } from './components/macro-nutrients/macro-nutrients';
-import { TopAppBarComponent } from './components/top-app-bar/top-app-bar';
-import { NavDrawerComponent } from './components/nav-drawer/nav-drawer';
+import { AppBarComponent } from './components/app-bar/app-bar';
+import { LeftNavComponent } from './components/left-nav/left-nav';
 import { MainBodyComponent } from './components/main-body/main-body';
 import { ChatInputComponent } from './components/chat-input/chat-input';
 import { MembershipGateComponent } from './components/membership-gate/membership-gate';
@@ -17,8 +17,8 @@ import { SubscriptionService } from './services/subscription.service';
   standalone: true,
   imports: [
     MacroNutrientsComponent,
-    TopAppBarComponent,
-    NavDrawerComponent,
+    AppBarComponent,
+    LeftNavComponent,
     MainBodyComponent,
     ChatInputComponent,
     MembershipGateComponent,
@@ -27,11 +27,11 @@ import { SubscriptionService } from './services/subscription.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="app-wrapper" [class.disabled-state]="shouldShowGate()">
-      <app-nav-drawer #navDrawer>
+      <app-left-nav #leftNav>
         <div class="app-container">
-          <app-top-app-bar
-            (menuClick)="navDrawer.toggleDrawer()">
-          </app-top-app-bar>
+          <app-app-bar
+            (menuClick)="leftNav.toggleDrawer()">
+          </app-app-bar>
 
           <main class="main-content">
             <app-macro-nutrients />
@@ -39,7 +39,7 @@ import { SubscriptionService } from './services/subscription.service';
             <app-chat-input />
           </main>
         </div>
-      </app-nav-drawer>
+      </app-left-nav>
 
       @if (shouldShowGate()) {
         <app-membership-gate />
