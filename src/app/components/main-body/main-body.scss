@@ -41,7 +41,7 @@
   min-width: auto !important;  // Auto width to fit content
   flex-grow: 0 !important;     // Don't grow to fill space
   flex-basis: auto !important; // Don't stretch
-  padding: 0 32px 0 12px !important;  // Less left padding, more right for close button
+  padding: 0 12px !important;  // Balanced padding
   height: 48px;
   position: relative;
   background: linear-gradient(180deg, #484848 0%, #353535 100%);  // Lighter gradient for inactive tabs
@@ -59,7 +59,7 @@
 
   // Force white text on all child elements
   .mdc-tab__text-label,
-  .tab-label-text,
+  .tab-toggle-btn,
   span,
   button {
     color: #ffffff !important;
@@ -77,7 +77,7 @@
       0 2px 0 rgba(0, 0, 0, 0.2) inset;
 
     .mdc-tab__text-label,
-    .tab-label-text,
+    .tab-toggle-btn,
     span {
       color: rgba(255, 255, 255, 0.9) !important;
     }
@@ -85,23 +85,21 @@
 }
 
 ::ng-deep .mat-mdc-tab.mdc-tab--active {
-  background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%) !important;  // Much lighter top for strong 3D
-  color: #ffffff !important;  // White - clickable
-  border-top: 1px solid #6a6a6a;
-  border-left: 1px solid #5a5a5a;
-  border-right: 1px solid #5a5a5a;
+  background: linear-gradient(180deg, #5ab3ff 0%, #4da6ff 100%) !important;  // Blue gradient when active
+  color: #000000 !important;  // Black text when active
+  border-color: #4da6ff;
   border-bottom: 2px solid #3a3a3a;  // Connect to content area seamlessly
   z-index: 1;
   box-shadow:
-    0 4px 8px rgba(0, 0, 0, 0.5),
-    0 -2px 0 rgba(255, 255, 255, 0.2) inset,
-    0 2px 0 rgba(0, 0, 0, 0.3) inset;  // Strong 3D raised effect
+    0 2px 8px rgba(77, 166, 255, 0.5),
+    0 -1px 0 rgba(255, 255, 255, 0.3) inset,
+    0 1px 0 rgba(0, 0, 0, 0.1) inset;  // Blue inset effect
 
-  // Force white text on all child elements for active tab
+  // Force black text on all child elements for active tab
   .mdc-tab__text-label,
-  .tab-label-text,
+  .tab-toggle-btn,
   span {
-    color: #ffffff !important;
+    color: #000000 !important;
   }
 }
 
@@ -128,32 +126,20 @@
   overflow: hidden;
 }
 
-.tab-label-text {
+.tab-toggle-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
   font-size: 14px;
   font-weight: 500;
-  margin-right: 2px;
-}
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: color 0.2s ease;
 
-.tab-close-btn {
-  width: 20px !important;  // Compact close button
-  height: 20px !important;
-  min-width: 20px !important;
-  padding: 0 !important;
-  margin-left: 6px;
-  position: absolute;
-  top: 4px;
-  right: 4px;
-
-  mat-icon {
-    font-size: 14px;
-    width: 14px;
-    height: 14px;
-    line-height: 14px;
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  &:hover mat-icon {
-    color: rgba(255, 255, 255, 0.9);
+  &:focus {
+    outline: none;
   }
 }
 
@@ -182,26 +168,11 @@
 // Responsive
 @media (max-width: 480px) {
   ::ng-deep .mat-mdc-tab {
-    padding: 0 28px 0 8px !important;  // Even tighter on mobile
+    padding: 0 10px !important;  // Tighter on mobile
     height: 44px;
   }
 
-  .tab-label-text {
+  .tab-toggle-btn {
     font-size: 13px;
-  }
-
-  .tab-close-btn {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px !important;
-    top: 3px;
-    right: 3px;
-
-    mat-icon {
-      font-size: 12px;
-      width: 12px;
-      height: 12px;
-      line-height: 12px;
-    }
   }
 }

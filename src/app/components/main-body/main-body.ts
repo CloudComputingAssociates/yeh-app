@@ -27,19 +27,16 @@ import { PlanComponent } from '../plan/plan';
         (selectedIndexChange)="onTabIndexChange($event)"
         class="main-body-tabs">
 
-        @for (tab of tabService.tabs(); track tab.id) {
+        @for (tab of tabService.tabs(); track tab.id; let i = $index) {
           <mat-tab>
             <ng-template mat-tab-label>
-              <span class="tab-label-text">{{ tab.label }}</span>
-              @if (tab.closeable) {
-                <button
-                  mat-icon-button
-                  class="tab-close-btn"
-                  (click)="closeTab($event, tab.id)"
-                  [attr.aria-label]="'Close ' + tab.label + ' tab'">
-                  <mat-icon>close</mat-icon>
-                </button>
-              }
+              <button
+                class="tab-toggle-btn"
+                [class.active]="tabService.activeTabIndex() === i"
+                (click)="toggleTab($event, tab.id, tab.label)"
+                [attr.aria-label]="tab.label + ' tab'">
+                {{ tab.label }}
+              </button>
             </ng-template>
 
             <div class="tab-content">
@@ -72,9 +69,9 @@ import { PlanComponent } from '../plan/plan';
 export class MainBodyComponent {
   tabService = inject(TabService);
 
-  closeTab(event: Event, tabId: string): void {
+  toggleTab(event: Event, tabId: string, label: string): void {
     event.stopPropagation();
-    this.tabService.closeTab(tabId);
+    this.tabService.toggleTab(tabId, label);
   }
 
   onTabIndexChange(index: number): void {

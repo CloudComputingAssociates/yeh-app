@@ -53,7 +53,6 @@ interface MenuItem {
             class="menu-item">
             <span class="menu-icon">{{ item.icon }}</span>
             <span class="menu-label">{{ item.label }}</span>
-            <mat-icon class="chevron-icon">chevron_right</mat-icon>
           </mat-list-item>
         </mat-nav-list>
       </mat-sidenav>
@@ -89,7 +88,7 @@ export class LeftNavComponent {
     } else {
       const menuItem = this.menuItems.find(item => item.tabId === tabId);
       if (menuItem) {
-        this.tabService.openTab(tabId, menuItem.label);
+        this.tabService.toggleTab(tabId, menuItem.label);
       }
     }
     drawer.close();

@@ -25,6 +25,34 @@ export class TabService {
   tabs = this.tabsSignal.asReadonly();
   activeTabIndex = this.activeTabIndexSignal.asReadonly();
 
+  toggleTab(tabId: string, label: string): void {
+    const currentTabs = this.tabsSignal();
+    const existingTabIndex = currentTabs.findIndex(t => t.id === tabId);
+
+    if (existingTabIndex !== -1) {
+      // Tab exists - check if it's active
+      if (this.activeTabIndexSignal() === existingTabIndex) {
+        // Active tab clicked - close it
+        this.closeTab(tabId);
+      } else {
+        // Inactive tab clicked - switch to it
+        this.activeTabIndexSignal.set(existingTabIndex);
+      }
+    } else {
+      // Tab doesn't exist - add it
+      this.tabsSignal.set([
+        ...currentTabs,
+        {
+          id: tabId,
+          label,
+          closeable: true
+        }
+      ]);
+      // Switch to the new tab
+      this.activeTabIndexSignal.set(currentTabs.length);
+    }
+  }
+
   openTab(tabId: string, label: string): void {
     const currentTabs = this.tabsSignal();
     const existingTabIndex = currentTabs.findIndex(t => t.id === tabId);
