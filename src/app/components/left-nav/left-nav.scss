@@ -100,7 +100,7 @@
         background-color: #4a4a4a;
 
         .menu-label {
-          color: #6bb8ff;  // Lighter blue on hover
+          color: rgba(255, 255, 255, 0.8);  // Dimmed white on hover
         }
       }
 
@@ -114,7 +114,7 @@
         flex: 1;
         font-size: 16px;
         font-weight: 500;
-        color: #4da6ff;  // Blue - clickable
+        color: #ffffff;  // White - clickable
         transition: color 0.2s ease;
       }
 

@@ -42,7 +42,7 @@
     .period-toggle-text {
       font-size: clamp(14px, 3.5vw, 18px);
       font-weight: 500;
-      color: #4da6ff;  // Blue text
+      color: #ffffff;  // White - clickable
       background-color: #3a3a3a;  // Match grey background
       cursor: pointer;
       user-select: none;
@@ -51,24 +51,26 @@
       padding: 6px 16px 4px 16px;
       border-radius: 8px;
       margin: 0;
-      border: 1px solid #4a4a4a;
-      outline: none;  // Remove blue outline
-      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);  // Raised look
+      border: 2px solid #5a5a5a;  // Thicker, lighter border
+      outline: none;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.15);  // Stronger raised look
 
       &:hover {
         background-color: #444444;
-        color: #6bb8ff;  // Lighter blue on hover
-        box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        border-color: #6a6a6a;
+        color: rgba(255, 255, 255, 0.8);  // Dimmed white on hover
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.7), inset 0 2px 0 rgba(255, 255, 255, 0.2);
       }
 
       &:active {
         background-color: #2a2a2a;
-        color: #3d8fcc;  // Darker blue when pressed
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);  // Pressed look
+        border-color: #4a4a4a;
+        color: rgba(255, 255, 255, 0.9);
+        box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.5);  // Pressed look
       }
 
       &:focus {
-        outline: none;  // Remove blue outline on focus
+        outline: none;
       }
     }
   }
@@ -95,7 +97,7 @@
       .macro-title {
         font-size: clamp(12px, 3vw, 18px);
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.9);
+        color: #4da6ff;  // Blue - label
         margin: 0 0 6px 0;
         line-height: 1;
       }
@@ -130,44 +132,46 @@
 
         .percentage-toggle-btn {
           background-color: #3a3a3a;  // Grey background
-          border: 1px solid #4a4a4a;
+          border: 2px solid #5a5a5a;  // Thicker, lighter border
           padding: 6px 12px 4px 12px;
           margin: 0;
           cursor: pointer;
           font-family: inherit;
           width: auto;
           display: inline-block;
-          outline: none;  // Remove blue outline
+          outline: none;
           border-radius: 8px;
           transition: all 0.2s ease;
-          box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);  // Raised look
+          box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.15);  // Stronger raised look
 
           &:hover {
             background-color: #444444;
-            box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            border-color: #6a6a6a;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.7), inset 0 2px 0 rgba(255, 255, 255, 0.2);
 
             .percentage-text {
-              color: #6bb8ff;  // Lighter blue on hover
+              color: rgba(255, 255, 255, 0.8);  // Dimmed white on hover
             }
           }
 
           &:active {
             background-color: #2a2a2a;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);  // Pressed look
+            border-color: #4a4a4a;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.5);  // Pressed look
 
             .percentage-text {
-              color: #3d8fcc;  // Darker blue when pressed
+              color: rgba(255, 255, 255, 0.9);
             }
           }
 
           &:focus {
-            outline: none;  // Remove blue outline on focus
+            outline: none;
           }
 
           .percentage-text {
             font-size: clamp(10px, 3vw, 20px);
             font-weight: 500;
-            color: #4da6ff;  // Blue text
+            color: #ffffff;  // White - clickable
             line-height: 1;
             display: block;
             transition: color 0.2s ease;

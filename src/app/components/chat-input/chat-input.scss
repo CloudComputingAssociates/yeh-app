@@ -61,7 +61,7 @@
   max-height: 56px;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: #4da6ff;  // Blue - label
   }
 
   &:focus {
@@ -84,9 +84,9 @@
   width: 56px;
   height: 48px;
   background-color: #3a3a3a;
-  border: 1px solid rgba(77, 166, 255, 0.5);
+  border: 2px solid #5a5a5a;  // Thicker, lighter border for better visibility
   border-radius: 8px;
-  color: #4da6ff;
+  color: #ffffff;  // White - clickable
   font-size: 9px;
   font-weight: 600;
   font-family: inherit;
@@ -94,17 +94,19 @@
   transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.15);  // Stronger raised look
 
   &:hover {
-    background-color: #4a4a4a;
-    border-color: #4da6ff;
+    background-color: #444444;
+    border-color: #6a6a6a;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.7), inset 0 2px 0 rgba(255, 255, 255, 0.2);
   }
 
   &.active {
     background-color: #4da6ff;
     color: #000000;
     border-color: #4da6ff;
-    box-shadow: 0 2px 8px rgba(77, 166, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(77, 166, 255, 0.5), inset 0 -2px 4px rgba(0, 0, 0, 0.2);
   }
 
   &:focus-visible {
