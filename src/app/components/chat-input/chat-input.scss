@@ -3,6 +3,7 @@
 .chat-input-container {
   background-color: #3a3a3a;
   border-top: 1px solid #4a4a4a;
+  border-radius: 12px 12px 0 0;  // Rounded top corners to match main-body
   padding: 12px 16px;
   box-sizing: border-box;
 }
@@ -139,10 +140,11 @@
   gap: 2px;
   padding: 4px;
 
-  .talk-line-1,
-  .talk-line-2 {
+  .talk-icon {
+    width: 32px;
+    height: 32px;
     display: block;
-    line-height: 1;
+    filter: brightness(0) invert(1);  // Make image white
   }
 
   &:hover:not(.active) {
@@ -165,6 +167,10 @@
       0 2px 8px rgba(77, 166, 255, 0.5),
       0 -1px 0 rgba(255, 255, 255, 0.3) inset,
       0 1px 0 rgba(0, 0, 0, 0.1) inset;
+
+    .talk-icon {
+      filter: none;  // Show natural icon color when active
+    }
   }
 
   &:focus-visible {
@@ -203,5 +209,10 @@
     width: 50px;
     height: 44px;
     font-size: 8px;
+
+    .talk-icon {
+      width: 28px;
+      height: 28px;
+    }
   }
 }

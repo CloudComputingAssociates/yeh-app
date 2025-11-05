@@ -4,6 +4,7 @@
   flex-direction: column;
   height: 100%;
   background-color: #3a3a3a;
+  gap: 2px;  // Minimal gap between sections
 }
 
 .plan-header {
@@ -11,7 +12,7 @@
   min-height: 0;
   max-height: 33.33%;  // Prevent expansion
   background-color: #2a2a2a;
-  padding: 16px;
+  padding: 8px;  // Reduced from 16px
   overflow-y: auto;
 
   .header-placeholder {
@@ -47,40 +48,34 @@
   justify-content: flex-end;  // Push to right side
   overflow: hidden;  // Prevent content from expanding container
 
-  // Mobile-first: Default to 100% width
+  // Default: 45% width for all screens
   ::ng-deep app-foods {
-    width: 100%;
-    max-width: 100%;
+    width: 45%;
+    max-width: 45%;
     height: 100%;
     display: flex;
     flex-direction: column;
   }
 }
 
-// Tablet and up: 60% width
-@media (min-width: 481px) {
+// Tablet: 50% width
+@media (min-width: 481px) and (max-width: 768px) {
   .plan-foods {
     ::ng-deep app-foods {
-      width: 60%;
-      max-width: 60%;
-    }
-  }
-}
-
-// Desktop: 45% width
-@media (min-width: 769px) {
-  .plan-foods {
-    ::ng-deep app-foods {
-      width: 45%;
-      max-width: 45%;
+      width: 50%;
+      max-width: 50%;
     }
   }
 }
 
 // Mobile responsive header adjustments
 @media (max-width: 480px) {
+  .plan-container {
+    gap: 2px;  // Keep minimal on mobile
+  }
+
   .plan-header {
-    padding: 12px;
+    padding: 6px;  // Even tighter on mobile
 
     .header-text {
       font-size: 13px;
