@@ -31,35 +31,47 @@
     padding-bottom: 0 !important;
   }
 
-  // Ultra-minimal toggle spacing with raised shading
-  .single-toggle {
-    text-align: center;
-    width: 100%;
-    padding: 4px 0 0 0;  // Reduced from 6px to 4px
+  // Header controls container - holds period label and toggle button
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 8px 0 8px;
     margin: 0;
     margin-bottom: -2px;
 
-    .period-toggle-text {
-      font-size: clamp(14px, 3.5vw, 18px);
+    .period-label {
+      flex: 1;
+      min-width: 0;
+      font-size: 18px;  // Same size as macro titles
+      font-weight: 500;
+      color: #4da6ff;  // Blue - label (non-clickable)
+      padding: 6px 0;
+      text-align: center;
+    }
+
+    .display-mode-toggle {
+      flex-shrink: 0;
+      font-size: 12px;  // Smaller text for button
       font-weight: 500;
       color: #ffffff;  // White - clickable
-      background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);  // Much lighter top for strong 3D
+      background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);
       cursor: pointer;
       user-select: none;
       transition: all 0.2s ease;
-      display: inline-block;
-      padding: 6px 16px 4px 16px;
+      padding: 8px 12px;  // More square proportions
+      min-width: 60px;  // Minimum width for square shape
       border-radius: 8px;
-      margin: 0;
-      border-top: 1px solid #6a6a6a;  // Light top edge
+      border-top: 1px solid #6a6a6a;
       border-left: 1px solid #5a5a5a;
       border-right: 1px solid #5a5a5a;
-      border-bottom: 2px solid #1a1a1a;  // Much darker, thicker bottom for strong shadow
+      border-bottom: 2px solid #1a1a1a;
       outline: none;
+      font-family: inherit;
       box-shadow:
-        0 4px 8px rgba(0, 0, 0, 0.5),  // Stronger drop shadow
-        0 -2px 0 rgba(255, 255, 255, 0.2) inset,  // Brighter top highlight
-        0 2px 0 rgba(0, 0, 0, 0.3) inset;  // Darker bottom shadow
+        0 4px 8px rgba(0, 0, 0, 0.5),
+        0 -2px 0 rgba(255, 255, 255, 0.2) inset,
+        0 2px 0 rgba(0, 0, 0, 0.3) inset;
 
       &:hover {
         background: linear-gradient(180deg, #606060 0%, #454545 100%);
@@ -75,7 +87,7 @@
       }
 
       &:active {
-        background: linear-gradient(180deg, #2a2a2a 0%, #353535 100%);  // Inverted - darker on top
+        background: linear-gradient(180deg, #2a2a2a 0%, #353535 100%);
         border-top-color: #2a2a2a;
         border-left-color: #353535;
         border-right-color: #353535;
@@ -112,7 +124,7 @@
       margin: 0;
 
       .macro-title {
-        font-size: clamp(12px, 3vw, 18px);
+        font-size: 18px;  // Same size as period label (Today)
         font-weight: 500;
         color: #4da6ff;  // Blue - label
         margin: 0 0 6px 0;
@@ -143,74 +155,14 @@
         }
       }
 
-      .percentage-label {
-        margin: 0;
+      .value-label {
+        margin: 0 0 5px 0;  // Added 5px bottom margin for more space (was 2px, now 5px)
         padding: 0;
-
-        .percentage-toggle-btn {
-          background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);  // Much lighter top for strong 3D
-          border-top: 1px solid #6a6a6a;  // Light top edge
-          border-left: 1px solid #5a5a5a;
-          border-right: 1px solid #5a5a5a;
-          border-bottom: 2px solid #1a1a1a;  // Much darker, thicker bottom for strong shadow
-          padding: 6px 12px 4px 12px;
-          margin: 0;
-          cursor: pointer;
-          font-family: inherit;
-          width: auto;
-          display: inline-block;
-          outline: none;
-          border-radius: 8px;
-          transition: all 0.2s ease;
-          box-shadow:
-            0 4px 8px rgba(0, 0, 0, 0.5),  // Stronger drop shadow
-            0 -2px 0 rgba(255, 255, 255, 0.2) inset,  // Brighter top highlight
-            0 2px 0 rgba(0, 0, 0, 0.3) inset;  // Darker bottom shadow
-
-          &:hover {
-            background: linear-gradient(180deg, #606060 0%, #454545 100%);
-            border-top-color: #757575;
-            border-left-color: #656565;
-            border-right-color: #656565;
-            border-bottom-color: #202020;
-            box-shadow:
-              0 5px 10px rgba(0, 0, 0, 0.6),
-              0 -2px 0 rgba(255, 255, 255, 0.25) inset,
-              0 2px 0 rgba(0, 0, 0, 0.3) inset;
-
-            .percentage-text {
-              color: rgba(255, 255, 255, 0.9);
-            }
-          }
-
-          &:active {
-            background: linear-gradient(180deg, #2a2a2a 0%, #353535 100%);  // Inverted gradient when pressed
-            border-top-color: #2a2a2a;
-            border-left-color: #353535;
-            border-right-color: #353535;
-            border-bottom-color: #4a4a4a;
-            box-shadow:
-              0 1px 2px rgba(0, 0, 0, 0.3) inset,
-              0 -1px 0 rgba(255, 255, 255, 0.05) inset;  // Pressed/inset look
-
-            .percentage-text {
-              color: rgba(255, 255, 255, 0.9);
-            }
-          }
-
-          &:focus {
-            outline: none;
-          }
-
-          .percentage-text {
-            font-size: 14px;  // Match tab text size
-            font-weight: 500;
-            color: #ffffff;  // White - clickable
-            line-height: 1;
-            display: block;
-            transition: color 0.2s ease;
-          }
-        }
+        font-size: 14px;
+        font-weight: 500;
+        color: #4da6ff;  // Blue - label (non-clickable)
+        text-align: center;
+        line-height: 1;
       }
     }
   }
@@ -247,9 +199,17 @@
 // Ultra-compact for very small phones
 @media (max-width: 320px) {
   .macros-container {
-    .single-toggle .period-toggle-text {
-      font-size: 10px;
-      padding: 4px 8px;
+    .header-controls {
+      .period-label {
+        font-size: 12px;
+        padding: 4px 0;
+      }
+
+      .display-mode-toggle {
+        font-size: 10px;
+        padding: 6px 8px;
+        min-width: 50px;
+      }
     }
 
     .macro-grid {
@@ -258,12 +218,12 @@
 
       .macro-card {
         .macro-title {
-          font-size: 10px;
+          font-size: 12px;
           margin-bottom: 4px;
         }
 
-        .percentage-label .percentage-toggle-btn .percentage-text {
-          font-size: 8px;
+        .value-label {
+          font-size: 10px;
         }
       }
     }

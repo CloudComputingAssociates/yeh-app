@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserProfileService } from '../../services/user-profile.service';
@@ -23,7 +24,7 @@ export interface MacroDisplayData {
 @Component({
   selector: 'app-macros',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatProgressBarModule],
+  imports: [CommonModule, MatCardModule, MatProgressBarModule, MatTooltipModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="macros-container">
@@ -31,14 +32,24 @@ export interface MacroDisplayData {
       <mat-card class="indicators-card">
         <mat-card-content>
 
-          <!-- Single Toggle inside container -->
-          <div class="single-toggle">
-            <span
-              class="period-toggle-text"
-              (click)="toggleTimePeriod()"
-              [attr.aria-label]="'Toggle between today and week view. Currently showing: ' + (currentTimePeriod === 'day' ? 'Today' : 'Week')">
+          <!-- Header with period label and Grams/Percent toggle -->
+          <div class="header-controls">
+            <!-- Period Label (Left) - Non-clickable -->
+            <div class="period-label">
               {{ currentTimePeriod === 'day' ? 'Today' : 'Week' }}
-            </span>
+            </div>
+
+            <!-- Grams/Percent Toggle (Right) -->
+            <button
+              type="button"
+              class="display-mode-toggle"
+              (click)="toggleDisplay()"
+              [attr.aria-label]="'Toggle between grams and percent. Currently showing: ' + (showPercentages ? 'Percent' : 'Grams')"
+              matTooltip="Switch between Grams and Percent"
+              matTooltipPosition="above"
+              [matTooltipShowDelay]="500">
+              {{ showPercentages ? '%' : 'Grams' }}
+            </button>
           </div>
 
           <!-- Macro Nutrients Grid -->
@@ -63,21 +74,13 @@ export interface MacroDisplayData {
                     </div>
                   </div>
 
-                  <!-- Percentage Label (clickable to toggle) -->
-                  <div class="percentage-label">
-                    <button
-                      type="button"
-                      class="percentage-toggle-btn"
-                      (click)="toggleDisplay()"
-                      [attr.aria-label]="'Toggle between percentage and grams. Currently showing: ' + (showPercentages ? 'percentage' : 'grams')">
-                      <span class="percentage-text">
-                        @if (showPercentages) {
-                          {{ macro.percentage }}%
-                        } @else {
-                          {{ macro.actual }}g
-                        }
-                      </span>
-                    </button>
+                  <!-- Value Label (non-clickable) -->
+                  <div class="value-label">
+                    @if (showPercentages) {
+                      {{ macro.percentage }}%
+                    } @else {
+                      {{ macro.actual }}g
+                    }
                   </div>
                 </mat-card-content>
 

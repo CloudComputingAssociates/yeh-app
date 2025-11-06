@@ -25,7 +25,7 @@
 }
 
 ::ng-deep .mat-mdc-tab-header {
-  background-color: #3a3a3a !important;
+  background-color: #000000 !important;  // Black background to match tab labels
   border-bottom: none !important;  // No border
   padding-left: 0;  // No padding for balanced look
 }
@@ -34,8 +34,12 @@
   display: none !important;  // Hide Material's border element - tab has its own
 }
 
+::ng-deep .mat-mdc-tab-label-container {
+  border-bottom: none !important;  // Remove the white line
+}
+
 ::ng-deep .mat-mdc-tab-labels {
-  background-color: #3a3a3a;
+  background-color: #3a3a3a;  // Gray background
   justify-content: flex-start !important;  // Force left-align tabs
   gap: 2px;  // Minimal gap between tabs
 }
@@ -48,18 +52,15 @@
   padding: 0 20px !important;  // Increased padding for more white space (was 12px)
   height: 48px;
   position: relative;
-  background: linear-gradient(180deg, #484848 0%, #353535 100%);  // Lighter gradient for inactive tabs
+  background: linear-gradient(180deg, #4e4e4e 0%, #424242 100%) !important;  // Subtly lighter than background
   border-radius: 8px 8px 0 0;  // Rounded top corners
   margin-bottom: -1px;  // Overlap bottom border
-  border-top: 1px solid #5a5a5a;
-  border-left: 1px solid #4a4a4a;
-  border-right: 1px solid #4a4a4a;
+  border-top: 2px solid #5a5a5a !important;  // Subtle lighter top edge
+  border-left: 1px solid #4a4a4a !important;
+  border-right: 1px solid #4a4a4a !important;
   border-bottom: none;
   transition: all 0.2s ease;
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.4),
-    0 -1px 0 rgba(255, 255, 255, 0.1) inset,
-    0 2px 0 rgba(0, 0, 0, 0.2) inset;  // 3D raised effect
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;  // Moderate shadow
 
   // Force white text on all child elements
   .mdc-tab__text-label,
@@ -75,10 +76,7 @@
     border-left-color: #555555;
     border-right-color: #555555;
     color: rgba(255, 255, 255, 0.9) !important;
-    box-shadow:
-      0 3px 6px rgba(0, 0, 0, 0.5),
-      0 -1px 0 rgba(255, 255, 255, 0.15) inset,
-      0 2px 0 rgba(0, 0, 0, 0.2) inset;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);  // Slightly stronger shadow on hover
 
     .mdc-tab__text-label,
     .tab-label-text,
@@ -89,23 +87,26 @@
 }
 
 ::ng-deep .mat-mdc-tab.mdc-tab--active {
-  background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%) !important;  // Much lighter top for strong 3D
+  background: linear-gradient(180deg, #6a6a6a 0%, #3a3a3a 100%) !important;  // Gradient that flows into content area
   color: #ffffff !important;  // White - clickable
-  border-top: 1px solid #6a6a6a;
-  border-left: 1px solid #5a5a5a;
-  border-right: 1px solid #5a5a5a;
-  border-bottom: 2px solid #000000;  // Black separator line
+  border-top: 3px solid #808080 !important;  // Thicker, brighter top border
+  border-left: 2px solid #6a6a6a !important;
+  border-right: 2px solid #6a6a6a !important;
+  border-bottom: none !important;  // No bottom border - seamless connection to content
+  margin-bottom: 0 !important;  // No margin - flush with content
   z-index: 1;
-  box-shadow:
-    0 4px 8px rgba(0, 0, 0, 0.5),
-    0 -2px 0 rgba(255, 255, 255, 0.2) inset,
-    0 2px 0 rgba(0, 0, 0, 0.3) inset;  // Strong 3D raised effect
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5) !important;  // Stronger shadow for prominence
 
   // Force white text on all child elements for active tab
   .mdc-tab__text-label,
   .tab-label-text,
   span {
     color: #ffffff !important;
+  }
+
+  // Hide any borders on ALL child elements
+  * {
+    border-bottom: none !important;
   }
 }
 

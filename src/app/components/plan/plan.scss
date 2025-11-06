@@ -11,13 +11,13 @@
   height: 100%;
   width: 100%;
   background-color: #3a3a3a;
-  gap: 2px;
+  gap: 0;  // No gap - removes the white line
   overflow: hidden;
 }
 
 .plan-header {
   grid-row: 1;
-  background-color: #3a3a3a;
+  background: linear-gradient(180deg, #404040 0%, #5a5a5a 100%);  // Stronger contrast: darker top, lighter bottom
   padding: 8px;
   overflow-y: auto;
   overflow-x: hidden;

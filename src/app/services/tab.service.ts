@@ -24,7 +24,7 @@ export class TabService {
     }
   ]);
 
-  private activeTabIndexSignal = signal<number>(0);  // Default to Chat (index 0)
+  private activeTabIndexSignal = signal<number>(1);  // Default to Plan (index 1)
 
   // Expose signals as readonly
   tabs = this.tabsSignal.asReadonly();

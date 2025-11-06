@@ -23,7 +23,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
           (click)="toggleMic()"
           [attr.aria-label]="isMicActive() ? 'Stop recording' : 'Start recording'"
           matTooltip="Voice input"
-          matTooltipPosition="above">
+          matTooltipPosition="above"
+          [matTooltipShowDelay]="500">
           <mat-icon>mic</mat-icon>
         </button>
 
@@ -44,7 +45,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
           (click)="toggleTalkMode()"
           [attr.aria-label]="isTalkMode() ? 'Exit conversation mode' : 'Enter conversation mode'"
           matTooltip="YEH speaks"
-          matTooltipPosition="above">
+          matTooltipPosition="above"
+          [matTooltipShowDelay]="500">
           <img src="/images/speak-icon.png" alt="Talk to me" class="talk-icon" />
         </button>
 

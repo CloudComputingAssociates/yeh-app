@@ -8,7 +8,8 @@
   .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 16px;
+    padding: 8px;
+    background: linear-gradient(180deg, #404040 0%, #5a5a5a 100%);  // Same gradient as plan header
 
     .placeholder-content {
       display: flex;

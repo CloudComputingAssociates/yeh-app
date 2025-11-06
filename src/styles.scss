@@ -94,3 +94,24 @@ body {
 .mat-mdc-tab-header-border-bottom {
   display: none !important;
 }
+
+// Global tooltip styling - bright yellow text with rounded corners
+.mat-mdc-tooltip {
+  background-color: #000000 !important;  // Black background
+  font-size: 13px !important;
+  padding: 6px 12px !important;
+  border-radius: 16px !important;  // Rounded balloon shape
+  border: 2px solid #ffed4e !important;  // Bright yellow border
+  z-index: 9999 !important;  // Ensure tooltips appear above everything
+
+  .mdc-tooltip__surface {
+    background-color: #000000 !important;  // Black background
+    color: #ffed4e !important;  // Bright yellow text
+    border-radius: 16px !important;
+  }
+}
+
+// Ensure tooltip container has high z-index
+.cdk-overlay-container {
+  z-index: 9999 !important;
+}
