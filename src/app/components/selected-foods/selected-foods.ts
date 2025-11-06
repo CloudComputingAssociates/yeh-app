@@ -15,7 +15,10 @@ export interface RemoveFoodEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="selected-foods-container">
-      <div class="selected-foods-list">
+      <div
+        class="selected-foods-list"
+        (keydown)="onKeyDown($event)"
+        tabindex="0">
         @if (foods().length === 0) {
           <div class="empty-message">
             <p>No foods selected</p>
@@ -24,6 +27,7 @@ export interface RemoveFoodEvent {
           @for (food of foods(); track food.id; let i = $index) {
             <div
               class="selected-food-item"
+              [class.selected]="selectedIndex() === i"
               (click)="selectFood(i)"
               (touchstart)="onTouchStart($event, i)"
               (touchmove)="onTouchMove($event, i)"
@@ -56,6 +60,7 @@ export class SelectedFoodsComponent {
 
   // Internal state
   favorites = signal<Set<number>>(new Set());
+  selectedIndex = signal<number>(-1);
 
   // Double-click/tap detection
   private lastTapTime = 0;
@@ -130,7 +135,8 @@ export class SelectedFoodsComponent {
       this.lastTapTime = 0;
       this.lastTapIndex = -1;
     } else {
-      // Single click/tap - just update timing for double-tap detection
+      // Single click/tap - select the item and update timing for double-tap detection
+      this.selectedIndex.set(index);
       this.lastTapTime = currentTime;
       this.lastTapIndex = index;
     }
@@ -197,5 +203,67 @@ export class SelectedFoodsComponent {
 
     // Reset swipe detection
     this.swipingIndex = -1;
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    const foodList = this.foods();
+    if (foodList.length === 0) {
+      return;
+    }
+
+    const currentIndex = this.selectedIndex();
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault(); // Prevent scrolling
+        if (currentIndex < foodList.length - 1) {
+          this.selectedIndex.set(currentIndex + 1);
+          this.scrollToIndex(currentIndex + 1);
+        }
+        break;
+
+      case 'ArrowUp':
+        event.preventDefault(); // Prevent scrolling
+        if (currentIndex > 0) {
+          this.selectedIndex.set(currentIndex - 1);
+          this.scrollToIndex(currentIndex - 1);
+        } else if (currentIndex === -1 && foodList.length > 0) {
+          // If nothing selected, select the first item
+          this.selectedIndex.set(0);
+          this.scrollToIndex(0);
+        }
+        break;
+
+      case 'Delete':
+      case 'Backspace':
+        event.preventDefault();
+        if (currentIndex >= 0 && currentIndex < foodList.length) {
+          // Delete/Backspace key removes from selected foods
+          const food = foodList[currentIndex];
+          console.log('Delete key pressed, removing food:', food.description);
+          this.removeFood.emit({ food });
+
+          // Adjust selection after removal
+          if (currentIndex >= foodList.length - 1) {
+            // If we removed the last item, select the new last item
+            this.selectedIndex.set(Math.max(0, foodList.length - 2));
+          }
+          // Otherwise selection stays at same index (which will be the next item)
+        }
+        break;
+    }
+  }
+
+  private scrollToIndex(index: number): void {
+    // Scroll the selected item into view
+    setTimeout(() => {
+      const foodItems = document.querySelectorAll('.selected-food-item');
+      if (foodItems[index]) {
+        foodItems[index].scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }
+    }, 0);
   }
 }

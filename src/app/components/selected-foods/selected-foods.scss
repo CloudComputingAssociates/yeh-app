@@ -118,13 +118,27 @@
   overflow: hidden;
   gap: 8px;  // Space between star and text
 
-  &:hover {
+  &:hover:not(.selected) {
     background: linear-gradient(180deg, #484848 0%, #404040 100%);
     border-top-color: #505050;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 
     .food-description {
       color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  &.selected {
+    background: linear-gradient(180deg, #4da6ff 0%, #3a8ee6 100%);  // Blue gradient for selection
+    border-top: 1px solid #5ab3ff;
+    border-left: 1px solid #4da6ff;
+    border-right: 1px solid #4da6ff;
+    border-bottom: 1px solid #3a8ee6;
+    box-shadow: 0 2px 4px rgba(77, 166, 255, 0.4);
+
+    .food-description {
+      color: #ffffff;
+      font-weight: 500;
     }
   }
 

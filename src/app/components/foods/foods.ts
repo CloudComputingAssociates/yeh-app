@@ -51,7 +51,10 @@ export interface AddFoodEvent {
 
       <!-- Foods List -->
       <div class="foods-list-container">
-        <div class="foods-list">
+        <div
+          class="foods-list"
+          (keydown)="onKeyDown($event)"
+          tabindex="0">
           @if (isLoading()) {
             <div class="loading-message">
               <p>Loading foods...</p>
@@ -269,5 +272,59 @@ export class FoodsComponent {
 
     // Reset swipe detection
     this.swipingIndex = -1;
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    const foodList = this.foods();
+    if (foodList.length === 0) {
+      return;
+    }
+
+    const currentIndex = this.selectedIndex();
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault(); // Prevent scrolling
+        if (currentIndex < foodList.length - 1) {
+          this.selectFood(currentIndex + 1);
+          this.scrollToIndex(currentIndex + 1);
+        }
+        break;
+
+      case 'ArrowUp':
+        event.preventDefault(); // Prevent scrolling
+        if (currentIndex > 0) {
+          this.selectFood(currentIndex - 1);
+          this.scrollToIndex(currentIndex - 1);
+        } else if (currentIndex === -1 && foodList.length > 0) {
+          // If nothing selected, select the first item
+          this.selectFood(0);
+          this.scrollToIndex(0);
+        }
+        break;
+
+      case 'Enter':
+        event.preventDefault();
+        if (currentIndex >= 0 && currentIndex < foodList.length) {
+          // Enter key adds to selected foods (same as double-click)
+          const food = foodList[currentIndex];
+          console.log('Enter key pressed, adding food:', food.description);
+          this.addFood.emit({ food });
+        }
+        break;
+    }
+  }
+
+  private scrollToIndex(index: number): void {
+    // Scroll the selected item into view
+    setTimeout(() => {
+      const foodItems = document.querySelectorAll('.food-item');
+      if (foodItems[index]) {
+        foodItems[index].scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }
+    }, 0);
   }
 }

@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-chat-input',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule, MatTooltipModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="chat-input-container">
@@ -20,7 +21,9 @@ import { MatButtonModule } from '@angular/material/button';
           class="input-icon-btn mic-btn"
           [class.active]="isMicActive()"
           (click)="toggleMic()"
-          [attr.aria-label]="isMicActive() ? 'Stop recording' : 'Start recording'">
+          [attr.aria-label]="isMicActive() ? 'Stop recording' : 'Start recording'"
+          matTooltip="Voice input"
+          matTooltipPosition="above">
           <mat-icon>mic</mat-icon>
         </button>
 
@@ -39,7 +42,9 @@ import { MatButtonModule } from '@angular/material/button';
           class="talk-btn"
           [class.active]="isTalkMode()"
           (click)="toggleTalkMode()"
-          [attr.aria-label]="isTalkMode() ? 'Exit conversation mode' : 'Enter conversation mode'">
+          [attr.aria-label]="isTalkMode() ? 'Exit conversation mode' : 'Enter conversation mode'"
+          matTooltip="YEH speaks"
+          matTooltipPosition="above">
           <img src="/images/speak-icon.png" alt="Talk to me" class="talk-icon" />
         </button>
 
