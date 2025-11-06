@@ -2,7 +2,7 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FoodsComponent, SelectedFoodEvent, AddFoodEvent } from '../foods/foods';
-import { SelectedFoodsComponent } from '../selected-foods/selected-foods';
+import { SelectedFoodsComponent, RemoveFoodEvent } from '../selected-foods/selected-foods';
 import { Food } from '../../models/food.model';
 
 @Component({
@@ -34,7 +34,9 @@ import { Food } from '../../models/food.model';
           (selectedFood)="onFoodSelected($event)"
           (addFood)="onAddFood($event)" />
 
-        <app-selected-foods [foods]="selectedFoods()" />
+        <app-selected-foods
+          [foods]="selectedFoods()"
+          (removeFood)="onRemoveFood($event)" />
       </div>
     </div>
   `,
@@ -60,6 +62,10 @@ export class PlanComponent {
     this.addToSelectedFoods(event.food);
   }
 
+  onRemoveFood(event: RemoveFoodEvent): void {
+    this.removeFromSelectedFoods(event.food);
+  }
+
   private addToSelectedFoods(food: Food): void {
     // Check if food is already in selected foods (prevent duplicates)
     const currentFoods = this.selectedFoods();
@@ -71,5 +77,12 @@ export class PlanComponent {
     } else {
       console.log('Food already in selected foods:', food.description);
     }
+  }
+
+  private removeFromSelectedFoods(food: Food): void {
+    const currentFoods = this.selectedFoods();
+    const updatedFoods = currentFoods.filter(f => f.id !== food.id);
+    this.selectedFoods.set(updatedFoods);
+    console.log('Removed food from selected foods:', food.description);
   }
 }

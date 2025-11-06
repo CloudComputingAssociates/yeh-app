@@ -72,13 +72,6 @@ export interface AddFoodEvent {
                 tabindex="0"
                 role="button"
                 [attr.aria-label]="food.description">
-                <mat-icon
-                  class="favorite-icon"
-                  [class.favorited]="isFavorite(food.id)"
-                  (click)="toggleFavorite($event, food.id)"
-                  aria-label="Toggle favorite">
-                  {{ isFavorite(food.id) ? 'star' : 'star_border' }}
-                </mat-icon>
                 <span class="food-description">{{ food.description }}</span>
               </div>
             }
@@ -104,7 +97,6 @@ export class FoodsComponent {
   foods = signal<Food[]>([]);
   selectedIndex = signal<number>(-1);
   isLoading = signal<boolean>(false);
-  favorites = signal<Set<number>>(new Set());
 
   // Double-click/tap detection
   private lastTapTime = 0;
@@ -119,43 +111,7 @@ export class FoodsComponent {
   private readonly swipeThreshold = 0.35;  // 35% of element width
   private readonly swipeTimeLimit = 500;  // Max 500ms for swipe
 
-  constructor(private foodsService: FoodsService) {
-    // Load favorites from LocalStorage
-    this.loadFavorites();
-  }
-
-  private loadFavorites(): void {
-    const stored = localStorage.getItem('food-favorites');
-    if (stored) {
-      try {
-        const arr = JSON.parse(stored) as number[];
-        this.favorites.set(new Set(arr));
-      } catch (e) {
-        console.error('Failed to load favorites:', e);
-      }
-    }
-  }
-
-  private saveFavorites(): void {
-    const arr = Array.from(this.favorites());
-    localStorage.setItem('food-favorites', JSON.stringify(arr));
-  }
-
-  isFavorite(foodId: number): boolean {
-    return this.favorites().has(foodId);
-  }
-
-  toggleFavorite(event: Event, foodId: number): void {
-    event.stopPropagation(); // Prevent selecting the food
-    const favs = new Set(this.favorites());
-    if (favs.has(foodId)) {
-      favs.delete(foodId);
-    } else {
-      favs.add(foodId);
-    }
-    this.favorites.set(favs);
-    this.saveFavorites();
-  }
+  constructor(private foodsService: FoodsService) {}
 
   performSearch(): void {
     const query = this.searchQuery.trim();

@@ -101,6 +101,7 @@
 
 .selected-food-item {
   padding: 1.5px 12px;  // Match foods component padding
+  cursor: pointer;
   border-bottom: 1px solid #3a3a3a;
   transition: all 0.2s ease;
   background: linear-gradient(180deg, #404040 0%, #383838 100%);  // Subtle gradient
@@ -115,17 +116,56 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  gap: 8px;  // Space between star and text
 
-  .food-description {
-    font-size: 14px;
-    color: #ffffff;  // White - text
-    line-height: 1.4;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
+  &:hover {
+    background: linear-gradient(180deg, #484848 0%, #404040 100%);
+    border-top-color: #505050;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+
+    .food-description {
+      color: rgba(255, 255, 255, 0.9);
+    }
   }
+
+  &:focus {
+    outline: 2px solid #4da6ff;
+    outline-offset: -2px;
+  }
+}
+
+.favorite-icon {
+  flex-shrink: 0;  // Don't shrink the star
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: rgba(255, 255, 255, 0.4);  // Dimmed white for unfavorited
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.7);  // Brighter on hover
+    transform: scale(1.1);  // Subtle grow on hover
+  }
+
+  &.favorited {
+    color: #ffd700;  // Gold for favorited
+
+    &:hover {
+      color: #ffed4e;  // Lighter gold on hover
+    }
+  }
+}
+
+.food-description {
+  font-size: 14px;
+  color: #ffffff;  // White - text
+  line-height: 1.4;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
 }
 
 // Responsive adjustments
