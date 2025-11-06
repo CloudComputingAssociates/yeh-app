@@ -35,7 +35,7 @@
   .single-toggle {
     text-align: center;
     width: 100%;
-    padding: 6px 0 0 0;
+    padding: 4px 0 0 0;  // Reduced from 6px to 4px
     margin: 0;
     margin-bottom: -2px;
 
@@ -95,10 +95,10 @@
   .macro-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
+    gap: 16px;  // Reduced from 32px to 16px
     width: 100%;
     margin: 0;
-    padding: 0 16px 8px 16px;
+    padding: 0 8px 4px 8px;  // Reduced from 16px/8px to 8px/4px
     box-sizing: border-box;
 
     .macro-card {

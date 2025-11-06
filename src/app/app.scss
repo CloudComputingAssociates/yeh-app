@@ -62,37 +62,36 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 2px 16px 0 16px;
+    padding: 2px 4px 0 4px;  // Reduced from 16px to 4px
     background-color: #000000;
     min-height: 0; // Important for flex children to respect container height
-    
+    gap: 2px;  // Use gap instead of margins
+
     // Macros - fixed height
     app-macros {
       flex-shrink: 0;
-      margin-bottom: 16px;
     }
-    
+
     // Main body - grows to fill remaining space
     app-main-body {
       flex: 1;
       min-height: 0; // Allows scrolling within this component
-      margin-bottom: 16px;
       display: flex;
     }
-    
+
     // Chat input - fixed height at bottom
     app-chat-input {
       flex-shrink: 0;
     }
-    
+
     // Tablet padding
     @media (min-width: 768px) {
-      padding: 2px 32px 0 32px;
+      padding: 2px 6px 0 6px;  // Reduced from 32px to 6px
     }
-    
+
     // Desktop padding
     @media (min-width: 1024px) {
-      padding: 2px 48px 0 48px;
+      padding: 2px 8px 0 8px;  // Reduced from 48px to 8px
     }
   }
 }
