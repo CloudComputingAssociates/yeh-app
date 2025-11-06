@@ -8,12 +8,13 @@
 }
 
 .plan-header {
-  flex: 0 0 34%;  // Top 34% - FIXED, doesn't grow
+  flex: 0 0 25%;  // Reduced to 25% to match visual expectations
   min-height: 0;
-  max-height: 34%;  // Prevent expansion
+  max-height: 25%;  // Prevent expansion
   background-color: #2a2a2a;
-  padding: 8px;  // Reduced from 16px
+  padding: 4px;  // Minimal padding
   overflow-y: auto;
+  overflow-x: hidden;
 
   .header-placeholder {
     display: flex;
@@ -21,27 +22,29 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    gap: 4px;
+    gap: 2px;
 
     .header-text {
       color: #4da6ff;  // Blue - label
-      font-size: 14px;
+      font-size: 12px;  // Smaller
       font-weight: 500;
       margin: 0;
+      line-height: 1.2;
     }
 
     .header-subtext {
       color: rgba(255, 255, 255, 0.5);
-      font-size: 12px;
+      font-size: 10px;  // Smaller
       margin: 0;
+      line-height: 1.2;
     }
   }
 }
 
 .plan-foods {
-  flex: 0 0 66%;  // Bottom 66% - FIXED, doesn't grow
+  flex: 0 0 75%;  // Increased to 75% to fill remaining space
   min-height: 0;
-  max-height: 66%;  // Prevent expansion
+  max-height: 75%;  // Prevent expansion
   display: flex;
   flex-direction: row;  // Changed to row for horizontal layout
   align-items: stretch;
@@ -52,6 +55,7 @@
   ::ng-deep app-foods {
     width: 50%;
     max-width: 50%;
+    min-width: 50%;
     height: 100%;
     max-height: 100%;  // Prevent growth
     display: flex;
@@ -67,14 +71,14 @@
   }
 
   .plan-header {
-    padding: 6px;  // Even tighter on mobile
+    padding: 4px;  // Keep minimal on mobile too
 
     .header-text {
-      font-size: 13px;
+      font-size: 11px;  // Smaller on mobile
     }
 
     .header-subtext {
-      font-size: 11px;
+      font-size: 9px;  // Smaller on mobile
     }
   }
 }
