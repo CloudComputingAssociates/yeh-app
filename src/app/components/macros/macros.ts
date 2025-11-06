@@ -47,7 +47,8 @@ export interface MacroDisplayData {
               [attr.aria-label]="'Toggle between grams and percent. Currently showing: ' + (showPercentages ? 'Percent' : 'Grams')"
               matTooltip="Switch between Grams and Percent"
               matTooltipPosition="above"
-              [matTooltipShowDelay]="500">
+              [matTooltipShowDelay]="500"
+              [matTooltipHideDelay]="5000">
               {{ showPercentages ? '%' : 'Grams' }}
             </button>
           </div>
