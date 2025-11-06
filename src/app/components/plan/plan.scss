@@ -1,16 +1,16 @@
 // src/app/components/plan/plan.scss
 .plan-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr 2fr;  // 1:2 ratio = 33.33%:66.67%
   height: 100%;
+  width: 100%;
   background-color: #3a3a3a;
-  gap: 2px;  // Minimal gap between sections
+  gap: 2px;
+  overflow: hidden;
 }
 
 .plan-header {
-  flex: 0 0 34%;  // Top 34% as agreed
-  min-height: 0;
-  max-height: 34%;  // Prevent expansion
+  grid-row: 1;
   background-color: #2a2a2a;
   padding: 8px;
   overflow-y: auto;
@@ -42,25 +42,15 @@
 }
 
 .plan-foods {
-  flex: 0 0 66%;  // Bottom 66% as agreed
-  min-height: 0;
-  max-height: 66%;  // Prevent expansion
-  display: flex;
-  flex-direction: row;  // Changed to row for horizontal layout
-  align-items: stretch;
-  justify-content: flex-start;  // Push to left side
-  overflow: hidden;  // Prevent content from expanding container
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;  // 50% / 50%
+  overflow: hidden;
 
-  // 50% width on left side
   ::ng-deep app-foods {
-    width: 50%;
-    max-width: 50%;
-    min-width: 50%;
+    grid-column: 1;  // First column (left side)
     height: 100%;
-    max-height: 100%;  // Prevent growth
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;  // Critical: prevent child expansion
+    overflow: hidden;
   }
 }
 

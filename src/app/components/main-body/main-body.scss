@@ -25,9 +25,13 @@
 }
 
 ::ng-deep .mat-mdc-tab-header {
-  background-color: #3a3a3a;
-  border-bottom: none;  // Remove white line
+  background-color: #3a3a3a !important;
+  border-bottom: none !important;  // Remove white line
   padding-left: 8px;  // Add left padding to start tabs from left
+}
+
+::ng-deep .mat-mdc-tab-header-border-bottom {
+  display: none !important;  // Material adds a separate border element
 }
 
 ::ng-deep .mat-mdc-tab-labels {

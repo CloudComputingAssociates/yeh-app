@@ -52,10 +52,6 @@ export interface SelectedFoodEvent {
             <div class="loading-message">
               <p>Loading foods...</p>
             </div>
-          } @else if (foods().length === 0) {
-            <div class="empty-message">
-              <p class="empty-text">No foods to display</p>
-            </div>
           } @else {
             @for (food of foods(); track food.id; let i = $index) {
               <div
