@@ -26,13 +26,12 @@
 
 ::ng-deep .mat-mdc-tab-header {
   background-color: #3a3a3a !important;
-  border-bottom: 1px solid #4da6ff !important;  // Blue separator line
+  border-bottom: none !important;  // No border - the tab itself has the blue border
   padding-left: 8px;  // Add left padding to start tabs from left
 }
 
 ::ng-deep .mat-mdc-tab-header-border-bottom {
-  background-color: #4da6ff !important;  // Blue separator instead of white
-  height: 1px !important;
+  display: none !important;  // Hide Material's border element - tab has its own
 }
 
 ::ng-deep .mat-mdc-tab-labels {
@@ -95,7 +94,7 @@
   border-top: 1px solid #6a6a6a;
   border-left: 1px solid #5a5a5a;
   border-right: 1px solid #5a5a5a;
-  border-bottom: 2px solid #3a3a3a;  // Connect to content area seamlessly
+  border-bottom: 2px solid #4da6ff;  // Blue separator line
   z-index: 1;
   box-shadow:
     0 4px 8px rgba(0, 0, 0, 0.5),
