@@ -17,6 +17,10 @@ export interface SelectedFoodEvent {
   fiber: number;
 }
 
+export interface AddFoodEvent {
+  food: Food;
+}
+
 @Component({
   selector: 'app-foods',
   standalone: true,
@@ -62,9 +66,19 @@ export interface SelectedFoodEvent {
                 class="food-item"
                 [class.selected]="selectedIndex() === i"
                 (click)="selectFood(i)"
+                (touchstart)="onTouchStart($event, i)"
+                (touchmove)="onTouchMove($event, i)"
+                (touchend)="onTouchEnd($event, i)"
                 tabindex="0"
                 role="button"
                 [attr.aria-label]="food.description">
+                <mat-icon
+                  class="favorite-icon"
+                  [class.favorited]="isFavorite(food.id)"
+                  (click)="toggleFavorite($event, food.id)"
+                  aria-label="Toggle favorite">
+                  {{ isFavorite(food.id) ? 'star' : 'star_border' }}
+                </mat-icon>
                 <span class="food-description">{{ food.description }}</span>
               </div>
             }
@@ -82,6 +96,7 @@ export class FoodsComponent {
 
   // Outputs
   selectedFood = output<SelectedFoodEvent>();
+  addFood = output<AddFoodEvent>();
 
   // Internal state
   searchQuery = '';
@@ -89,8 +104,58 @@ export class FoodsComponent {
   foods = signal<Food[]>([]);
   selectedIndex = signal<number>(-1);
   isLoading = signal<boolean>(false);
+  favorites = signal<Set<number>>(new Set());
 
-  constructor(private foodsService: FoodsService) {}
+  // Double-click/tap detection
+  private lastTapTime = 0;
+  private lastTapIndex = -1;
+  private readonly doubleTapDelay = 300;  // 300ms between taps
+
+  // Swipe detection
+  private touchStartX = 0;
+  private touchStartY = 0;
+  private touchStartTime = 0;
+  private swipingIndex = -1;
+  private readonly swipeThreshold = 0.35;  // 35% of element width
+  private readonly swipeTimeLimit = 500;  // Max 500ms for swipe
+
+  constructor(private foodsService: FoodsService) {
+    // Load favorites from LocalStorage
+    this.loadFavorites();
+  }
+
+  private loadFavorites(): void {
+    const stored = localStorage.getItem('food-favorites');
+    if (stored) {
+      try {
+        const arr = JSON.parse(stored) as number[];
+        this.favorites.set(new Set(arr));
+      } catch (e) {
+        console.error('Failed to load favorites:', e);
+      }
+    }
+  }
+
+  private saveFavorites(): void {
+    const arr = Array.from(this.favorites());
+    localStorage.setItem('food-favorites', JSON.stringify(arr));
+  }
+
+  isFavorite(foodId: number): boolean {
+    return this.favorites().has(foodId);
+  }
+
+  toggleFavorite(event: Event, foodId: number): void {
+    event.stopPropagation(); // Prevent selecting the food
+    const favs = new Set(this.favorites());
+    if (favs.has(foodId)) {
+      favs.delete(foodId);
+    } else {
+      favs.add(foodId);
+    }
+    this.favorites.set(favs);
+    this.saveFavorites();
+  }
 
   performSearch(): void {
     const query = this.searchQuery.trim();
@@ -146,21 +211,107 @@ export class FoodsComponent {
       return;
     }
 
-    this.selectedIndex.set(index);
-    const food = foodList[index];
+    // Check for double-click/tap
+    const currentTime = Date.now();
+    const timeSinceLastTap = currentTime - this.lastTapTime;
+    const isDoubleTap =
+      index === this.lastTapIndex &&
+      timeSinceLastTap < this.doubleTapDelay;
 
-    // Extract nutrition info
-    const nf = food.nutritionFacts;
-    const event: SelectedFoodEvent = {
-      food,
-      description: food.description,
-      protein: nf?.proteinG ?? 0,
-      carbs: nf?.totalCarbohydrateG ?? 0,
-      fat: nf?.totalFatG ?? 0,
-      fiber: nf?.dietaryFiberG ?? 0
-    };
+    if (isDoubleTap) {
+      // Double-click/tap detected - add to selected foods
+      const food = foodList[index];
+      console.log('Double-tap detected, adding food:', food.description);
+      this.addFood.emit({ food });
 
-    console.log('Food selected:', event);
-    this.selectedFood.emit(event);
+      // Reset double-tap detection
+      this.lastTapTime = 0;
+      this.lastTapIndex = -1;
+    } else {
+      // Single click/tap - select the food
+      this.selectedIndex.set(index);
+      const food = foodList[index];
+
+      // Extract nutrition info
+      const nf = food.nutritionFacts;
+      const event: SelectedFoodEvent = {
+        food,
+        description: food.description,
+        protein: nf?.proteinG ?? 0,
+        carbs: nf?.totalCarbohydrateG ?? 0,
+        fat: nf?.totalFatG ?? 0,
+        fiber: nf?.dietaryFiberG ?? 0
+      };
+
+      console.log('Food selected:', event);
+      this.selectedFood.emit(event);
+
+      // Update double-tap detection
+      this.lastTapTime = currentTime;
+      this.lastTapIndex = index;
+    }
+  }
+
+  onTouchStart(event: TouchEvent, index: number): void {
+    const touch = event.touches[0];
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+    this.touchStartTime = Date.now();
+    this.swipingIndex = index;
+  }
+
+  onTouchMove(event: TouchEvent, index: number): void {
+    if (this.swipingIndex !== index) {
+      return;
+    }
+
+    const touch = event.touches[0];
+    const deltaX = touch.clientX - this.touchStartX;
+    const deltaY = Math.abs(touch.clientY - this.touchStartY);
+
+    // If moving more vertically than horizontally, cancel swipe (allow scroll)
+    if (deltaY > Math.abs(deltaX)) {
+      this.swipingIndex = -1;
+      return;
+    }
+
+    // Prevent default to stop scrolling during horizontal swipe
+    if (Math.abs(deltaX) > 10) {
+      event.preventDefault();
+    }
+  }
+
+  onTouchEnd(event: TouchEvent, index: number): void {
+    if (this.swipingIndex !== index) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - this.touchStartX;
+    const deltaY = Math.abs(touch.clientY - this.touchStartY);
+    const deltaTime = Date.now() - this.touchStartTime;
+
+    // Get the element width to calculate threshold
+    const target = event.target as HTMLElement;
+    const foodItem = target.closest('.food-item') as HTMLElement;
+    const elementWidth = foodItem?.offsetWidth || 0;
+
+    // Check if it's a valid swipe right
+    const isSwipeRight =
+      deltaX > elementWidth * this.swipeThreshold &&
+      deltaY < 50 &&  // Not too much vertical movement
+      deltaTime < this.swipeTimeLimit;
+
+    if (isSwipeRight) {
+      const foodList = this.foods();
+      if (index >= 0 && index < foodList.length) {
+        const food = foodList[index];
+        console.log('Swipe right detected, adding food:', food.description);
+        this.addFood.emit({ food });
+      }
+    }
+
+    // Reset swipe detection
+    this.swipingIndex = -1;
   }
 }

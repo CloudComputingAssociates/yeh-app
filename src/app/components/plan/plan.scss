@@ -21,13 +21,16 @@
   padding: 8px;
   overflow-y: auto;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 
   .header-placeholder {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    flex: 1;
     gap: 4px;
 
     .header-text {
@@ -45,16 +48,37 @@
       line-height: 1.2;
     }
   }
+
+  .selected-description {
+    color: #4da6ff;  // Blue - label
+    font-size: 14px;
+    padding: 2px;
+    background-color: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 1.4;
+    flex-shrink: 0;  // Don't shrink the description
+  }
 }
 
 .plan-foods {
   grid-row: 2;
   display: grid;
   grid-template-columns: 1fr 1fr;  // 50% / 50%
+  gap: 2px;
   overflow: hidden;
 
   ::ng-deep app-foods {
     grid-column: 1;  // First column (left side)
+    height: 100%;
+    overflow: hidden;
+  }
+
+  ::ng-deep app-selected-foods {
+    grid-column: 2;  // Second column (right side)
     height: 100%;
     overflow: hidden;
   }
