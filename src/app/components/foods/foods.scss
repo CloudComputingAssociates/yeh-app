@@ -173,6 +173,7 @@
   overflow: hidden;  // Hide overflow on container
   display: flex;
   flex-direction: column;
+  border: 2px solid #ff0000;  // TEMPORARY: Red border to see if this renders
 }
 
 .loading-message,
