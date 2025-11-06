@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TabService } from '../../services/tab.service';
 import { ChatComponent } from '../chat/chat';
+import { TodayComponent } from '../today/today';
 import { PlanComponent } from '../plan/plan';
 
 @Component({
@@ -17,6 +18,7 @@ import { PlanComponent } from '../plan/plan';
     MatIconModule,
     MatButtonModule,
     ChatComponent,
+    TodayComponent,
     PlanComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +38,8 @@ import { PlanComponent } from '../plan/plan';
             <div class="tab-content">
               @if (tab.id === 'chat') {
                 <app-chat />
+              } @else if (tab.id === 'today') {
+                <app-today />
               } @else if (tab.id === 'plan') {
                 <app-plan />
               } @else if (tab.id === 'progress') {

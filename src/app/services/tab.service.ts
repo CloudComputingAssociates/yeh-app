@@ -18,20 +18,20 @@ export class TabService {
       closeable: false
     },
     {
-      id: 'plan',
-      label: 'Plan',
+      id: 'today',
+      label: 'Today',
       closeable: false
     }
   ]);
 
-  private activeTabIndexSignal = signal<number>(1);  // Default to Plan (index 1)
+  private activeTabIndexSignal = signal<number>(1);  // Default to Today (index 1)
 
   // Expose signals as readonly
   tabs = this.tabsSignal.asReadonly();
   activeTabIndex = this.activeTabIndexSignal.asReadonly();
 
   // Define menu order - this determines tab insertion order
-  private menuOrder = ['chat', 'plan', 'progress', 'shop'];
+  private menuOrder = ['chat', 'today', 'plan', 'progress', 'shop'];
 
   toggleTab(tabId: string, label: string): void {
     const currentTabs = this.tabsSignal();

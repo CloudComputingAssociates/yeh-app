@@ -8,7 +8,8 @@ import { TabService } from '../../services/tab.service';
 
 interface MenuItem {
   label: string;
-  icon: string;
+  icon?: string;  // Emoji icon
+  iconImage?: string;  // Image path for logo
   tabId: string;
 }
 
@@ -52,7 +53,11 @@ interface MenuItem {
             (click)="navigateTo(item.tabId, drawer)"
             class="menu-item"
             [class.active]="isTabOpen(item.tabId)">
-            <span class="menu-icon">{{ item.icon }}</span>
+            @if (item.iconImage) {
+              <img [src]="item.iconImage" [alt]="item.label" class="menu-icon-image" />
+            } @else {
+              <span class="menu-icon">{{ item.icon }}</span>
+            }
             <span class="menu-label">{{ item.label }}</span>
           </mat-list-item>
         </mat-nav-list>
@@ -71,6 +76,7 @@ export class LeftNavComponent {
   @Output() drawerToggle = new EventEmitter<void>();
 
   menuItems: MenuItem[] = [
+    { label: 'Today', iconImage: 'images/yeh_logo_dark.png', tabId: 'today' },
     { label: 'Plan', icon: '📋', tabId: 'plan' },
     { label: 'Progress', icon: '📈', tabId: 'progress' },
     { label: 'Shop', icon: '🛒', tabId: 'shop' }
