@@ -14,8 +14,8 @@
 .search-controls {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 6px;
+  gap: 4px;
+  padding: 4px;  // Reduced from 6px to 4px
   background-color: #2a2a2a;
   border-bottom: 1px solid #4a4a4a;
   flex-shrink: 0;  // Don't shrink search controls
@@ -23,13 +23,13 @@
 
 .search-row {
   display: flex;
-  gap: 6px;
+  gap: 4px;  // Reduced from 6px
   align-items: center;
 }
 
 .limit-row {
   display: flex;
-  gap: 6px;
+  gap: 4px;  // Reduced from 6px
   align-items: center;
 }
 
@@ -46,7 +46,7 @@
   background-color: #3a3a3a;
   border: 1px solid #5a5a5a;
   border-radius: 6px;
-  padding: 8px 12px;
+  padding: 6px 10px;  // Reduced from 8px 12px
   font-size: 14px;
   color: #ffffff;
   font-family: inherit;
@@ -74,7 +74,7 @@
   background-color: #3a3a3a;
   border: 1px solid #5a5a5a;
   border-radius: 6px;
-  padding: 8px 12px;
+  padding: 6px 10px;  // Reduced from 8px 12px
   font-size: 14px;
   color: #ffffff;
   font-family: inherit;
@@ -108,8 +108,8 @@
 
 .search-btn {
   flex-shrink: 0;
-  width: 38px;  // Reduced from 44px
-  height: 38px;  // Match input height better
+  width: 32px;  // Reduced to match smaller input
+  height: 32px;  // Match input height better
   background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);
   border-top: 1px solid #6a6a6a;
   border-left: 1px solid #5a5a5a;
@@ -128,9 +128,9 @@
 
   mat-icon {
     color: #ffffff;  // White - clickable
-    font-size: 20px;  // Reduced to match smaller button
-    width: 20px;
-    height: 20px;
+    font-size: 18px;  // Reduced to match smaller button
+    width: 18px;
+    height: 18px;
   }
 
   &:hover:not(:disabled) {
