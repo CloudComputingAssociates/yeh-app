@@ -23,6 +23,7 @@
   .menu-button {
     flex-shrink: 0;
     color: #ffffff;  // White - clickable
+    z-index: 1;  // Keep hamburger above title
 
     &:hover {
       color: rgba(255, 255, 255, 0.8);  // Dimmed white on hover
@@ -44,8 +45,16 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
     text-align: center;
     line-height: 1.2;
-    flex: 1;
-    padding: 0 8px;
+    position: absolute;  // Absolute positioning to center on entire bar
+    left: 50%;  // Start at 50% of parent width
+    transform: translateX(-50%);  // Move back by 50% of own width = true center
+    pointer-events: none;  // Allow clicks to pass through to elements below
+  }
+
+  // Profile menu wrapper needs z-index too
+  app-profile-menu {
+    flex-shrink: 0;
+    z-index: 1;  // Keep profile menu above title
   }
 
   .profile-button {

@@ -52,6 +52,10 @@ export interface SelectedFoodEvent {
             <div class="loading-message">
               <p>Loading foods...</p>
             </div>
+          } @else if (foods().length === 0) {
+            <div class="food-item placeholder-item">
+              <span class="food-description">{{ '{' }}food count: 0{{ '}' }}</span>
+            </div>
           } @else {
             @for (food of foods(); track food.id; let i = $index) {
               <div

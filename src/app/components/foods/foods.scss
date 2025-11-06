@@ -23,8 +23,8 @@
   flex-direction: row;
   gap: 4px;
   padding: 4px;
-  background-color: #2a2a2a;
-  border-bottom: 1px solid #4a4a4a;
+  background-color: #3a3a3a;
+  border-bottom: none;  // Remove border to eliminate white line
   flex-shrink: 0;  // Don't shrink search controls
   align-items: center;
 }
@@ -35,10 +35,13 @@
   background-color: #3a3a3a;
   border: 1px solid #5a5a5a;
   border-radius: 6px;
-  padding: 6px 10px;  // Reduced from 8px 12px
+  padding: 7px 12px;  // Reduced vertical padding to match button height exactly
+  height: 38px;
   font-size: 14px;
   color: #ffffff;
   font-family: inherit;
+  box-sizing: border-box;
+  line-height: 1.4;  // Match text baseline with button
 
   &::placeholder {
     color: #4da6ff;  // Blue - label
@@ -124,11 +127,14 @@
 .foods-list-container {
   flex: 1 1 auto;  // Allow it to grow and shrink
   min-height: 0;
-  background-color: #2a2a2a;
+  background-color: #3a3a3a;
   overflow: hidden;  // Hide overflow on container
   display: flex;
   flex-direction: column;
-  border: 2px solid #ff00ff;  // TEMPORARY: Magenta border to see the container
+  border-left: 1px solid #2a2a2a;  // Subtle left edge for 3D inset
+  border-bottom: 1px solid #2a2a2a;  // Subtle bottom edge for 3D inset
+  border-top: 1px solid #4a4a4a;  // Lighter top edge for 3D inset
+  border-right: 1px solid #4a4a4a;  // Lighter right edge for 3D inset
 }
 
 .loading-message,
@@ -153,7 +159,7 @@
 }
 
 .foods-list {
-  overflow-y: auto;  // Scroll within this container
+  overflow-y: scroll;  // ALWAYS show scrollbar
   overflow-x: hidden;  // Prevent horizontal scroll
   flex: 1;
   min-height: 0;
@@ -161,21 +167,58 @@
   display: flex;
   flex-direction: column;
 
-  // Custom scrollbar styling
+  // Custom scrollbar styling - Make it VERY visible with arrows
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 16px;  // Much wider for visibility
+  }
+
+  // Single arrow buttons - one at top (decrement/up), one at bottom (increment/down)
+  &::-webkit-scrollbar-button:single-button {
+    background: #555555;
+    height: 20px;  // Taller for easier mobile clicking
+    border: 1px solid #6a6a6a;
+    display: block;
+
+    &:hover {
+      background: #606060;
+    }
+
+    &:active {
+      background: #4a4a4a;
+    }
+  }
+
+  // Down arrow at bottom
+  &::-webkit-scrollbar-button:single-button:increment {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><path fill="%23ffffff" d="M7 10L3 5h8z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  // Up arrow at top
+  &::-webkit-scrollbar-button:single-button:decrement {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14"><path fill="%23ffffff" d="M7 4L3 9h8z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
   &::-webkit-scrollbar-track {
-    background: #1a1a1a;
+    background: #4a4a4a;  // Lighter gray - much more visible
+    border-radius: 0;
+    border-left: 1px solid #5a5a5a;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #4a4a4a;
+    background: #6a6a6a;  // Lighter gray - stands out
     border-radius: 4px;
+    border: 2px solid #4a4a4a;  // Match track for better contrast
 
     &:hover {
-      background: #5a5a5a;
+      background: #7a7a7a;
+    }
+
+    &:active {
+      background: #8a8a8a;
     }
   }
 }
