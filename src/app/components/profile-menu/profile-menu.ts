@@ -44,6 +44,11 @@ import { SubscriptionService } from '../../services/subscription.service';
           <span>Settings</span>
         </button>
 
+        <button mat-menu-item class="menu-item">
+          <mat-icon>tune</mat-icon>
+          <span>Preferences</span>
+        </button>
+
         <mat-divider></mat-divider>
 
         <button mat-menu-item class="menu-item" (click)="logout()">
