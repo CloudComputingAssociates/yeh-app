@@ -20,7 +20,7 @@ export class TabService {
     {
       id: 'today',
       label: 'Today',
-      closeable: false
+      closeable: true
     }
   ]);
 

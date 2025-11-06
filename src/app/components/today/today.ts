@@ -1,16 +1,18 @@
 // src/app/components/today/today.ts
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MacrosComponent } from '../macros/macros';
 
 @Component({
   selector: 'app-today',
   standalone: true,
-  imports: [CommonModule, MacrosComponent],
+  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="today-container">
-      <app-macros />
+      <div class="content-placeholder">
+        <p class="placeholder-text">Today's Activity</p>
+        <p class="placeholder-subtext">(Coming soon)</p>
+      </div>
     </div>
   `,
   styleUrls: ['./today.scss']

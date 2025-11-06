@@ -1,12 +1,54 @@
 // src/app/components/today/today.scss
 
-.today-container {
+:host {
   display: flex;
-  flex-direction: column;
   height: 100%;
   width: 100%;
-  background-color: #3a3a3a;
-  padding: 16px;
-  box-sizing: border-box;
+}
+
+.today-container {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(180deg, #404040 0%, #5a5a5a 100%);  // Gradient fill
   overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  .placeholder-text {
+    color: #4da6ff;  // Blue - label
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .placeholder-subtext {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    margin: 0;
+    line-height: 1.2;
+  }
+}
+
+// Mobile responsive adjustments
+@media (max-width: 480px) {
+  .content-placeholder {
+    .placeholder-text {
+      font-size: 11px;
+    }
+
+    .placeholder-subtext {
+      font-size: 9px;
+    }
+  }
 }
