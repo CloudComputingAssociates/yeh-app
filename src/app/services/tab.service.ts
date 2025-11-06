@@ -16,10 +16,15 @@ export class TabService {
       id: 'chat',
       label: 'Chat',
       closeable: false
+    },
+    {
+      id: 'plan',
+      label: 'Plan',
+      closeable: false
     }
   ]);
 
-  private activeTabIndexSignal = signal<number>(0);
+  private activeTabIndexSignal = signal<number>(1);  // Default to Plan (index 1)
 
   // Expose signals as readonly
   tabs = this.tabsSignal.asReadonly();

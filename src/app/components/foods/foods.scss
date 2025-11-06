@@ -14,31 +14,13 @@
 
 .search-controls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 4px;
-  padding: 4px;  // Reduced from 6px to 4px
+  padding: 4px;
   background-color: #2a2a2a;
   border-bottom: 1px solid #4a4a4a;
   flex-shrink: 0;  // Don't shrink search controls
-}
-
-.search-row {
-  display: flex;
-  gap: 4px;  // Reduced from 6px
   align-items: center;
-}
-
-.limit-row {
-  display: flex;
-  gap: 4px;  // Reduced from 6px
-  align-items: center;
-}
-
-.limit-label {
-  color: #4da6ff;  // Blue - label
-  font-size: 13px;
-  white-space: nowrap;
-  margin: 0;
 }
 
 .search-input {
@@ -69,54 +51,20 @@
   }
 }
 
-.max-count-input {
-  width: 50px;  // Narrower width
-  flex-shrink: 0;  // Don't shrink
-  background-color: #3a3a3a;
-  border: 1px solid #5a5a5a;
-  border-radius: 6px;
-  padding: 6px 8px;  // Match search input height
-  font-size: 14px;
-  color: #ffffff;
-  font-family: inherit;
-  text-align: center;
-
-  &::placeholder {
-    color: #4da6ff;  // Blue - label
-    opacity: 0.8;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #4da6ff;
-    background-color: #3a3a3a;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  // Remove spinner arrows
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  -moz-appearance: textfield;
-}
+// max-count-input removed - hardcoded to 50
 
 .search-btn {
   flex-shrink: 0;
-  width: 32px;  // Reduced to match smaller input
-  height: 32px;  // Match input height better
+  width: auto;  // Auto width to match input height
+  min-width: 38px;  // Minimum clickable area
+  height: 38px;  // Match search input height exactly (6px padding * 2 + 14px font + borders)
+  padding: 0 8px;
   background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);
   border-top: 1px solid #6a6a6a;
   border-left: 1px solid #5a5a5a;
   border-right: 1px solid #5a5a5a;
   border-bottom: 2px solid #1a1a1a;
-  border-radius: 8px;
+  border-radius: 6px;  // Match input border radius
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -129,9 +77,9 @@
 
   mat-icon {
     color: #ffffff;  // White - clickable
-    font-size: 18px;  // Reduced to match smaller button
-    width: 18px;
-    height: 18px;
+    font-size: 16px;  // Smaller icon to fit in compact button
+    width: 16px;
+    height: 16px;
   }
 
   &:hover:not(:disabled) {
@@ -307,16 +255,9 @@
     gap: 4px;
   }
 
-  .search-row {
-    gap: 4px;
-  }
-
-  .limit-row {
-    gap: 4px;
-  }
-
-  .limit-label {
-    font-size: 12px;
+  .search-controls {
+    gap: 3px;
+    padding: 3px;
   }
 
   .search-input {
@@ -324,20 +265,14 @@
     padding: 6px 10px;
   }
 
-  .max-count-input {
-    width: 45px;  // Even narrower on mobile
-    font-size: 13px;
-    padding: 6px 6px;
-  }
-
   .search-btn {
-    width: 40px;
-    height: 40px;
+    min-width: 36px;
+    height: 36px;  // Match mobile input height
 
     mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
     }
   }
 

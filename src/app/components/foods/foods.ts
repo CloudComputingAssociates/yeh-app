@@ -27,35 +27,21 @@ export interface SelectedFoodEvent {
       <!-- Search Mode UI -->
       @if (mode() === 'search') {
         <div class="search-controls">
-          <div class="search-row">
-            <input
-              type="text"
-              class="search-input"
-              [(ngModel)]="searchQuery"
-              (keydown.enter)="performSearch()"
-              placeholder="Search food..."
-              [disabled]="isLoading()" />
+          <input
+            type="text"
+            class="search-input"
+            [(ngModel)]="searchQuery"
+            (keydown.enter)="performSearch()"
+            placeholder="Search food..."
+            [disabled]="isLoading()" />
 
-            <button
-              class="search-btn"
-              (click)="performSearch()"
-              [disabled]="isLoading() || !searchQuery.trim()"
-              aria-label="Search">
-              <mat-icon>keyboard_return</mat-icon>
-            </button>
-          </div>
-
-          <div class="limit-row">
-            <label class="limit-label">Search limit:</label>
-            <input
-              type="number"
-              class="max-count-input"
-              [(ngModel)]="maxCount"
-              placeholder="50"
-              min="1"
-              max="100"
-              [disabled]="isLoading()" />
-          </div>
+          <button
+            class="search-btn"
+            (click)="performSearch()"
+            [disabled]="isLoading() || !searchQuery.trim()"
+            aria-label="Search">
+            <mat-icon>keyboard_return</mat-icon>
+          </button>
         </div>
       }
 
