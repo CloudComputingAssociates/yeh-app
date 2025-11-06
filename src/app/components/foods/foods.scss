@@ -69,7 +69,8 @@
 }
 
 .max-count-input {
-  flex: 1;  // Take remaining space in limit row
+  width: 70px;  // Fixed narrow width
+  flex-shrink: 0;  // Don't shrink
   background-color: #3a3a3a;
   border: 1px solid #5a5a5a;
   border-radius: 6px;
@@ -107,8 +108,8 @@
 
 .search-btn {
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
+  width: 38px;  // Reduced from 44px
+  height: 38px;  // Match input height better
   background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);
   border-top: 1px solid #6a6a6a;
   border-left: 1px solid #5a5a5a;
@@ -127,9 +128,9 @@
 
   mat-icon {
     color: #ffffff;  // White - clickable
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
+    font-size: 20px;  // Reduced to match smaller button
+    width: 20px;
+    height: 20px;
   }
 
   &:hover:not(:disabled) {
@@ -168,12 +169,10 @@
 .foods-list-container {
   flex: 1;
   min-height: 0;
-  max-height: 100%;  // Don't expand beyond available space
   background-color: #2a2a2a;
   overflow: hidden;  // Hide overflow on container
   display: flex;
   flex-direction: column;
-  position: relative;  // Ensure proper containment
 }
 
 .loading-message,
@@ -202,12 +201,9 @@
   overflow-x: hidden;  // Prevent horizontal scroll
   flex: 1;
   min-height: 0;
-  max-height: 100%;  // Critical: don't exceed container
-  position: absolute;  // Take out of flow to prevent pushing
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  height: 100%;  // Fill container
+  display: flex;
+  flex-direction: column;
 
   // Custom scrollbar styling
   &::-webkit-scrollbar {

@@ -65,7 +65,7 @@
     padding: 2px 4px 0 4px;  // Reduced from 16px to 4px
     background-color: #000000;
     min-height: 0; // Important for flex children to respect container height
-    gap: 2px;  // Use gap instead of margins
+    gap: 4px;  // Increased from 2px to 4px for better separation
 
     // Macros - fixed height
     app-macros {

@@ -61,16 +61,16 @@ export interface SelectedFoodEvent {
 
       <!-- Foods List -->
       <div class="foods-list-container">
-        @if (isLoading()) {
-          <div class="loading-message">
-            <p>Loading foods...</p>
-          </div>
-        } @else if (foods().length === 0) {
-          <div class="empty-message">
-            <p class="empty-text">{{ mode() === 'search' ? 'Search for foods to get started' : 'No foods to display' }}</p>
-          </div>
-        } @else {
-          <div class="foods-list">
+        <div class="foods-list">
+          @if (isLoading()) {
+            <div class="loading-message">
+              <p>Loading foods...</p>
+            </div>
+          } @else if (foods().length === 0) {
+            <div class="empty-message">
+              <p class="empty-text">No foods to display</p>
+            </div>
+          } @else {
             @for (food of foods(); track food.id; let i = $index) {
               <div
                 class="food-item"
@@ -82,8 +82,8 @@ export interface SelectedFoodEvent {
                 <span class="food-description">{{ food.description }}</span>
               </div>
             }
-          </div>
-        }
+          }
+        </div>
       </div>
     </div>
   `,
