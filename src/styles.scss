@@ -76,3 +76,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin: 0;
   }
 }
+
+// Global Material tab overrides - MUST be in global styles, not component styles
+.mat-mdc-tab-header {
+  background-color: #3a3a3a !important;
+  border-bottom: none !important;
+}
+
+.mat-mdc-tab-header-border-bottom {
+  display: none !important;
+}

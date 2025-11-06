@@ -1,4 +1,10 @@
 // src/app/components/plan/plan.scss
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
 .plan-container {
   display: grid;
   grid-template-rows: 1fr 2fr;  // 1:2 ratio = 33.33%:66.67%
