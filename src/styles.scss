@@ -35,8 +35,16 @@ body {
 }
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// Use locked viewport height to prevent keyboard resize issues
+html, body {
+  height: 100%;
+  height: var(--app-height, 100vh); // Fallback to 100vh if custom property not set
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow: hidden; // Prevent body scroll, only scroll within components
+}
 
 // Add this to the END of src/styles.scss
 
