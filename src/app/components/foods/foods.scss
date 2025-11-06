@@ -221,7 +221,7 @@
 }
 
 .food-item {
-  padding: 10px 12px;
+  padding: 1.5px 12px;  // Reduced vertical padding to 1.5px
   cursor: pointer;
   border-bottom: 1px solid #3a3a3a;
   transition: all 0.2s ease;
@@ -229,14 +229,14 @@
   border-top: 1px solid #5a5a5a;
   border-left: 1px solid #4a4a4a;
   border-right: 1px solid #4a4a4a;
-  margin: 2px;
+  margin: 1.5px;  // Reduced margin to 1.5px
   border-radius: 4px;
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.4),
     0 -1px 0 rgba(255, 255, 255, 0.1) inset,
     0 2px 0 rgba(0, 0, 0, 0.2) inset;
-  min-height: 40px;  // Fixed minimum height
-  max-height: 40px;  // Fixed maximum height
+  min-height: 28px;  // Reduced from 40px
+  max-height: 28px;  // Reduced from 40px
   display: flex;
   align-items: center;
   overflow: hidden;  // Hide overflow text
@@ -337,9 +337,9 @@
   }
 
   .food-item {
-    padding: 8px 10px;
-    min-height: 36px;
-    max-height: 36px;
+    padding: 1.5px 10px;  // Keep 1.5px vertical padding on mobile
+    min-height: 26px;  // Reduced for mobile
+    max-height: 26px;  // Reduced for mobile
   }
 
   .food-description {
