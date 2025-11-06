@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 100%;  // Force full height
   max-height: 100%;  // Don't expand beyond parent
   background-color: #3a3a3a;
   gap: 2px;  // Reduced from 8px
@@ -167,13 +168,12 @@
 }
 
 .foods-list-container {
-  flex: 1;
+  flex: 1 1 auto;  // Allow it to grow and shrink
   min-height: 0;
   background-color: #2a2a2a;
   overflow: hidden;  // Hide overflow on container
   display: flex;
   flex-direction: column;
-  border: 2px solid #ff0000;  // TEMPORARY: Red border to see if this renders
 }
 
 .loading-message,
