@@ -51,7 +51,7 @@
   justify-content: flex-start;  // Push to left side
   overflow: hidden;  // Prevent content from expanding container
 
-  // Default: 50% width for all screens
+  // 50% width on left side
   ::ng-deep app-foods {
     width: 50%;
     max-width: 50%;

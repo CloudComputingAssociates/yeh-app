@@ -69,12 +69,12 @@
 }
 
 .max-count-input {
-  width: 70px;  // Fixed narrow width
+  width: 50px;  // Narrower width
   flex-shrink: 0;  // Don't shrink
   background-color: #3a3a3a;
   border: 1px solid #5a5a5a;
   border-radius: 6px;
-  padding: 6px 10px;  // Reduced from 8px 12px
+  padding: 6px 8px;  // Match search input height
   font-size: 14px;
   color: #ffffff;
   font-family: inherit;
@@ -324,9 +324,9 @@
   }
 
   .max-count-input {
-    width: 60px;
+    width: 45px;  // Even narrower on mobile
     font-size: 13px;
-    padding: 6px 8px;
+    padding: 6px 6px;
   }
 
   .search-btn {
