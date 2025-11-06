@@ -170,9 +170,10 @@
   min-height: 0;
   max-height: 100%;  // Don't expand beyond available space
   background-color: #2a2a2a;
-  overflow: hidden;
+  overflow: hidden;  // Hide overflow on container
   display: flex;
   flex-direction: column;
+  position: relative;  // Ensure proper containment
 }
 
 .loading-message,
@@ -197,9 +198,16 @@
 }
 
 .foods-list {
-  overflow-y: auto;
+  overflow-y: auto;  // Scroll within this container
+  overflow-x: hidden;  // Prevent horizontal scroll
   flex: 1;
   min-height: 0;
+  max-height: 100%;  // Critical: don't exceed container
+  position: absolute;  // Take out of flow to prevent pushing
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
   // Custom scrollbar styling
   &::-webkit-scrollbar {
