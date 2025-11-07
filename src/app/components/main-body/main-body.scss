@@ -49,8 +49,9 @@
   min-width: auto !important;  // Auto width to fit content
   flex-grow: 0 !important;     // Don't grow to fill space
   flex-basis: auto !important; // Don't stretch
-  padding: 0 20px !important;  // Increased padding for more white space (was 12px)
-  height: 48px;
+  padding: 0 20px !important;  // Horizontal padding only
+  height: 41px !important;  // Increased by 1px for bottom spacing
+  min-height: 41px !important;  // Force minimum height
   position: relative;
   background: linear-gradient(180deg, #4e4e4e 0%, #424242 100%) !important;  // Subtly lighter than background
   border-radius: 8px 8px 0 0;  // Rounded top corners
@@ -62,12 +63,23 @@
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;  // Moderate shadow
 
-  // Force white text on all child elements
+  // Force white text and remove internal padding on all child elements
   .mdc-tab__text-label,
   .tab-label-text,
   span,
   button {
     color: #ffffff !important;
+    padding: 0 0 1px 0 !important;  // Add 1px bottom padding to text
+  }
+
+  // Target Material's internal content wrapper
+  .mdc-tab__content {
+    padding: 0 0 1px 0 !important;  // Add 1px bottom padding
+  }
+
+  // Target Material's label wrapper
+  .mat-mdc-tab-label-content {
+    padding: 0 0 1px 0 !important;  // Add 1px bottom padding
   }
 
   &:hover {
@@ -165,7 +177,8 @@
 @media (max-width: 480px) {
   ::ng-deep .mat-mdc-tab {
     padding: 0 16px !important;  // Increased from 10px for better spacing
-    height: 44px;
+    height: 37px !important;  // Increased by 1px for bottom spacing
+    min-height: 37px !important;
   }
 
   .tab-label-text {
