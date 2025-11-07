@@ -79,8 +79,7 @@ export class LeftNavComponent {
     { label: 'Today', iconImage: 'images/yeh_logo_dark.png', tabId: 'today' },
     { label: 'Plan', icon: '📋', tabId: 'plan' },
     { label: 'Progress', icon: '📈', tabId: 'progress' },
-    { label: 'Shop', icon: '🛒', tabId: 'shop' },
-    { label: 'Preferences', icon: '⚙️', tabId: 'preferences' }
+    { label: 'Shop', icon: '🛒', tabId: 'shop' }
   ];
 
   tabService = inject(TabService);

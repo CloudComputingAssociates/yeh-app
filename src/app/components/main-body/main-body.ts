@@ -5,9 +5,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TabService } from '../../services/tab.service';
+import { PanelService } from '../../services/panel.service';
 import { ChatComponent } from '../chat/chat';
 import { TodayComponent } from '../today/today';
 import { PlanComponent } from '../plan/plan';
+import { ProfilePanelComponent } from '../profile-panel/profile-panel';
+import { SettingsPanelComponent } from '../settings-panel/settings-panel';
+import { PreferencesPanelComponent } from '../preferences-panel/preferences-panel';
+import { NotificationComponent } from '../notification/notification';
 
 @Component({
   selector: 'app-main-body',
@@ -19,49 +24,73 @@ import { PlanComponent } from '../plan/plan';
     MatButtonModule,
     ChatComponent,
     TodayComponent,
-    PlanComponent
+    PlanComponent,
+    ProfilePanelComponent,
+    SettingsPanelComponent,
+    PreferencesPanelComponent,
+    NotificationComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="main-body-container">
-      <mat-tab-group
-        [selectedIndex]="tabService.activeTabIndex()"
-        (selectedIndexChange)="onTabIndexChange($event)"
-        class="main-body-tabs">
-
-        @for (tab of tabService.tabs(); track tab.id; let i = $index) {
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <span class="tab-label-text">{{ tab.label }}</span>
-            </ng-template>
-
-            <div class="tab-content">
-              @if (tab.id === 'chat') {
-                <app-chat />
-              } @else if (tab.id === 'today') {
-                <app-today />
-              } @else if (tab.id === 'plan') {
-                <app-plan />
-              } @else if (tab.id === 'progress') {
-                <div class="placeholder-content">
-                  <p class="placeholder-text">Progress view - Coming soon</p>
-                </div>
-              } @else if (tab.id === 'shop') {
-                <div class="placeholder-content">
-                  <p class="placeholder-text">Shop view - Coming soon</p>
-                </div>
-              }
-            </div>
-          </mat-tab>
+      @if (panelService.activePanel()) {
+        <!-- Show panel overlay (hides tabs) -->
+        @switch (panelService.activePanel()) {
+          @case ('profile') {
+            <app-profile-panel />
+          }
+          @case ('settings') {
+            <app-settings-panel />
+          }
+          @case ('preferences') {
+            <app-preferences-panel />
+          }
         }
+      } @else {
+        <!-- Show normal tab interface -->
+        <mat-tab-group
+          [selectedIndex]="tabService.activeTabIndex()"
+          (selectedIndexChange)="onTabIndexChange($event)"
+          class="main-body-tabs">
 
-      </mat-tab-group>
+          @for (tab of tabService.tabs(); track tab.id; let i = $index) {
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <span class="tab-label-text">{{ tab.label }}</span>
+              </ng-template>
+
+              <div class="tab-content">
+                @if (tab.id === 'chat') {
+                  <app-chat />
+                } @else if (tab.id === 'today') {
+                  <app-today />
+                } @else if (tab.id === 'plan') {
+                  <app-plan />
+                } @else if (tab.id === 'progress') {
+                  <div class="placeholder-content">
+                    <p class="placeholder-text">Progress view - Coming soon</p>
+                  </div>
+                } @else if (tab.id === 'shop') {
+                  <div class="placeholder-content">
+                    <p class="placeholder-text">Shop view - Coming soon</p>
+                  </div>
+                }
+              </div>
+            </mat-tab>
+          }
+
+        </mat-tab-group>
+      }
+
+      <!-- Notification component (always present) -->
+      <app-notification />
     </div>
   `,
   styleUrls: ['./main-body.scss']
 })
 export class MainBodyComponent {
   tabService = inject(TabService);
+  panelService = inject(PanelService);
 
   onTabIndexChange(index: number): void {
     // When user manually clicks a tab, update the service

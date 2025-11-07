@@ -6,6 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '@auth0/auth0-angular';
 import { SubscriptionService } from '../../services/subscription.service';
+import { PanelService } from '../../services/panel.service';
 
 @Component({
   selector: 'app-profile-menu',
@@ -34,17 +35,17 @@ import { SubscriptionService } from '../../services/subscription.service';
 
         <mat-divider></mat-divider>
 
-        <button mat-menu-item class="menu-item">
+        <button mat-menu-item class="menu-item" (click)="openProfile()">
           <mat-icon>person</mat-icon>
           <span>Profile</span>
         </button>
 
-        <button mat-menu-item class="menu-item">
+        <button mat-menu-item class="menu-item" (click)="openSettings()">
           <mat-icon>settings</mat-icon>
           <span>Settings</span>
         </button>
 
-        <button mat-menu-item class="menu-item">
+        <button mat-menu-item class="menu-item" (click)="openPreferences()">
           <mat-icon>tune</mat-icon>
           <span>Preferences</span>
         </button>
@@ -68,6 +69,7 @@ export class ProfileMenuComponent {
   @Input() defaultImage = 'images/yeh_logo_dark.png';
   auth = inject(AuthService);
   subscriptionService = inject(SubscriptionService);
+  panelService = inject(PanelService);
 
   login(): void {
     this.auth.loginWithRedirect();
@@ -77,5 +79,17 @@ export class ProfileMenuComponent {
     // Clear subscription state before logging out
     this.subscriptionService.clearStatus();
     this.auth.logout({ logoutParams: { returnTo: window.location.origin } });
+  }
+
+  openProfile(): void {
+    this.panelService.openPanel('profile');
+  }
+
+  openSettings(): void {
+    this.panelService.openPanel('settings');
+  }
+
+  openPreferences(): void {
+    this.panelService.openPanel('preferences');
   }
 }
