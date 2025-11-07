@@ -130,7 +130,7 @@
 
         .menu-icon,
         .menu-label {
-          color: #000000;  // Black when active
+          color: #ffffff;  // White when active
         }
       }
 
@@ -145,6 +145,9 @@
         height: 24px;
         object-fit: contain;
         flex-shrink: 0;
+        vertical-align: middle;
+        margin-left: 2px;
+        margin-right: 2px;
       }
 
       .menu-label {
