@@ -9,7 +9,6 @@ import { UserSettingsService } from '../../services/user-settings.service';
 import { NotificationService } from '../../services/notification.service';
 import { Food } from '../../models/food.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 export interface SelectedFoodEvent {
   food: Food;
@@ -37,6 +36,7 @@ export interface AddFoodEvent {
             type="text"
             class="search-input"
             [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchQueryChange($event)"
             (keydown.enter)="performSearch()"
             placeholder="Search food..."
             [disabled]="isLoading()" />
@@ -120,11 +120,14 @@ export class FoodsComponent implements OnInit {
 
   // Internal state
   searchQuery = '';
-  maxCount = 50;
+  maxCount = 500;  // Increased to get all YEH approved foods
   foods = signal<Food[]>([]);
   selectedIndex = signal<number>(-1);
   isLoading = signal<boolean>(false);
   isYehApproved = signal<boolean>(true);  // Local checkbox state
+
+  // Cache for YEH approved foods (avoids server round trips when filtering)
+  private yehApprovedCache = signal<Food[]>([]);
 
   // Double-click/tap detection
   private lastTapTime = 0;
@@ -142,6 +145,66 @@ export class FoodsComponent implements OnInit {
   ngOnInit(): void {
     // Initialize checkbox from user profile setting
     this.isYehApproved.set(this.userSettings.yehApprovedFoodsOnly());
+
+    // Auto-load YEH approved foods if checkbox is checked
+    if (this.isYehApproved() && this.mode() === 'search') {
+      this.loadYehApprovedFoods();
+    }
+  }
+
+  /** Load all YEH approved foods and cache them */
+  private loadYehApprovedFoods(): void {
+    this.isLoading.set(true);
+
+    this.foodsService.searchYehApprovedFoods(this.maxCount).subscribe({
+      next: (response) => {
+        if (response && response.foods && Array.isArray(response.foods)) {
+          this.yehApprovedCache.set(response.foods);
+          this.foods.set(response.foods);
+
+          // Auto-select first item
+          if (response.foods.length > 0) {
+            this.selectFood(0);
+          }
+        }
+        this.isLoading.set(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Failed to load YEH approved foods:', error);
+        this.isLoading.set(false);
+        this.notificationService.show('Failed to load YEH approved foods', 'error');
+      }
+    });
+  }
+
+  /** Handle search query changes - filter client-side for YEH Approved */
+  onSearchQueryChange(query: string): void {
+    if (this.isYehApproved()) {
+      // Filter cached YEH approved foods client-side (no server call)
+      const cache = this.yehApprovedCache();
+      if (cache.length > 0) {
+        const trimmedQuery = query.trim().toLowerCase();
+        if (trimmedQuery.length === 0) {
+          // Show all cached foods
+          this.foods.set(cache);
+        } else {
+          // Filter by query
+          const filtered = cache.filter(food =>
+            food.description.toLowerCase().includes(trimmedQuery) ||
+            (food.shortDescription && food.shortDescription.toLowerCase().includes(trimmedQuery))
+          );
+          this.foods.set(filtered);
+        }
+
+        // Auto-select first item
+        if (this.foods().length > 0) {
+          this.selectFood(0);
+        } else {
+          this.selectedIndex.set(-1);
+        }
+      }
+    }
+    // For non-YEH mode, do nothing on change - require Enter/button click
   }
 
   /** Check if search can be performed */
@@ -162,49 +225,46 @@ export class FoodsComponent implements OnInit {
   onYehApprovedChange(event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     this.isYehApproved.set(checked);
+
+    if (checked) {
+      // Load YEH approved foods when checkbox is checked
+      this.searchQuery = '';
+      this.loadYehApprovedFoods();
+    } else {
+      // Clear foods and cache when unchecked - user must search USDA
+      this.yehApprovedCache.set([]);
+      this.foods.set([]);
+      this.selectedIndex.set(-1);
+    }
   }
 
   performSearch(): void {
     const query = this.searchQuery.trim();
     const isYehApprovedMode = this.isYehApproved();
 
-    // Validate: YEH Approved can search without query, regular search needs query
-    if (!isYehApprovedMode && (!query || query.length < 2)) {
+    // YEH Approved mode: filtering is done client-side via onSearchQueryChange
+    // Just trigger the filter if Enter is pressed
+    if (isYehApprovedMode) {
+      this.onSearchQueryChange(this.searchQuery);
+      return;
+    }
+
+    // USDA search: require at least 2 characters
+    if (query.length < 2) {
       return;
     }
 
     this.isLoading.set(true);
 
-    let searchObservable: Observable<{ count: number; foods: Food[] }>;
-
-    if (isYehApprovedMode) {
-      // YEH Approved: get all approved foods, then filter client-side if query provided
-      searchObservable = this.foodsService.searchYehApprovedFoods(this.maxCount);
-    } else {
-      // Regular search
-      searchObservable = this.foodsService.searchFoods(query, this.maxCount);
-    }
-
-    searchObservable.subscribe({
+    this.foodsService.searchFoods(query, this.maxCount).subscribe({
       next: (response) => {
         console.log('Food search results:', response);
 
         if (response && response.foods && Array.isArray(response.foods)) {
-          let foods = response.foods;
-
-          // Client-side filter for YEH Approved mode with query
-          if (isYehApprovedMode && query.length >= 2) {
-            const lowerQuery = query.toLowerCase();
-            foods = foods.filter(food =>
-              food.description.toLowerCase().includes(lowerQuery) ||
-              (food.shortDescription && food.shortDescription.toLowerCase().includes(lowerQuery))
-            );
-          }
-
-          this.foods.set(foods);
+          this.foods.set(response.foods);
 
           // Auto-select first item
-          if (foods.length > 0) {
+          if (response.foods.length > 0) {
             this.selectFood(0);
           } else {
             this.selectedIndex.set(-1);
