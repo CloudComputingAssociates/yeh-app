@@ -2,7 +2,7 @@
 
 .notification-container {
   position: fixed;
-  bottom: 24px;
+  top: 24px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
@@ -12,7 +12,7 @@
 
 @keyframes slideIn {
   from {
-    transform: translateX(-50%) translateY(100%);
+    transform: translateX(-50%) translateY(-100%);
     opacity: 0;
   }
   to {
@@ -79,7 +79,7 @@
 // Mobile responsive
 @media (max-width: 480px) {
   .notification-container {
-    bottom: 16px;
+    top: 16px;
     left: 16px;
     right: 16px;
     transform: none;

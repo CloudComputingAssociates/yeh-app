@@ -222,14 +222,18 @@ export class FoodsComponent implements OnInit {
         this.selectedIndex.set(-1);
         this.isLoading.set(false);
 
-        // Show error notification
-        let errorMessage = 'Failed to search foods';
+        // Show error notification with diagnostic info
+        let errorMessage = `Search failed (${error.status})`;
         if (error.status === 0) {
-          errorMessage = 'Unable to connect to server';
+          errorMessage = 'Network error (status 0) - CORS or connection issue';
+        } else if (error.status === 401) {
+          errorMessage = 'Auth error (401) - Token issue';
+        } else if (error.status === 403) {
+          errorMessage = 'Forbidden (403) - Access denied';
         } else if (error.status === 404) {
-          errorMessage = 'No foods found';
+          errorMessage = 'Not found (404)';
         } else if (error.status >= 500) {
-          errorMessage = 'Server error occurred';
+          errorMessage = `Server error (${error.status})`;
         }
         this.notificationService.show(errorMessage, 'error');
       }
