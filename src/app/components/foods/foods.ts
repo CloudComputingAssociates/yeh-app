@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FoodsService } from '../../services/foods.service';
 import { UserSettingsService } from '../../services/user-settings.service';
+import { NotificationService } from '../../services/notification.service';
 import { Food } from '../../models/food.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -107,6 +108,7 @@ export interface AddFoodEvent {
 export class FoodsComponent implements OnInit {
   private foodsService = inject(FoodsService);
   private userSettings = inject(UserSettingsService);
+  private notificationService = inject(NotificationService);
 
   // Inputs
   mode = input<'search' | 'display'>('search');
@@ -220,7 +222,7 @@ export class FoodsComponent implements OnInit {
         this.selectedIndex.set(-1);
         this.isLoading.set(false);
 
-        // TODO: Show error toast/snackbar
+        // Show error notification
         let errorMessage = 'Failed to search foods';
         if (error.status === 0) {
           errorMessage = 'Unable to connect to server';
@@ -229,7 +231,7 @@ export class FoodsComponent implements OnInit {
         } else if (error.status >= 500) {
           errorMessage = 'Server error occurred';
         }
-        console.error(errorMessage);
+        this.notificationService.show(errorMessage, 'error');
       }
     });
   }
