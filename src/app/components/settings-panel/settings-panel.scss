@@ -81,9 +81,49 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  align-items: flex-start;
+  gap: 16px;
+
+  .settings-section {
+    width: 100%;
+
+    .section-title {
+      color: #4da6ff;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 12px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .checkbox-setting {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 8px 0;
+
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: #4da6ff;
+      }
+
+      .checkbox-label {
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+
+    .setting-description {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+      margin: 4px 0 0 28px;
+      line-height: 1.4;
+    }
+  }
 
   .placeholder-text {
     color: #4da6ff;  // Blue - label

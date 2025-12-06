@@ -24,6 +24,16 @@ export class FoodsService {
   }
 
   /**
+   * Get all YEH-approved foods
+   * @param limit - Maximum number of results to return (default: 50)
+   * @returns Observable of search results with count and foods array
+   */
+  searchYehApprovedFoods(limit: number = 50): Observable<FoodSearchResponse> {
+    const url = `${this.baseUrl}/foods/search/all/yehapproved?limit=${limit}`;
+    return this.http.get<FoodSearchResponse>(url);
+  }
+
+  /**
    * Get image URL for a food image ObjectId
    * @param objectId - MongoDB ObjectId of the image
    * @returns Full URL to the image

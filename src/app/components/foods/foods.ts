@@ -1,12 +1,14 @@
 // src/app/components/foods/foods.ts
-import { Component, ChangeDetectionStrategy, signal, output, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, output, input, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FoodsService } from '../../services/foods.service';
+import { UserSettingsService } from '../../services/user-settings.service';
 import { Food } from '../../models/food.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface SelectedFoodEvent {
   food: Food;
@@ -23,7 +25,6 @@ export interface AddFoodEvent {
 
 @Component({
   selector: 'app-foods',
-  standalone: true,
   imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -42,10 +43,21 @@ export interface AddFoodEvent {
           <button
             class="search-btn"
             (click)="performSearch()"
-            [disabled]="isLoading() || !searchQuery.trim()"
+            [disabled]="isLoading() || !canSearch()"
             aria-label="Search">
             <mat-icon>keyboard_return</mat-icon>
           </button>
+        </div>
+
+        <!-- YEH Approved checkbox -->
+        <div class="yeh-approved-row">
+          <label class="checkbox-control">
+            <input
+              type="checkbox"
+              [checked]="isYehApproved()"
+              (change)="onYehApprovedChange($event)" />
+            <span>YEH Approved</span>
+          </label>
         </div>
       }
 
@@ -75,7 +87,14 @@ export interface AddFoodEvent {
                 tabindex="0"
                 role="button"
                 [attr.aria-label]="food.description">
-                <span class="food-description">{{ food.description }}</span>
+                <div class="food-thumbnail">
+                  @if (food.foodImageThumbnail) {
+                    <img [src]="food.foodImageThumbnail" alt="" class="thumbnail-img" />
+                  } @else {
+                    <div class="thumbnail-placeholder"></div>
+                  }
+                </div>
+                <span class="food-description">{{ getDisplayDescription(food) }}</span>
               </div>
             }
           }
@@ -85,7 +104,10 @@ export interface AddFoodEvent {
   `,
   styleUrls: ['./foods.scss']
 })
-export class FoodsComponent {
+export class FoodsComponent implements OnInit {
+  private foodsService = inject(FoodsService);
+  private userSettings = inject(UserSettingsService);
+
   // Inputs
   mode = input<'search' | 'display'>('search');
   displayFoods = input<Food[]>([]);
@@ -100,6 +122,7 @@ export class FoodsComponent {
   foods = signal<Food[]>([]);
   selectedIndex = signal<number>(-1);
   isLoading = signal<boolean>(false);
+  isYehApproved = signal<boolean>(true);  // Local checkbox state
 
   // Double-click/tap detection
   private lastTapTime = 0;
@@ -114,25 +137,72 @@ export class FoodsComponent {
   private readonly swipeThreshold = 0.35;  // 35% of element width
   private readonly swipeTimeLimit = 500;  // Max 500ms for swipe
 
-  constructor(private foodsService: FoodsService) {}
+  ngOnInit(): void {
+    // Initialize checkbox from user profile setting
+    this.isYehApproved.set(this.userSettings.yehApprovedFoodsOnly());
+  }
+
+  /** Check if search can be performed */
+  canSearch(): boolean {
+    // YEH Approved mode can search without query, regular mode needs query
+    if (this.isYehApproved()) {
+      return true;
+    }
+    return this.searchQuery.trim().length >= 2;
+  }
+
+  /** Get display description - prefer shortDescription, fallback to description */
+  getDisplayDescription(food: Food): string {
+    return food.shortDescription || food.description;
+  }
+
+  /** Handle YEH Approved checkbox change */
+  onYehApprovedChange(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.isYehApproved.set(checked);
+  }
 
   performSearch(): void {
     const query = this.searchQuery.trim();
-    if (!query || query.length < 2) {
+    const isYehApprovedMode = this.isYehApproved();
+
+    // Validate: YEH Approved can search without query, regular search needs query
+    if (!isYehApprovedMode && (!query || query.length < 2)) {
       return;
     }
 
     this.isLoading.set(true);
 
-    this.foodsService.searchFoods(query, this.maxCount).subscribe({
+    let searchObservable: Observable<{ count: number; foods: Food[] }>;
+
+    if (isYehApprovedMode) {
+      // YEH Approved: get all approved foods, then filter client-side if query provided
+      searchObservable = this.foodsService.searchYehApprovedFoods(this.maxCount);
+    } else {
+      // Regular search
+      searchObservable = this.foodsService.searchFoods(query, this.maxCount);
+    }
+
+    searchObservable.subscribe({
       next: (response) => {
         console.log('Food search results:', response);
 
         if (response && response.foods && Array.isArray(response.foods)) {
-          this.foods.set(response.foods);
+          let foods = response.foods;
+
+          // Client-side filter for YEH Approved mode with query
+          if (isYehApprovedMode && query.length >= 2) {
+            const lowerQuery = query.toLowerCase();
+            foods = foods.filter(food =>
+              food.description.toLowerCase().includes(lowerQuery) ||
+              (food.shortDescription && food.shortDescription.toLowerCase().includes(lowerQuery))
+            );
+          }
+
+          this.foods.set(foods);
 
           // Auto-select first item
-          if (response.foods.length > 0) {
+          if (foods.length > 0) {
             this.selectFood(0);
           } else {
             this.selectedIndex.set(-1);

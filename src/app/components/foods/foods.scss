@@ -124,6 +124,31 @@
   }
 }
 
+// YEH Approved checkbox row
+.yeh-approved-row {
+  padding: 2px 4px 4px 4px;
+  flex-shrink: 0;
+
+  .checkbox-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+      accent-color: #4da6ff;
+    }
+
+    span {
+      color: #ffffff;
+      font-size: 12px;
+    }
+  }
+}
+
 .foods-list-container {
   flex: 1 1 auto;  // Allow it to grow and shrink
   min-height: 0;
@@ -224,7 +249,7 @@
 }
 
 .food-item {
-  padding: 1.5px 12px;  // Reduced vertical padding to 1.5px
+  padding: 4px 8px;
   cursor: pointer;
   border-bottom: 1px solid #3a3a3a;
   transition: all 0.2s ease;
@@ -232,15 +257,14 @@
   border-top: 1px solid #4a4a4a;  // Softer borders
   border-left: 1px solid #3a3a3a;
   border-right: 1px solid #3a3a3a;
-  margin: 1.5px;  // Reduced margin to 1.5px
+  margin: 1.5px;
   border-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);  // Softer shadow
-  min-height: 28px;  // Reduced from 40px
-  max-height: 28px;  // Reduced from 40px
+  min-height: 48px;  // Increased to accommodate thumbnail
   display: flex;
   align-items: center;
   overflow: hidden;  // Hide overflow text
-  gap: 8px;  // Space between star and text
+  gap: 8px;  // Space between thumbnail and text
 
   &:hover:not(.selected) {
     background: linear-gradient(180deg, #484848 0%, #404040 100%);
@@ -269,6 +293,27 @@
   &:focus {
     outline: 2px solid #4da6ff;
     outline-offset: -2px;
+  }
+}
+
+// Thumbnail styles
+.food-thumbnail {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+
+  .thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumbnail-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #555555;
   }
 }
 
@@ -314,11 +359,6 @@
   }
 
   .search-controls {
-    padding: 4px;  // Very tight on mobile
-    gap: 4px;
-  }
-
-  .search-controls {
     gap: 3px;
     padding: 3px;
   }
@@ -339,10 +379,32 @@
     }
   }
 
+  .yeh-approved-row {
+    padding: 2px 3px 3px 3px;
+
+    .checkbox-control {
+      gap: 5px;
+
+      input[type="checkbox"] {
+        width: 12px;
+        height: 12px;
+      }
+
+      span {
+        font-size: 11px;
+      }
+    }
+  }
+
   .food-item {
-    padding: 1.5px 10px;  // Keep 1.5px vertical padding on mobile
-    min-height: 26px;  // Reduced for mobile
-    max-height: 26px;  // Reduced for mobile
+    padding: 3px 6px;
+    min-height: 44px;
+    gap: 6px;
+  }
+
+  .food-thumbnail {
+    width: 36px;
+    height: 36px;
   }
 
   .food-description {

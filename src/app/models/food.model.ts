@@ -3,11 +3,16 @@
 export interface Food {
   id: number;  // SQL FoodID - required for backend
   description: string;
+  shortDescription?: string | null;
+  glycemicIndex?: number | null;
+  glycemicLoad?: number | null;
+  yehApproved?: boolean;
   nutritionFacts?: NutritionFacts;
   servingSizeMultiplicand?: number;
   brandInfo?: BrandInfo;
   nutritionFactsImage?: string;
   foodImage?: string;
+  foodImageThumbnail?: string;
   nutritionFactsStatus?: string;
 }
 
