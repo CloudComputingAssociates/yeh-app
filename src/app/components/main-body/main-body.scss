@@ -49,12 +49,12 @@
   min-width: auto !important;  // Auto width to fit content
   flex-grow: 0 !important;     // Don't grow to fill space
   flex-basis: auto !important; // Don't stretch
-  padding: 0 20px !important;  // Horizontal padding only
-  height: 41px !important;  // Increased by 1px for bottom spacing
-  min-height: 41px !important;  // Force minimum height
+  padding: 0 14px !important;  // Reduced from 20px (25% reduction)
+  height: 31px !important;  // Reduced from 41px (25% reduction)
+  min-height: 31px !important;  // Force minimum height
   position: relative;
   background: linear-gradient(180deg, #4e4e4e 0%, #424242 100%) !important;  // Subtly lighter than background
-  border-radius: 8px 8px 0 0;  // Rounded top corners
+  border-radius: 6px 6px 0 0;  // Reduced from 8px
   margin-bottom: -1px;  // Overlap bottom border
   border-top: 2px solid #5a5a5a !important;  // Subtle lighter top edge
   border-left: 1px solid #4a4a4a !important;
@@ -146,7 +146,7 @@
 }
 
 .tab-label-text {
-  font-size: 14px;
+  font-size: 12px;  // Reduced from 14px
   font-weight: 500;
   margin: 0;
 }
@@ -176,12 +176,12 @@
 // Responsive
 @media (max-width: 480px) {
   ::ng-deep .mat-mdc-tab {
-    padding: 0 16px !important;  // Increased from 10px for better spacing
-    height: 37px !important;  // Increased by 1px for bottom spacing
-    min-height: 37px !important;
+    padding: 0 10px !important;  // Reduced from 16px
+    height: 28px !important;  // Reduced from 37px (25% reduction)
+    min-height: 28px !important;
   }
 
   .tab-label-text {
-    font-size: 13px;
+    font-size: 11px;  // Reduced from 13px
   }
 }

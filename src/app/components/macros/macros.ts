@@ -1,5 +1,5 @@
 // src/app/components/macros/macros.ts
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -8,6 +8,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UserProfileService } from '../../services/user-profile.service';
 import { TimePeriod, NutritionResponse } from '../../models/nutrition.model';
+
+// Display modes for macros component
+export type MacrosDisplayMode = 'day' | 'week' | 'food' | 'mealplan' | 'dayplan';
 
 export interface MacroNutrient {
   name: string;
@@ -32,60 +35,57 @@ export interface MacroDisplayData {
       <mat-card class="indicators-card">
         <mat-card-content>
 
-          <!-- Header with period label and Grams/Percent toggle -->
-          <div class="header-controls">
-            <!-- Period Label (Left) - Non-clickable -->
-            <div class="period-label">
-              {{ currentTimePeriod === 'day' ? 'Today' : 'Week' }}
-            </div>
-
-            <!-- Grams/Percent Toggle (Right) -->
-            <button
-              type="button"
-              class="display-mode-toggle"
-              (click)="toggleDisplay()"
-              [attr.aria-label]="'Toggle between grams and percent. Currently showing: ' + (showPercentages ? 'Percent' : 'Grams')"
-              matTooltip="Switch between Grams and Percent"
-              matTooltipPosition="above"
-              [matTooltipShowDelay]="500"
-              [matTooltipHideDelay]="5000">
-              {{ showPercentages ? '%' : 'Grams' }}
-            </button>
-          </div>
-
-          <!-- Macro Nutrients Grid -->
-          <div class="macro-grid">
+          <!-- Macro Nutrients Row with Mode Toggle -->
+          <div class="macro-row">
 
             <!-- Iterate through each macro nutrient -->
             @for (macro of displayData.macros; track macro.name) {
-              <mat-card class="macro-card">
-                <mat-card-header>
-                  <mat-card-title class="macro-title">{{ macro.name }}</mat-card-title>
-                </mat-card-header>
-
-                <mat-card-content>
-                  <!-- Custom Progress Bar (replacing Material's) -->
-                  <div class="custom-progress-container">
-                    <div class="custom-progress-track">
-                      <div
-                        class="custom-progress-fill"
-                        [style.width.%]="macro.percentage"
-                        [style.background-color]="getMacroColor(macro.name, macro.percentage)">
-                      </div>
+              <div class="macro-item">
+                <div class="macro-title">{{ macro.name }}</div>
+                <div class="custom-progress-container">
+                  <div class="custom-progress-track">
+                    <div
+                      class="custom-progress-fill"
+                      [style.width.%]="macro.percentage"
+                      [style.background-color]="getMacroColor(macro.name, macro.percentage)">
                     </div>
                   </div>
+                </div>
+                <!-- Value Label - clickable in non-planning mode to toggle day/week -->
+                @if (!isPlanningMode()) {
+                  <button
+                    type="button"
+                    class="value-label clickable"
+                    (click)="toggleTimePeriod()"
+                    matTooltip="Toggle Day/Week"
+                    matTooltipPosition="below">
+                    {{ macro.percentage }}%
+                  </button>
+                } @else {
+                  <div class="value-label">{{ macro.percentage }}%</div>
+                }
+              </div>
+            }
 
-                  <!-- Value Label (non-clickable) -->
-                  <div class="value-label">
-                    @if (showPercentages) {
-                      {{ macro.percentage }}%
-                    } @else {
-                      {{ macro.actual }}g
-                    }
-                  </div>
-                </mat-card-content>
-
-              </mat-card>
+            <!-- Mode Toggle (Right) - Purple color -->
+            @if (!isPlanningMode()) {
+              <button
+                type="button"
+                class="mode-toggle"
+                (click)="toggleTimePeriod()"
+                matTooltip="Toggle between Day and Week totals"
+                matTooltipPosition="below">
+                {{ currentTimePeriod === 'day' ? 'Day' : 'Week' }}
+              </button>
+            } @else {
+              <button
+                type="button"
+                class="mode-toggle"
+                (click)="cyclePlanningMode()"
+                matTooltip="Toggle planning display mode"
+                matTooltipPosition="below">
+                {{ getPlanningModeLabel() }}
+              </button>
             }
 
           </div>
@@ -113,6 +113,9 @@ export class MacrosComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  // Input to indicate if we're in planning mode
+  planningMode = input<boolean>(false);
+
   // Component state
   displayData: MacroDisplayData = {
     macros: [],
@@ -120,7 +123,7 @@ export class MacrosComponent implements OnInit, OnDestroy {
   };
   currentTimePeriod: TimePeriod = 'day';
   isLoading = false;
-  showPercentages = true; // Toggle between percentage and grams display
+  currentPlanningDisplayMode: MacrosDisplayMode = 'food';  // For planning mode cycling
 
   constructor(private userProfileService: UserProfileService) {}
 
@@ -207,10 +210,32 @@ export class MacrosComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Toggle between percentage and grams display
+   * Check if in planning mode
    */
-  toggleDisplay(): void {
-    this.showPercentages = !this.showPercentages;
+  isPlanningMode(): boolean {
+    return this.planningMode();
+  }
+
+  /**
+   * Cycle through planning display modes: food -> mealplan -> dayplan -> food
+   */
+  cyclePlanningMode(): void {
+    const modes: MacrosDisplayMode[] = ['food', 'mealplan', 'dayplan'];
+    const currentIndex = modes.indexOf(this.currentPlanningDisplayMode);
+    const nextIndex = (currentIndex + 1) % modes.length;
+    this.currentPlanningDisplayMode = modes[nextIndex];
+  }
+
+  /**
+   * Get label for current planning mode
+   */
+  getPlanningModeLabel(): string {
+    switch (this.currentPlanningDisplayMode) {
+      case 'food': return 'Food';
+      case 'mealplan': return 'MealPlan';
+      case 'dayplan': return 'DayPlan';
+      default: return 'Food';
+    }
   }
 
   /**

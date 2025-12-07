@@ -3,22 +3,22 @@
 .chat-input-container {
   background-color: #3a3a3a;
   border-top: 1px solid #4a4a4a;
-  border-radius: 12px 12px 0 0;  // Rounded top corners to match main-body
-  padding: 12px 16px;
+  border-radius: 8px 8px 0 0;  // Rounded top corners to match main-body
+  padding: 6px 12px;  // Reduced from 12px 16px (50% vertical reduction)
   box-sizing: border-box;
 }
 
 .input-wrapper {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;  // Reduced from 12px
   max-width: 100%;
 }
 
 .input-icon-btn {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: 36px;  // Reduced from 48px (25% reduction)
+  height: 36px;
   background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);  // Much lighter top for strong 3D
   border-top: 1px solid #6a6a6a;  // Light top edge
   border-left: 1px solid #5a5a5a;
@@ -32,9 +32,9 @@
     0 2px 0 rgba(0, 0, 0, 0.3) inset;  // Darker bottom shadow
 
   mat-icon {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
+    font-size: 18px;  // Reduced from 24px
+    width: 18px;
+    height: 18px;
     color: #ffffff;  // White - clickable
   }
 
@@ -82,15 +82,15 @@
   min-width: 0;
   background-color: #4a4a4a;
   border: 1px solid #5a5a5a;
-  border-radius: 24px;
-  padding: 12px 20px;
-  font-size: 15px;
+  border-radius: 18px;  // Reduced from 24px
+  padding: 8px 14px;  // Reduced from 12px 20px
+  font-size: 14px;  // Reduced from 15px
   color: rgba(255, 255, 255, 0.9);
   font-family: inherit;
   resize: none;
   overflow-y: auto;
   line-height: 1.4;
-  max-height: 56px;
+  max-height: 42px;  // Reduced from 56px
 
   &::placeholder {
     color: #4da6ff;  // Blue - label
@@ -113,8 +113,8 @@
 
 .talk-btn {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: 36px;  // Reduced from 48px (25% reduction)
+  height: 36px;
   background: linear-gradient(180deg, #555555 0%, #3a3a3a 100%);  // Much lighter top for strong 3D
   border-top: 1px solid #6a6a6a;  // Light top edge
   border-left: 1px solid #5a5a5a;
@@ -122,7 +122,7 @@
   border-bottom: 2px solid #1a1a1a;  // Much darker, thicker bottom for strong shadow
   border-radius: 50%;  // Make button round
   color: #ffffff;  // White - clickable
-  font-size: 9px;
+  font-size: 8px;  // Reduced from 9px
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
@@ -130,19 +130,19 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow:
-    0 4px 8px rgba(0, 0, 0, 0.5),  // Stronger drop shadow
-    0 -2px 0 rgba(255, 255, 255, 0.2) inset,  // Brighter top highlight
-    0 2px 0 rgba(0, 0, 0, 0.3) inset;  // Darker bottom shadow
+    0 3px 6px rgba(0, 0, 0, 0.5),  // Reduced shadow
+    0 -1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 1px 0 rgba(0, 0, 0, 0.3) inset;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 4px;
+  gap: 1px;  // Reduced from 2px
+  padding: 3px;  // Reduced from 4px
 
   .talk-icon {
-    width: 32px;
-    height: 32px;
+    width: 24px;  // Reduced from 32px
+    height: 24px;
     display: block;
     filter: brightness(0) invert(1);  // Make image white
   }
@@ -182,37 +182,37 @@
 // Responsive
 @media (max-width: 480px) {
   .chat-input-container {
-    padding: 8px 12px;
+    padding: 5px 10px;  // Reduced
   }
 
   .input-wrapper {
-    gap: 8px;
+    gap: 6px;  // Reduced from 8px
   }
 
   .input-icon-btn {
-    width: 44px;
-    height: 44px;
+    width: 32px;  // Reduced from 44px
+    height: 32px;
 
     mat-icon {
-      font-size: 22px;
-      width: 22px;
-      height: 22px;
+      font-size: 16px;  // Reduced from 22px
+      width: 16px;
+      height: 16px;
     }
   }
 
   .message-input {
-    font-size: 14px;
-    padding: 10px 16px;
+    font-size: 13px;  // Reduced from 14px
+    padding: 6px 12px;  // Reduced from 10px 16px
   }
 
   .talk-btn {
-    width: 44px;
-    height: 44px;
-    font-size: 8px;
+    width: 32px;  // Reduced from 44px
+    height: 32px;
+    font-size: 7px;  // Reduced from 8px
 
     .talk-icon {
-      width: 28px;
-      height: 28px;
+      width: 20px;  // Reduced from 28px
+      height: 20px;
     }
   }
 }
