@@ -51,14 +51,16 @@ export interface AddFoodEvent {
           </button>
 
           <!-- AI Pick Button -->
-          <button
-            type="button"
-            class="ai-pick-btn"
-            matTooltip="Let 'AI' pick foods"
-            matTooltipPosition="below"
-            aria-label="Let AI pick foods">
-            <img src="images/ai-button1.png" alt="AI" class="ai-icon" />
-          </button>
+          @if (showAiButton()) {
+            <button
+              type="button"
+              class="ai-pick-btn"
+              matTooltip="Let 'AI' pick foods"
+              matTooltipPosition="below"
+              aria-label="Let AI pick foods">
+              <img src="images/ai-button1.png" alt="AI" class="ai-icon" />
+            </button>
+          }
         </div>
 
         <!-- YEH Approved checkbox -->
@@ -124,6 +126,7 @@ export class FoodsComponent implements OnInit {
   // Inputs
   mode = input<'search' | 'display'>('search');
   displayFoods = input<Food[]>([]);
+  showAiButton = input<boolean>(true);
 
   // Outputs
   selectedFood = output<SelectedFoodEvent>();
