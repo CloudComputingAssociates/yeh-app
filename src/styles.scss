@@ -115,3 +115,28 @@ body {
 .cdk-overlay-container {
   z-index: 9999 !important;
 }
+
+// Food picker filter radio buttons - white theme
+.filter-radio-group {
+  .mat-mdc-radio-button {
+    // Unselected outer circle
+    .mdc-radio__outer-circle {
+      border-color: #ffffff !important;
+    }
+
+    // Selected inner circle (the filled dot)
+    .mdc-radio__inner-circle {
+      border-color: #ffffff !important;
+    }
+
+    // Label text
+    .mdc-label {
+      color: #ffffff !important;
+    }
+
+    // Ripple effect
+    .mat-radio-ripple .mat-ripple-element {
+      background-color: rgba(255, 255, 255, 0.2) !important;
+    }
+  }
+}
