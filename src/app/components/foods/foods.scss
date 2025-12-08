@@ -201,6 +201,32 @@
   }
 }
 
+// 4-way filter radio row
+.filter-row {
+  padding: 4px 8px;
+  flex-shrink: 0;
+  background-color: #3a3a3a;
+
+  .filter-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+
+    .mat-mdc-radio-button {
+      --mdc-radio-selected-icon-color: #4da6ff;
+      --mdc-radio-unselected-icon-color: rgba(255, 255, 255, 0.5);
+      --mat-radio-label-text-color: #ffffff;
+      --mat-radio-label-text-size: 12px;
+
+      ::ng-deep .mdc-label {
+        color: #ffffff;
+        font-size: 12px;
+        padding-left: 4px;
+      }
+    }
+  }
+}
+
 .foods-list-container {
   flex: 1 1 auto;  // Allow it to grow and shrink
   min-height: 0;
@@ -369,25 +395,78 @@
   }
 }
 
+// Preference icons container - right-justified with finger-friendly spacing
+.preference-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;  // Space between icons
+  flex-shrink: 0;
+  margin-left: auto;  // Push to right
+  padding-left: 8px;  // Space from description text
+}
+
 .favorite-icon {
-  flex-shrink: 0;  // Don't shrink the star
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  flex-shrink: 0;
+  font-size: 24px;  // Larger for finger-friendly touch
+  width: 44px;  // Minimum touch target size (44x44 recommended)
+  height: 44px;
   color: rgba(255, 255, 255, 0.4);  // Dimmed white for unfavorited
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;  // Round touch target
+  margin: -8px 0;  // Negative margin to not increase row height
 
   &:hover {
-    color: rgba(255, 255, 255, 0.7);  // Brighter on hover
-    transform: scale(1.1);  // Subtle grow on hover
+    color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
-  &.favorited {
+  &:active {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: scale(0.95);
+  }
+
+  &.active {
     color: #ffd700;  // Gold for favorited
 
     &:hover {
-      color: #ffed4e;  // Lighter gold on hover
+      color: #ffed4e;
+    }
+  }
+}
+
+.restricted-icon {
+  flex-shrink: 0;
+  font-size: 24px;  // Larger for finger-friendly touch
+  width: 44px;  // Minimum touch target size
+  height: 44px;
+  color: rgba(255, 255, 255, 0.4);  // Dimmed white for unrestricted
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: -8px 0;  // Negative margin to not increase row height
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &:active {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: scale(0.95);
+  }
+
+  &.active {
+    color: #ff4444;  // Red for restricted
+
+    &:hover {
+      color: #ff6666;
     }
   }
 }
@@ -458,6 +537,22 @@
     }
   }
 
+  .filter-row {
+    padding: 3px 6px;
+
+    .filter-radio-group {
+      gap: 2px 8px;
+
+      .mat-mdc-radio-button {
+        --mat-radio-label-text-size: 11px;
+
+        ::ng-deep .mdc-label {
+          font-size: 11px;
+        }
+      }
+    }
+  }
+
   .food-item {
     padding: 3px 6px;
     min-height: 44px;
@@ -471,5 +566,17 @@
 
   .food-description {
     font-size: 13px;
+  }
+
+  .preference-icons {
+    gap: 4px;
+    padding-left: 4px;
+  }
+
+  .favorite-icon,
+  .restricted-icon {
+    font-size: 22px;
+    width: 40px;
+    height: 40px;
   }
 }

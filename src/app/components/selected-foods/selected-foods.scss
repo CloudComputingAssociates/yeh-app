@@ -100,23 +100,22 @@
 }
 
 .selected-food-item {
-  padding: 1.5px 12px;  // Match foods component padding
+  padding: 4px 8px;
   cursor: pointer;
   border-bottom: 1px solid #3a3a3a;
   transition: all 0.2s ease;
-  background: linear-gradient(180deg, #404040 0%, #383838 100%);  // Subtle gradient
+  background: linear-gradient(180deg, #404040 0%, #383838 100%);
   border-top: 1px solid #4a4a4a;
   border-left: 1px solid #3a3a3a;
   border-right: 1px solid #3a3a3a;
   margin: 1.5px;
   border-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  min-height: 28px;
-  max-height: 28px;
+  min-height: 48px;  // Increased to accommodate thumbnail
   display: flex;
   align-items: center;
   overflow: hidden;
-  gap: 8px;  // Space between star and text
+  gap: 8px;  // Space between thumbnail and text
 
   &:hover:not(.selected) {
     background: linear-gradient(180deg, #484848 0%, #404040 100%);
@@ -148,49 +147,24 @@
   }
 }
 
-.favorite-icon {
-  flex-shrink: 0;  // Don't shrink the star
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-  color: rgba(255, 255, 255, 0.4);  // Dimmed white for unfavorited
-  cursor: pointer;
-  transition: all 0.2s ease;
+// Thumbnail styles
+.food-thumbnail {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
 
-  &:hover {
-    color: rgba(255, 255, 255, 0.7);  // Brighter on hover
-    transform: scale(1.1);  // Subtle grow on hover
+  .thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  &.favorited {
-    color: #ffd700;  // Gold for favorited
-
-    &:hover {
-      color: #ffed4e;  // Lighter gold on hover
-    }
-  }
-}
-
-.restricted-icon {
-  flex-shrink: 0;  // Don't shrink the icon
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-  color: rgba(255, 255, 255, 0.4);  // Dimmed white for unrestricted
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: rgba(255, 255, 255, 0.7);  // Brighter on hover
-    transform: scale(1.1);  // Subtle grow on hover
-  }
-
-  &.restricted {
-    color: #ff4444;  // Red for restricted
-
-    &:hover {
-      color: #ff6666;  // Lighter red on hover
-    }
+  .thumbnail-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #555555;
   }
 }
 
@@ -208,9 +182,14 @@
 // Responsive adjustments
 @media (max-width: 480px) {
   .selected-food-item {
-    padding: 1.5px 10px;
-    min-height: 26px;
-    max-height: 26px;
+    padding: 3px 6px;
+    min-height: 44px;
+    gap: 6px;
+  }
+
+  .food-thumbnail {
+    width: 36px;
+    height: 36px;
   }
 
   .food-description {

@@ -1,7 +1,6 @@
 // src/app/components/selected-foods/selected-foods.ts
 import { Component, ChangeDetectionStrategy, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
 import { Food } from '../../models/food.model';
 
 export interface RemoveFoodEvent {
@@ -10,8 +9,7 @@ export interface RemoveFoodEvent {
 
 @Component({
   selector: 'app-selected-foods',
-  standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="selected-foods-container">
@@ -35,20 +33,13 @@ export interface RemoveFoodEvent {
               tabindex="0"
               role="button"
               [attr.aria-label]="food.description">
-              <mat-icon
-                class="favorite-icon"
-                [class.favorited]="isFavorite(food.id)"
-                (click)="toggleFavorite($event, food.id)"
-                aria-label="Toggle favorite">
-                {{ isFavorite(food.id) ? 'star' : 'star_border' }}
-              </mat-icon>
-              <mat-icon
-                class="restricted-icon"
-                [class.restricted]="isRestricted(food.id)"
-                (click)="toggleRestricted($event, food.id)"
-                aria-label="Toggle restricted">
-                block
-              </mat-icon>
+              <div class="food-thumbnail">
+                @if (food.foodImageThumbnail) {
+                  <img [src]="food.foodImageThumbnail" [alt]="food.description" class="thumbnail-img" />
+                } @else {
+                  <div class="thumbnail-placeholder"></div>
+                }
+              </div>
               <span class="food-description">{{ food.description }}</span>
             </div>
           }
@@ -66,8 +57,6 @@ export class SelectedFoodsComponent {
   removeFood = output<RemoveFoodEvent>();
 
   // Internal state
-  favorites = signal<Set<number>>(new Set());
-  restricted = signal<Set<number>>(new Set());
   selectedIndex = signal<number>(-1);
 
   // Double-click/tap detection
@@ -82,77 +71,6 @@ export class SelectedFoodsComponent {
   private swipingIndex = -1;
   private readonly swipeThreshold = 0.35;  // 35% of element width
   private readonly swipeTimeLimit = 500;  // Max 500ms for swipe
-
-  constructor() {
-    this.loadFavorites();
-    this.loadRestricted();
-  }
-
-  private loadFavorites(): void {
-    const stored = localStorage.getItem('food-favorites');
-    if (stored) {
-      try {
-        const arr = JSON.parse(stored) as number[];
-        this.favorites.set(new Set(arr));
-      } catch (e) {
-        console.error('Failed to load favorites:', e);
-      }
-    }
-  }
-
-  private saveFavorites(): void {
-    const arr = Array.from(this.favorites());
-    localStorage.setItem('food-favorites', JSON.stringify(arr));
-  }
-
-  private loadRestricted(): void {
-    const stored = localStorage.getItem('food-restricted');
-    if (stored) {
-      try {
-        const arr = JSON.parse(stored) as number[];
-        this.restricted.set(new Set(arr));
-      } catch (e) {
-        console.error('Failed to load restricted:', e);
-      }
-    }
-  }
-
-  private saveRestricted(): void {
-    const arr = Array.from(this.restricted());
-    localStorage.setItem('food-restricted', JSON.stringify(arr));
-  }
-
-  isFavorite(foodId: number): boolean {
-    return this.favorites().has(foodId);
-  }
-
-  isRestricted(foodId: number): boolean {
-    return this.restricted().has(foodId);
-  }
-
-  toggleFavorite(event: Event, foodId: number): void {
-    event.stopPropagation(); // Prevent removing the food
-    const favs = new Set(this.favorites());
-    if (favs.has(foodId)) {
-      favs.delete(foodId);
-    } else {
-      favs.add(foodId);
-    }
-    this.favorites.set(favs);
-    this.saveFavorites();
-  }
-
-  toggleRestricted(event: Event, foodId: number): void {
-    event.stopPropagation(); // Prevent removing the food
-    const rest = new Set(this.restricted());
-    if (rest.has(foodId)) {
-      rest.delete(foodId);
-    } else {
-      rest.add(foodId);
-    }
-    this.restricted.set(rest);
-    this.saveRestricted();
-  }
 
   selectFood(index: number): void {
     const foodList = this.foods();

@@ -5,11 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRadioModule } from '@angular/material/radio';
 import { FoodsService } from '../../services/foods.service';
-import { UserSettingsService } from '../../services/user-settings.service';
+import { PreferencesService } from '../../services/preferences.service';
 import { NotificationService } from '../../services/notification.service';
 import { Food } from '../../models/food.model';
 import { HttpErrorResponse } from '@angular/common/http';
+
+export type FoodFilterType = 'yeh-approved' | 'my-favorites' | 'my-restricted' | 'clear';
 
 export interface SelectedFoodEvent {
   food: Food;
@@ -26,7 +29,7 @@ export interface AddFoodEvent {
 
 @Component({
   selector: 'app-foods',
-  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule, MatTooltipModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule, MatTooltipModule, MatRadioModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="foods-container">
@@ -63,16 +66,28 @@ export interface AddFoodEvent {
           }
         </div>
 
-        <!-- YEH Approved checkbox -->
-        <div class="yeh-approved-row">
-          <label class="checkbox-control">
-            <input
-              type="checkbox"
-              [checked]="isYehApproved()"
-              (change)="onYehApprovedChange($event)" />
-            <span>YEH Approved</span>
-          </label>
-        </div>
+        <!-- Filter Radio Buttons -->
+        @if (showFilterRadios()) {
+          <div class="filter-row">
+            <mat-radio-group [value]="activeFilter()" (change)="onFilterChange($event.value)">
+              <mat-radio-button value="yeh-approved">YEH Approved</mat-radio-button>
+              <mat-radio-button value="my-favorites">My Favorites</mat-radio-button>
+              <mat-radio-button value="my-restricted">My Restricted</mat-radio-button>
+              <mat-radio-button value="clear">Clear</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        } @else {
+          <!-- Original checkbox for Plan tab -->
+          <div class="yeh-approved-row">
+            <label class="checkbox-control">
+              <input
+                type="checkbox"
+                [checked]="isYehApproved()"
+                (change)="onYehApprovedChange($event)" />
+              <span>YEH Approved</span>
+            </label>
+          </div>
+        }
       }
 
       <!-- Foods List -->
@@ -87,7 +102,7 @@ export interface AddFoodEvent {
             </div>
           } @else if (foods().length === 0) {
             <div class="food-item placeholder-item">
-              <span class="food-description">{{ '{' }}food count: 0{{ '}' }}</span>
+              <span class="food-description">{{ getEmptyMessage() }}</span>
             </div>
           } @else {
             @for (food of foods(); track food.id; let i = $index) {
@@ -109,6 +124,26 @@ export interface AddFoodEvent {
                   }
                 </div>
                 <span class="food-description">{{ getDisplayDescription(food) }}</span>
+
+                <!-- Preference icons (right-justified, finger-friendly) -->
+                @if (showPreferenceIcons()) {
+                  <div class="preference-icons">
+                    <mat-icon
+                      class="favorite-icon"
+                      [class.active]="preferencesService.isAllowed(food.id)"
+                      (click)="toggleFavorite($event, food.id)"
+                      aria-label="Toggle favorite">
+                      {{ preferencesService.isAllowed(food.id) ? 'star' : 'star_border' }}
+                    </mat-icon>
+                    <mat-icon
+                      class="restricted-icon"
+                      [class.active]="preferencesService.isRestricted(food.id)"
+                      (click)="toggleRestricted($event, food.id)"
+                      aria-label="Toggle restricted">
+                      block
+                    </mat-icon>
+                  </div>
+                }
               </div>
             }
           }
@@ -120,13 +155,15 @@ export interface AddFoodEvent {
 })
 export class FoodsComponent implements OnInit {
   private foodsService = inject(FoodsService);
-  private userSettings = inject(UserSettingsService);
+  protected preferencesService = inject(PreferencesService);
   private notificationService = inject(NotificationService);
 
   // Inputs
   mode = input<'search' | 'display'>('search');
   displayFoods = input<Food[]>([]);
   showAiButton = input<boolean>(true);
+  showPreferenceIcons = input<boolean>(false);
+  showFilterRadios = input<boolean>(false);
 
   // Outputs
   selectedFood = output<SelectedFoodEvent>();
@@ -134,35 +171,59 @@ export class FoodsComponent implements OnInit {
 
   // Internal state
   searchQuery = '';
-  maxCount = 500;  // Increased to get all YEH approved foods
+  maxCount = 500;
   foods = signal<Food[]>([]);
   selectedIndex = signal<number>(-1);
   isLoading = signal<boolean>(false);
-  isYehApproved = signal<boolean>(true);  // Local checkbox state
+  isYehApproved = signal<boolean>(true);
+  activeFilter = signal<FoodFilterType>('yeh-approved');
 
-  // Cache for YEH approved foods (avoids server round trips when filtering)
+  // Caches
   private yehApprovedCache = signal<Food[]>([]);
+  private favoritesCache = signal<Food[]>([]);
+  private restrictedCache = signal<Food[]>([]);
 
   // Double-click/tap detection
   private lastTapTime = 0;
   private lastTapIndex = -1;
-  private readonly doubleTapDelay = 300;  // 300ms between taps
+  private readonly doubleTapDelay = 300;
 
   // Swipe detection
   private touchStartX = 0;
   private touchStartY = 0;
   private touchStartTime = 0;
   private swipingIndex = -1;
-  private readonly swipeThreshold = 0.35;  // 35% of element width
-  private readonly swipeTimeLimit = 500;  // Max 500ms for swipe
+  private readonly swipeThreshold = 0.35;
+  private readonly swipeTimeLimit = 500;
 
   ngOnInit(): void {
-    // Initialize checkbox from user profile setting
-    this.isYehApproved.set(this.userSettings.yehApprovedFoodsOnly());
+    // Always start with YEH Approved filter
+    this.activeFilter.set('yeh-approved');
+    this.isYehApproved.set(true);
 
-    // Auto-load YEH approved foods if checkbox is checked
-    if (this.isYehApproved() && this.mode() === 'search') {
+    if (this.mode() === 'search') {
       this.loadYehApprovedFoods();
+
+      // Load user preferences if showing preference icons
+      if (this.showPreferenceIcons()) {
+        this.preferencesService.getAllPreferences().subscribe({
+          error: (err) => console.error('Failed to load preferences:', err)
+        });
+      }
+    }
+  }
+
+  /** Get appropriate empty message based on filter */
+  getEmptyMessage(): string {
+    switch (this.activeFilter()) {
+      case 'clear':
+        return 'Enter search and press Enter';
+      case 'my-favorites':
+        return 'No favorite foods';
+      case 'my-restricted':
+        return 'No restricted foods';
+      default:
+        return '{food count: 0}';
     }
   }
 
@@ -176,7 +237,6 @@ export class FoodsComponent implements OnInit {
           this.yehApprovedCache.set(response.foods);
           this.foods.set(response.foods);
 
-          // Auto-select first item
           if (response.foods.length > 0) {
             this.selectFood(0);
           }
@@ -191,61 +251,177 @@ export class FoodsComponent implements OnInit {
     });
   }
 
-  /** Handle search query changes - filter client-side for YEH Approved */
-  onSearchQueryChange(query: string): void {
-    if (this.isYehApproved()) {
-      // Filter cached YEH approved foods client-side (no server call)
-      const cache = this.yehApprovedCache();
-      if (cache.length > 0) {
-        const trimmedQuery = query.trim().toLowerCase();
-        if (trimmedQuery.length === 0) {
-          // Show all cached foods
-          this.foods.set(cache);
-        } else {
-          // Filter by query
-          const filtered = cache.filter(food =>
-            food.description.toLowerCase().includes(trimmedQuery) ||
-            (food.shortDescription && food.shortDescription.toLowerCase().includes(trimmedQuery))
-          );
-          this.foods.set(filtered);
+  /** Load user's favorite foods from API */
+  private loadFavorites(): void {
+    this.isLoading.set(true);
+
+    this.preferencesService.getAllowedPreferences().subscribe({
+      next: () => {
+        // Convert preference responses to Food objects
+        // For now, we'll search for each food by ID or use cached YEH foods
+        const favoriteFoods: Food[] = [];
+        const allowedMap = this.preferencesService.allowedFoods();
+
+        // Find foods from YEH cache that are in favorites
+        const yehFoods = this.yehApprovedCache();
+        for (const food of yehFoods) {
+          if (allowedMap.has(food.id)) {
+            favoriteFoods.push(food);
+          }
         }
 
-        // Auto-select first item
-        if (this.foods().length > 0) {
+        this.favoritesCache.set(favoriteFoods);
+        this.foods.set(favoriteFoods);
+
+        if (favoriteFoods.length > 0) {
           this.selectFood(0);
         } else {
           this.selectedIndex.set(-1);
         }
+        this.isLoading.set(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Failed to load favorites:', error);
+        this.isLoading.set(false);
+        this.notificationService.show('Failed to load favorites', 'error');
+      }
+    });
+  }
+
+  /** Load user's restricted foods from API */
+  private loadRestricted(): void {
+    this.isLoading.set(true);
+
+    this.preferencesService.getRestrictedPreferences().subscribe({
+      next: () => {
+        // Find foods from YEH cache that are restricted
+        const restrictedFoods: Food[] = [];
+        const restrictedMap = this.preferencesService.restrictedFoods();
+
+        const yehFoods = this.yehApprovedCache();
+        for (const food of yehFoods) {
+          if (restrictedMap.has(food.id)) {
+            restrictedFoods.push(food);
+          }
+        }
+
+        this.restrictedCache.set(restrictedFoods);
+        this.foods.set(restrictedFoods);
+
+        if (restrictedFoods.length > 0) {
+          this.selectFood(0);
+        } else {
+          this.selectedIndex.set(-1);
+        }
+        this.isLoading.set(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Failed to load restricted:', error);
+        this.isLoading.set(false);
+        this.notificationService.show('Failed to load restricted foods', 'error');
+      }
+    });
+  }
+
+  /** Handle filter radio change */
+  onFilterChange(filter: FoodFilterType): void {
+    this.activeFilter.set(filter);
+    this.searchQuery = '';
+    this.selectedIndex.set(-1);
+
+    switch (filter) {
+      case 'yeh-approved':
+        this.isYehApproved.set(true);
+        if (this.yehApprovedCache().length > 0) {
+          this.foods.set(this.yehApprovedCache());
+          if (this.foods().length > 0) {
+            this.selectFood(0);
+          }
+        } else {
+          this.loadYehApprovedFoods();
+        }
+        break;
+
+      case 'my-favorites':
+        this.isYehApproved.set(false);
+        this.loadFavorites();
+        break;
+
+      case 'my-restricted':
+        this.isYehApproved.set(false);
+        this.loadRestricted();
+        break;
+
+      case 'clear':
+        this.isYehApproved.set(false);
+        this.foods.set([]);
+        break;
+    }
+  }
+
+  /** Handle search query changes */
+  onSearchQueryChange(query: string): void {
+    const filter = this.activeFilter();
+    const trimmedQuery = query.trim().toLowerCase();
+
+    // Get the appropriate cache based on filter
+    let cache: Food[] = [];
+    switch (filter) {
+      case 'yeh-approved':
+        cache = this.yehApprovedCache();
+        break;
+      case 'my-favorites':
+        cache = this.favoritesCache();
+        break;
+      case 'my-restricted':
+        cache = this.restrictedCache();
+        break;
+      case 'clear':
+        // Do nothing - require Enter to search
+        return;
+    }
+
+    if (cache.length > 0) {
+      if (trimmedQuery.length === 0) {
+        this.foods.set(cache);
+      } else {
+        const filtered = cache.filter(food =>
+          food.description.toLowerCase().includes(trimmedQuery) ||
+          (food.shortDescription && food.shortDescription.toLowerCase().includes(trimmedQuery))
+        );
+        this.foods.set(filtered);
+      }
+
+      if (this.foods().length > 0) {
+        this.selectFood(0);
+      } else {
+        this.selectedIndex.set(-1);
       }
     }
-    // For non-YEH mode, do nothing on change - require Enter/button click
   }
 
   /** Check if search can be performed */
   canSearch(): boolean {
-    // YEH Approved mode can search without query, regular mode needs query
-    if (this.isYehApproved()) {
-      return true;
+    if (this.activeFilter() === 'clear') {
+      return this.searchQuery.trim().length >= 2;
     }
-    return this.searchQuery.trim().length >= 2;
+    return true;
   }
 
-  /** Get display description - prefer shortDescription, fallback to description */
+  /** Get display description */
   getDisplayDescription(food: Food): string {
     return food.shortDescription || food.description;
   }
 
-  /** Handle YEH Approved checkbox change */
+  /** Handle YEH Approved checkbox change (for Plan tab) */
   onYehApprovedChange(event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     this.isYehApproved.set(checked);
 
     if (checked) {
-      // Load YEH approved foods when checkbox is checked
       this.searchQuery = '';
       this.loadYehApprovedFoods();
     } else {
-      // Clear foods and cache when unchecked - user must search USDA
       this.yehApprovedCache.set([]);
       this.foods.set([]);
       this.selectedIndex.set(-1);
@@ -254,16 +430,15 @@ export class FoodsComponent implements OnInit {
 
   performSearch(): void {
     const query = this.searchQuery.trim();
-    const isYehApprovedMode = this.isYehApproved();
+    const filter = this.activeFilter();
 
-    // YEH Approved mode: filtering is done client-side via onSearchQueryChange
-    // Just trigger the filter if Enter is pressed
-    if (isYehApprovedMode) {
+    // For non-clear filters, just filter the cache
+    if (filter !== 'clear') {
       this.onSearchQueryChange(this.searchQuery);
       return;
     }
 
-    // USDA search: require at least 2 characters
+    // Clear filter: search USDA
     if (query.length < 2) {
       return;
     }
@@ -272,12 +447,9 @@ export class FoodsComponent implements OnInit {
 
     this.foodsService.searchFoods(query, this.maxCount).subscribe({
       next: (response) => {
-        console.log('Food search results:', response);
-
         if (response && response.foods && Array.isArray(response.foods)) {
           this.foods.set(response.foods);
 
-          // Auto-select first item
           if (response.foods.length > 0) {
             this.selectFood(0);
           } else {
@@ -287,7 +459,6 @@ export class FoodsComponent implements OnInit {
           this.foods.set([]);
           this.selectedIndex.set(-1);
         }
-
         this.isLoading.set(false);
       },
       error: (error: HttpErrorResponse) => {
@@ -296,20 +467,53 @@ export class FoodsComponent implements OnInit {
         this.selectedIndex.set(-1);
         this.isLoading.set(false);
 
-        // Show error notification with diagnostic info
         let errorMessage = `Search failed (${error.status})`;
         if (error.status === 0) {
-          errorMessage = 'Network error (status 0) - CORS or connection issue';
+          errorMessage = 'Network error - CORS or connection issue';
         } else if (error.status === 401) {
-          errorMessage = 'Auth error (401) - Token issue';
+          errorMessage = 'Auth error - Token issue';
         } else if (error.status === 403) {
-          errorMessage = 'Forbidden (403) - Access denied';
+          errorMessage = 'Forbidden - Access denied';
         } else if (error.status === 404) {
-          errorMessage = 'Not found (404)';
+          errorMessage = 'Not found';
         } else if (error.status >= 500) {
           errorMessage = `Server error (${error.status})`;
         }
         this.notificationService.show(errorMessage, 'error');
+      }
+    });
+  }
+
+  /** Toggle favorite status for a food */
+  toggleFavorite(event: Event, foodId: number): void {
+    event.stopPropagation();
+    this.preferencesService.toggleFavorite(foodId).subscribe({
+      next: () => {
+        // Refresh the current view if on favorites filter
+        if (this.activeFilter() === 'my-favorites') {
+          this.loadFavorites();
+        }
+      },
+      error: (err) => {
+        console.error('Failed to toggle favorite:', err);
+        this.notificationService.show('Failed to save preference', 'error');
+      }
+    });
+  }
+
+  /** Toggle restricted status for a food */
+  toggleRestricted(event: Event, foodId: number): void {
+    event.stopPropagation();
+    this.preferencesService.toggleRestricted(foodId).subscribe({
+      next: () => {
+        // Refresh the current view if on restricted filter
+        if (this.activeFilter() === 'my-restricted') {
+          this.loadRestricted();
+        }
+      },
+      error: (err) => {
+        console.error('Failed to toggle restricted:', err);
+        this.notificationService.show('Failed to save preference', 'error');
       }
     });
   }
@@ -320,7 +524,6 @@ export class FoodsComponent implements OnInit {
       return;
     }
 
-    // Check for double-click/tap
     const currentTime = Date.now();
     const timeSinceLastTap = currentTime - this.lastTapTime;
     const isDoubleTap =
@@ -328,20 +531,16 @@ export class FoodsComponent implements OnInit {
       timeSinceLastTap < this.doubleTapDelay;
 
     if (isDoubleTap) {
-      // Double-click/tap detected - add to selected foods
       const food = foodList[index];
       console.log('Double-tap detected, adding food:', food.description);
       this.addFood.emit({ food });
 
-      // Reset double-tap detection
       this.lastTapTime = 0;
       this.lastTapIndex = -1;
     } else {
-      // Single click/tap - select the food
       this.selectedIndex.set(index);
       const food = foodList[index];
 
-      // Extract nutrition info
       const nf = food.nutritionFacts;
       const event: SelectedFoodEvent = {
         food,
@@ -352,10 +551,8 @@ export class FoodsComponent implements OnInit {
         fiber: nf?.dietaryFiberG ?? 0
       };
 
-      console.log('Food selected:', event);
       this.selectedFood.emit(event);
 
-      // Update double-tap detection
       this.lastTapTime = currentTime;
       this.lastTapIndex = index;
     }
@@ -378,13 +575,11 @@ export class FoodsComponent implements OnInit {
     const deltaX = touch.clientX - this.touchStartX;
     const deltaY = Math.abs(touch.clientY - this.touchStartY);
 
-    // If moving more vertically than horizontally, cancel swipe (allow scroll)
     if (deltaY > Math.abs(deltaX)) {
       this.swipingIndex = -1;
       return;
     }
 
-    // Prevent default to stop scrolling during horizontal swipe
     if (Math.abs(deltaX) > 10) {
       event.preventDefault();
     }
@@ -400,15 +595,13 @@ export class FoodsComponent implements OnInit {
     const deltaY = Math.abs(touch.clientY - this.touchStartY);
     const deltaTime = Date.now() - this.touchStartTime;
 
-    // Get the element width to calculate threshold
     const target = event.target as HTMLElement;
     const foodItem = target.closest('.food-item') as HTMLElement;
     const elementWidth = foodItem?.offsetWidth || 0;
 
-    // Check if it's a valid swipe right
     const isSwipeRight =
       deltaX > elementWidth * this.swipeThreshold &&
-      deltaY < 50 &&  // Not too much vertical movement
+      deltaY < 50 &&
       deltaTime < this.swipeTimeLimit;
 
     if (isSwipeRight) {
@@ -420,7 +613,6 @@ export class FoodsComponent implements OnInit {
       }
     }
 
-    // Reset swipe detection
     this.swipingIndex = -1;
   }
 
@@ -434,7 +626,7 @@ export class FoodsComponent implements OnInit {
 
     switch (event.key) {
       case 'ArrowDown':
-        event.preventDefault(); // Prevent scrolling
+        event.preventDefault();
         if (currentIndex < foodList.length - 1) {
           this.selectFood(currentIndex + 1);
           this.scrollToIndex(currentIndex + 1);
@@ -442,12 +634,11 @@ export class FoodsComponent implements OnInit {
         break;
 
       case 'ArrowUp':
-        event.preventDefault(); // Prevent scrolling
+        event.preventDefault();
         if (currentIndex > 0) {
           this.selectFood(currentIndex - 1);
           this.scrollToIndex(currentIndex - 1);
         } else if (currentIndex === -1 && foodList.length > 0) {
-          // If nothing selected, select the first item
           this.selectFood(0);
           this.scrollToIndex(0);
         }
@@ -456,7 +647,6 @@ export class FoodsComponent implements OnInit {
       case 'Enter':
         event.preventDefault();
         if (currentIndex >= 0 && currentIndex < foodList.length) {
-          // Enter key adds to selected foods (same as double-click)
           const food = foodList[currentIndex];
           console.log('Enter key pressed, adding food:', food.description);
           this.addFood.emit({ food });
@@ -466,7 +656,6 @@ export class FoodsComponent implements OnInit {
   }
 
   private scrollToIndex(index: number): void {
-    // Scroll the selected item into view
     setTimeout(() => {
       const foodItems = document.querySelectorAll('.food-item');
       if (foodItems[index]) {

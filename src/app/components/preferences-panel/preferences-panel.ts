@@ -1,17 +1,14 @@
 // src/app/components/preferences-panel/preferences-panel.ts
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { TabService } from '../../services/tab.service';
-import { NotificationService } from '../../services/notification.service';
-import { UserSettingsService } from '../../services/user-settings.service';
 import { FoodsComponent, SelectedFoodEvent, AddFoodEvent } from '../foods/foods';
 import { SelectedFoodsComponent, RemoveFoodEvent } from '../selected-foods/selected-foods';
 import { Food } from '../../models/food.model';
 
 @Component({
   selector: 'app-preferences-panel',
-  imports: [CommonModule, FormsModule, FoodsComponent, SelectedFoodsComponent],
+  imports: [CommonModule, FoodsComponent, SelectedFoodsComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="panel-container">
@@ -21,31 +18,25 @@ import { Food } from '../../models/food.model';
       </div>
 
       <div class="panel-content">
-        <div class="settings-section">
-          <h3 class="section-title">Food Search</h3>
-          <label class="checkbox-setting">
-            <input
-              type="checkbox"
-              [checked]="userSettings.yehApprovedFoodsOnly()"
-              (change)="onYehApprovedChange($event)" />
-            <span class="checkbox-label">YEH Approved Foods Only</span>
-          </label>
-          <p class="setting-description">When enabled, food searches will default to showing only YEH-approved foods.</p>
-        </div>
-
-        <!-- Favorites & Restricted Foods Section -->
         <div class="foods-section">
-          <h3 class="section-title">Favorites & Restricted Foods</h3>
           <div class="foods-panel">
-            <app-foods
-              [mode]="'search'"
-              [showAiButton]="false"
-              (selectedFood)="onFoodSelected($event)"
-              (addFood)="onAddFood($event)" />
+            <div class="picker-column">
+              <h3 class="column-title">FOOD PICKER</h3>
+              <app-foods
+                [mode]="'search'"
+                [showAiButton]="false"
+                [showPreferenceIcons]="true"
+                [showFilterRadios]="true"
+                (selectedFood)="onFoodSelected($event)"
+                (addFood)="onAddFood($event)" />
+            </div>
 
-            <app-selected-foods
-              [foods]="selectedFoods()"
-              (removeFood)="onRemoveFood($event)" />
+            <div class="selected-column">
+              <h3 class="column-title">MY FOODS</h3>
+              <app-selected-foods
+                [foods]="selectedFoods()"
+                (removeFood)="onRemoveFood($event)" />
+            </div>
           </div>
         </div>
       </div>
@@ -55,20 +46,12 @@ import { Food } from '../../models/food.model';
 })
 export class PreferencesPanelComponent {
   private tabService = inject(TabService);
-  private notificationService = inject(NotificationService);
-  protected userSettings = inject(UserSettingsService);
 
   // State for foods selection
   selectedFoods = signal<Food[]>([]);
 
   close(): void {
     this.tabService.closeTab('preferences');
-  }
-
-  onYehApprovedChange(event: Event): void {
-    const checked = (event.target as HTMLInputElement).checked;
-    this.userSettings.setYehApprovedFoodsOnly(checked);
-    this.notificationService.show('Setting saved');
   }
 
   onFoodSelected(event: SelectedFoodEvent): void {
