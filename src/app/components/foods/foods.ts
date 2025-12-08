@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FoodsService } from '../../services/foods.service';
 import { UserSettingsService } from '../../services/user-settings.service';
 import { NotificationService } from '../../services/notification.service';
@@ -25,7 +26,7 @@ export interface AddFoodEvent {
 
 @Component({
   selector: 'app-foods',
-  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule, MatTooltipModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="foods-container">
@@ -40,6 +41,16 @@ export interface AddFoodEvent {
             (keydown.enter)="performSearch()"
             placeholder="Search food..."
             [disabled]="isLoading()" />
+
+          <!-- AI Pick Button -->
+          <button
+            type="button"
+            class="ai-pick-btn"
+            matTooltip="Let AI pick my foods&#10;based on my preferences"
+            matTooltipPosition="below"
+            aria-label="Let AI pick foods">
+            <img src="images/ai-button1.png" alt="AI" class="ai-icon" />
+          </button>
 
           <button
             class="search-btn"
