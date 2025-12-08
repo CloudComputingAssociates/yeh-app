@@ -42,6 +42,14 @@ export interface AddFoodEvent {
             placeholder="Search food..."
             [disabled]="isLoading()" />
 
+          <button
+            class="search-btn"
+            (click)="performSearch()"
+            [disabled]="isLoading() || !canSearch()"
+            aria-label="Search">
+            <mat-icon>keyboard_return</mat-icon>
+          </button>
+
           <!-- AI Pick Button -->
           <button
             type="button"
@@ -50,14 +58,6 @@ export interface AddFoodEvent {
             matTooltipPosition="below"
             aria-label="Let AI pick foods">
             <img src="images/ai-button1.png" alt="AI" class="ai-icon" />
-          </button>
-
-          <button
-            class="search-btn"
-            (click)="performSearch()"
-            [disabled]="isLoading() || !canSearch()"
-            aria-label="Search">
-            <mat-icon>keyboard_return</mat-icon>
           </button>
         </div>
 
