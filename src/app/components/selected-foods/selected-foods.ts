@@ -42,6 +42,13 @@ export interface RemoveFoodEvent {
                 aria-label="Toggle favorite">
                 {{ isFavorite(food.id) ? 'star' : 'star_border' }}
               </mat-icon>
+              <mat-icon
+                class="restricted-icon"
+                [class.restricted]="isRestricted(food.id)"
+                (click)="toggleRestricted($event, food.id)"
+                aria-label="Toggle restricted">
+                block
+              </mat-icon>
               <span class="food-description">{{ food.description }}</span>
             </div>
           }
@@ -60,6 +67,7 @@ export class SelectedFoodsComponent {
 
   // Internal state
   favorites = signal<Set<number>>(new Set());
+  restricted = signal<Set<number>>(new Set());
   selectedIndex = signal<number>(-1);
 
   // Double-click/tap detection
@@ -77,6 +85,7 @@ export class SelectedFoodsComponent {
 
   constructor() {
     this.loadFavorites();
+    this.loadRestricted();
   }
 
   private loadFavorites(): void {
@@ -96,8 +105,29 @@ export class SelectedFoodsComponent {
     localStorage.setItem('food-favorites', JSON.stringify(arr));
   }
 
+  private loadRestricted(): void {
+    const stored = localStorage.getItem('food-restricted');
+    if (stored) {
+      try {
+        const arr = JSON.parse(stored) as number[];
+        this.restricted.set(new Set(arr));
+      } catch (e) {
+        console.error('Failed to load restricted:', e);
+      }
+    }
+  }
+
+  private saveRestricted(): void {
+    const arr = Array.from(this.restricted());
+    localStorage.setItem('food-restricted', JSON.stringify(arr));
+  }
+
   isFavorite(foodId: number): boolean {
     return this.favorites().has(foodId);
+  }
+
+  isRestricted(foodId: number): boolean {
+    return this.restricted().has(foodId);
   }
 
   toggleFavorite(event: Event, foodId: number): void {
@@ -110,6 +140,18 @@ export class SelectedFoodsComponent {
     }
     this.favorites.set(favs);
     this.saveFavorites();
+  }
+
+  toggleRestricted(event: Event, foodId: number): void {
+    event.stopPropagation(); // Prevent removing the food
+    const rest = new Set(this.restricted());
+    if (rest.has(foodId)) {
+      rest.delete(foodId);
+    } else {
+      rest.add(foodId);
+    }
+    this.restricted.set(rest);
+    this.saveRestricted();
   }
 
   selectFood(index: number): void {

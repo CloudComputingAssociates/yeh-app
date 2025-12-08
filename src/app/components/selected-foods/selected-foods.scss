@@ -171,6 +171,29 @@
   }
 }
 
+.restricted-icon {
+  flex-shrink: 0;  // Don't shrink the icon
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: rgba(255, 255, 255, 0.4);  // Dimmed white for unrestricted
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.7);  // Brighter on hover
+    transform: scale(1.1);  // Subtle grow on hover
+  }
+
+  &.restricted {
+    color: #ff4444;  // Red for restricted
+
+    &:hover {
+      color: #ff6666;  // Lighter red on hover
+    }
+  }
+}
+
 .food-description {
   font-size: 14px;
   color: #ffffff;  // White - text
