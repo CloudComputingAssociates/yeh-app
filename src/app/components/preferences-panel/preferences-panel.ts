@@ -32,7 +32,7 @@ import { Food } from '../../models/food.model';
             </div>
 
             <div class="selected-column">
-              <h3 class="column-title">MY FOODS</h3>
+              <h3 class="column-title">SELECTED FOODS</h3>
               <app-selected-foods
                 [foods]="selectedFoods()"
                 (removeFood)="onRemoveFood($event)" />
