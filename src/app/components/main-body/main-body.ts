@@ -1,5 +1,5 @@
 // src/app/components/main-body/main-body.ts
-import { Component, ChangeDetectionStrategy, inject, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,8 +9,7 @@ import { PanelService } from '../../services/panel.service';
 import { ChatComponent } from '../chat/chat';
 import { TodayComponent } from '../today/today';
 import { PlanComponent } from '../plan/plan';
-import { ProfilePanelComponent } from '../profile-panel/profile-panel';
-import { SettingsPanelComponent } from '../settings-panel/settings-panel';
+import { AccountPanelComponent } from '../account-panel/account-panel';
 import { PreferencesPanelComponent } from '../preferences-panel/preferences-panel';
 import { NotificationComponent } from '../notification/notification';
 
@@ -25,8 +24,7 @@ import { NotificationComponent } from '../notification/notification';
     ChatComponent,
     TodayComponent,
     PlanComponent,
-    ProfilePanelComponent,
-    SettingsPanelComponent,
+    AccountPanelComponent,
     PreferencesPanelComponent,
     NotificationComponent
   ],
@@ -34,13 +32,10 @@ import { NotificationComponent } from '../notification/notification';
   template: `
     <div class="main-body-container">
       @if (panelService.activePanel()) {
-        <!-- Show panel overlay (hides tabs) -->
+        <!-- Show panel as tab content (replaces tabs) -->
         @switch (panelService.activePanel()) {
-          @case ('profile') {
-            <app-profile-panel />
-          }
-          @case ('settings') {
-            <app-settings-panel />
+          @case ('account') {
+            <app-account-panel />
           }
           @case ('preferences') {
             <app-preferences-panel />

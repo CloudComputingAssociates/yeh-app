@@ -35,17 +35,12 @@ import { PanelService } from '../../services/panel.service';
 
         <mat-divider></mat-divider>
 
-        <button mat-menu-item class="menu-item" (click)="openProfile()">
+        <button mat-menu-item class="menu-item" (click)="toggleAccount()">
           <mat-icon>person</mat-icon>
-          <span>Profile</span>
+          <span>Account</span>
         </button>
 
-        <button mat-menu-item class="menu-item" (click)="openSettings()">
-          <mat-icon>settings</mat-icon>
-          <span>Settings</span>
-        </button>
-
-        <button mat-menu-item class="menu-item" (click)="openPreferences()">
+        <button mat-menu-item class="menu-item" (click)="togglePreferences()">
           <mat-icon>tune</mat-icon>
           <span>Preferences</span>
         </button>
@@ -81,15 +76,11 @@ export class ProfileMenuComponent {
     this.auth.logout({ logoutParams: { returnTo: window.location.origin } });
   }
 
-  openProfile(): void {
-    this.panelService.openPanel('profile');
+  toggleAccount(): void {
+    this.panelService.togglePanel('account');
   }
 
-  openSettings(): void {
-    this.panelService.openPanel('settings');
-  }
-
-  openPreferences(): void {
-    this.panelService.openPanel('preferences');
+  togglePreferences(): void {
+    this.panelService.togglePanel('preferences');
   }
 }

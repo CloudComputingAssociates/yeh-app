@@ -1,4 +1,4 @@
-// src/app/components/preferences-panel/preferences-panel.scss
+// src/app/components/account-panel/account-panel.scss
 
 :host {
   display: flex;
@@ -75,48 +75,21 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
-  .settings-section {
-    width: 100%;
+  .placeholder-text {
+    color: #4da6ff;  // Blue - label
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+  }
 
-    .section-title {
-      color: #4da6ff;
-      font-size: 13px;
-      font-weight: 600;
-      margin: 0 0 10px 0;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .checkbox-setting {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      padding: 6px 0;
-
-      input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-        accent-color: #4da6ff;
-      }
-
-      .checkbox-label {
-        color: #ffffff;
-        font-size: 13px;
-        font-weight: 500;
-      }
-    }
-
-    .setting-description {
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 11px;
-      margin: 4px 0 0 26px;
-      line-height: 1.4;
-    }
+  .placeholder-subtext {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    margin: 0;
   }
 }
 
@@ -139,20 +112,12 @@
   .panel-content {
     padding: 12px;
 
-    .settings-section {
-      .section-title {
-        font-size: 12px;
-      }
+    .placeholder-text {
+      font-size: 13px;
+    }
 
-      .checkbox-setting {
-        .checkbox-label {
-          font-size: 12px;
-        }
-      }
-
-      .setting-description {
-        font-size: 10px;
-      }
+    .placeholder-subtext {
+      font-size: 11px;
     }
   }
 }
