@@ -46,7 +46,7 @@ export interface AddFoodEvent {
           <button
             type="button"
             class="ai-pick-btn"
-            matTooltip="Let AI pick my foods&#10;based on my preferences"
+            matTooltip="Let 'AI' pick foods"
             matTooltipPosition="below"
             aria-label="Let AI pick foods">
             <img src="images/ai-button1.png" alt="AI" class="ai-icon" />
