@@ -210,7 +210,7 @@
   .filter-radio-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 2px 6px;
+    gap: 2px 2px;
 
     ::ng-deep .mat-mdc-radio-button {
       // Unselected state
@@ -226,11 +226,22 @@
       // Label
       --mat-radio-label-text-color: #ffffff;
       --mat-radio-label-text-size: 12px;
+      // Tighten internal spacing
+      --mdc-radio-state-layer-size: 28px;
+
+      .mdc-form-field {
+        padding-right: 0;
+      }
 
       .mdc-label {
         color: #ffffff !important;
         font-size: 12px;
-        padding-left: 2px;
+        padding-left: 0;
+        margin-right: 4px;
+      }
+
+      .mdc-radio {
+        padding: 4px;
       }
 
       .mdc-radio__outer-circle {
@@ -558,14 +569,20 @@
     padding: 2px 3px;
 
     .filter-radio-group {
-      gap: 1px 4px;
+      gap: 1px 1px;
 
       ::ng-deep .mat-mdc-radio-button {
         --mat-radio-label-text-size: 11px;
+        --mdc-radio-state-layer-size: 24px;
 
         .mdc-label {
           font-size: 11px;
-          padding-left: 1px;
+          padding-left: 0;
+          margin-right: 2px;
+        }
+
+        .mdc-radio {
+          padding: 2px;
         }
       }
     }
