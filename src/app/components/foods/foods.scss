@@ -210,7 +210,7 @@
   .filter-radio-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 2px 2px;
+    gap: 2px 4px;
 
     ::ng-deep .mat-mdc-radio-button {
       // Unselected state
@@ -236,12 +236,12 @@
       .mdc-label {
         color: #ffffff !important;
         font-size: 12px;
-        padding-left: 0;
-        margin-right: 4px;
+        padding-left: 1px;
+        margin-right: 5px;
       }
 
       .mdc-radio {
-        padding: 4px;
+        padding: 5px;
       }
 
       .mdc-radio__outer-circle {
@@ -569,7 +569,7 @@
     padding: 2px 3px;
 
     .filter-radio-group {
-      gap: 1px 1px;
+      gap: 1px 2px;
 
       ::ng-deep .mat-mdc-radio-button {
         --mat-radio-label-text-size: 11px;
@@ -577,12 +577,12 @@
 
         .mdc-label {
           font-size: 11px;
-          padding-left: 0;
-          margin-right: 2px;
+          padding-left: 1px;
+          margin-right: 3px;
         }
 
         .mdc-radio {
-          padding: 2px;
+          padding: 3px;
         }
       }
     }
