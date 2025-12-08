@@ -6,7 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from '@auth0/auth0-angular';
 import { SubscriptionService } from '../../services/subscription.service';
-import { PanelService } from '../../services/panel.service';
+import { TabService } from '../../services/tab.service';
 
 @Component({
   selector: 'app-profile-menu',
@@ -64,7 +64,7 @@ export class ProfileMenuComponent {
   @Input() defaultImage = 'images/yeh_logo_dark.png';
   auth = inject(AuthService);
   subscriptionService = inject(SubscriptionService);
-  panelService = inject(PanelService);
+  private tabService = inject(TabService);
 
   login(): void {
     this.auth.loginWithRedirect();
@@ -77,10 +77,10 @@ export class ProfileMenuComponent {
   }
 
   toggleAccount(): void {
-    this.panelService.togglePanel('account');
+    this.tabService.toggleTab('account', 'Account');
   }
 
   togglePreferences(): void {
-    this.panelService.togglePanel('preferences');
+    this.tabService.toggleTab('preferences', 'Preferences');
   }
 }

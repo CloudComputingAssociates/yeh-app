@@ -31,7 +31,7 @@ export class TabService {
   activeTabIndex = this.activeTabIndexSignal.asReadonly();
 
   // Define menu order - this determines tab insertion order
-  private menuOrder = ['chat', 'today', 'plan', 'progress', 'shop'];
+  private menuOrder = ['chat', 'today', 'plan', 'progress', 'shop', 'account', 'preferences'];
 
   toggleTab(tabId: string, label: string): void {
     const currentTabs = this.tabsSignal();

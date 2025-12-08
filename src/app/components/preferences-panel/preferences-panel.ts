@@ -2,7 +2,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PanelService } from '../../services/panel.service';
+import { TabService } from '../../services/tab.service';
 import { NotificationService } from '../../services/notification.service';
 import { UserSettingsService } from '../../services/user-settings.service';
 
@@ -35,12 +35,12 @@ import { UserSettingsService } from '../../services/user-settings.service';
   styleUrls: ['./preferences-panel.scss']
 })
 export class PreferencesPanelComponent {
-  private panelService = inject(PanelService);
+  private tabService = inject(TabService);
   private notificationService = inject(NotificationService);
   protected userSettings = inject(UserSettingsService);
 
   close(): void {
-    this.panelService.closePanel();
+    this.tabService.closeTab('preferences');
   }
 
   onYehApprovedChange(event: Event): void {

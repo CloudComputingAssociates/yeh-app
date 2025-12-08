@@ -1,7 +1,7 @@
 // src/app/components/account-panel/account-panel.ts
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PanelService } from '../../services/panel.service';
+import { TabService } from '../../services/tab.service';
 import { NotificationService } from '../../services/notification.service';
 
 @Component({
@@ -24,11 +24,11 @@ import { NotificationService } from '../../services/notification.service';
   styleUrls: ['./account-panel.scss']
 })
 export class AccountPanelComponent {
-  private panelService = inject(PanelService);
+  private tabService = inject(TabService);
   private notificationService = inject(NotificationService);
 
   close(): void {
-    this.panelService.closePanel();
+    this.tabService.closeTab('account');
   }
 
   // Example save method for future use
