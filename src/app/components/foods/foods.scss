@@ -203,14 +203,14 @@
 
 // 4-way filter radio row
 .filter-row {
-  padding: 4px 8px;
+  padding: 2px 4px;
   flex-shrink: 0;
   background-color: #3a3a3a;
 
   .filter-radio-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px 12px;
+    gap: 2px 6px;
 
     ::ng-deep .mat-mdc-radio-button {
       // Unselected state
@@ -230,7 +230,7 @@
       .mdc-label {
         color: #ffffff !important;
         font-size: 12px;
-        padding-left: 4px;
+        padding-left: 2px;
       }
 
       .mdc-radio__outer-circle {
@@ -555,16 +555,17 @@
   }
 
   .filter-row {
-    padding: 3px 6px;
+    padding: 2px 3px;
 
     .filter-radio-group {
-      gap: 2px 8px;
+      gap: 1px 4px;
 
       ::ng-deep .mat-mdc-radio-button {
         --mat-radio-label-text-size: 11px;
 
         .mdc-label {
           font-size: 11px;
+          padding-left: 1px;
         }
       }
     }
