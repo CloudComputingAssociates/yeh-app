@@ -69,7 +69,7 @@ export interface AddFoodEvent {
         <!-- Filter Radio Buttons -->
         @if (showFilterRadios()) {
           <div class="filter-row">
-            <mat-radio-group [value]="activeFilter()" (change)="onFilterChange($event.value)">
+            <mat-radio-group class="filter-radio-group" [value]="activeFilter()" (change)="onFilterChange($event.value)">
               <mat-radio-button value="yeh-approved">YEH Approved</mat-radio-button>
               <mat-radio-button value="my-favorites">My Favorites</mat-radio-button>
               <mat-radio-button value="my-restricted">My Restricted</mat-radio-button>
