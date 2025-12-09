@@ -484,38 +484,16 @@ export class FoodsComponent implements OnInit {
     });
   }
 
-  /** Toggle favorite status for a food */
+  /** Toggle favorite status for a food (local only, no API call) */
   toggleFavorite(event: Event, foodId: number): void {
     event.stopPropagation();
-    this.preferencesService.toggleFavorite(foodId).subscribe({
-      next: () => {
-        // Refresh the current view if on favorites filter
-        if (this.activeFilter() === 'my-favorites') {
-          this.loadFavorites();
-        }
-      },
-      error: (err) => {
-        console.error('Failed to toggle favorite:', err);
-        this.notificationService.show('Failed to save preference', 'error');
-      }
-    });
+    this.preferencesService.toggleFavoriteLocal(foodId);
   }
 
-  /** Toggle restricted status for a food */
+  /** Toggle restricted status for a food (local only, no API call) */
   toggleRestricted(event: Event, foodId: number): void {
     event.stopPropagation();
-    this.preferencesService.toggleRestricted(foodId).subscribe({
-      next: () => {
-        // Refresh the current view if on restricted filter
-        if (this.activeFilter() === 'my-restricted') {
-          this.loadRestricted();
-        }
-      },
-      error: (err) => {
-        console.error('Failed to toggle restricted:', err);
-        this.notificationService.show('Failed to save preference', 'error');
-      }
-    });
+    this.preferencesService.toggleRestrictedLocal(foodId);
   }
 
   selectFood(index: number): void {
