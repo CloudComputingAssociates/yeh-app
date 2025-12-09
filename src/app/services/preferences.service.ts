@@ -1,7 +1,7 @@
 // src/app/services/preferences.service.ts
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, forkJoin, of, map } from 'rxjs';
+import { Observable, tap, of, map, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface FoodPreference {
@@ -286,39 +286,31 @@ export class PreferencesService {
       // 'remove' type only deletes, doesn't create
     }
 
-    // Build the operations
-    const operations: Observable<unknown>[] = [];
+    // Chain operations: delete first, then create, then refresh
+    let operation$: Observable<unknown> = of(null);
 
     // Bulk delete if needed
     if (toDelete.length > 0) {
-      operations.push(
-        this.http.request<{ deleted: number }>('DELETE', `${this.baseUrl}/user/preferences`, {
-          body: { preferenceIds: toDelete }
-        })
-      );
+      operation$ = this.http.request<{ deleted: number }>('DELETE', `${this.baseUrl}/user/preferences`, {
+        body: { preferenceIds: toDelete }
+      });
     }
 
-    // Bulk create if needed
+    // Bulk create if needed (chain after delete)
     if (toCreate.length > 0) {
-      operations.push(
-        this.http.post<CreatePreferenceResponse>(`${this.baseUrl}/user/preferences`, { items: toCreate })
+      operation$ = operation$.pipe(
+        switchMap(() => this.http.post<CreatePreferenceResponse>(`${this.baseUrl}/user/preferences`, { items: toCreate }))
       );
     }
 
-    if (operations.length === 0) {
-      return of(undefined);
-    }
-
-    // Execute all operations and then refresh state from server
-    return forkJoin(operations).pipe(
+    // Clear pending changes and refresh from server
+    return operation$.pipe(
       tap(() => {
-        // Clear pending changes
+        // Clear pending changes immediately
         this.pendingChanges.set(new Map());
       }),
       // Refresh from server to get accurate preferenceIds
-      tap(() => {
-        this.getAllPreferences().subscribe();
-      }),
+      switchMap(() => this.getAllPreferences()),
       // Map to void
       map(() => undefined)
     );
