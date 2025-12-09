@@ -40,9 +40,9 @@ import { TabService } from '../../services/tab.service';
           <span>Account</span>
         </button>
 
-        <button mat-menu-item class="menu-item" (click)="togglePreferences()">
-          <mat-icon>tune</mat-icon>
-          <span>Preferences</span>
+        <button mat-menu-item class="menu-item" (click)="toggleHelp()">
+          <mat-icon>help_outline</mat-icon>
+          <span>Help</span>
         </button>
 
         <mat-divider></mat-divider>
@@ -80,7 +80,7 @@ export class ProfileMenuComponent {
     this.tabService.toggleTab('account', 'Account');
   }
 
-  togglePreferences(): void {
-    this.tabService.toggleTab('preferences', 'Preferences');
+  toggleHelp(): void {
+    this.tabService.toggleTab('help', 'Help');
   }
 }

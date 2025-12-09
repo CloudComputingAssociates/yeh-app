@@ -56,10 +56,14 @@ import { NotificationComponent } from '../notification/notification';
                 <div class="placeholder-content">
                   <p class="placeholder-text">Shop view - Coming soon</p>
                 </div>
-              } @else if (tab.id === 'account') {
-                <app-account-panel />
               } @else if (tab.id === 'preferences') {
                 <app-preferences-panel />
+              } @else if (tab.id === 'account') {
+                <app-account-panel />
+              } @else if (tab.id === 'help') {
+                <div class="placeholder-content">
+                  <p class="placeholder-text">Help - Coming soon</p>
+                </div>
               }
             </div>
           </mat-tab>
