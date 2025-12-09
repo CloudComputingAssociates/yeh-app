@@ -309,9 +309,10 @@ export class PreferencesService {
 
     // Bulk create if needed (chain after delete)
     if (toCreate.length > 0) {
-      console.log('[PreferencesService] Adding POST operation');
+      const requestBody = { items: toCreate };
+      console.log('[PreferencesService] Adding POST operation, request body:', JSON.stringify(requestBody));
       operation$ = operation$.pipe(
-        switchMap(() => this.http.post<CreatePreferenceResponse>(`${this.baseUrl}/user/preferences`, { items: toCreate }).pipe(
+        switchMap(() => this.http.post<CreatePreferenceResponse>(`${this.baseUrl}/user/preferences`, requestBody).pipe(
           tap(res => console.log('[PreferencesService] POST response:', res))
         ))
       );
