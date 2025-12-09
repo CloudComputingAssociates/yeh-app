@@ -156,9 +156,11 @@ export class PreferencesService {
    * Updates local state and tracks pending change
    */
   toggleFavoriteLocal(foodId: number): void {
+    console.log('[PreferencesService] toggleFavoriteLocal called with foodId:', foodId);
     const localAllowed = new Set(this.localAllowedFoods());
     const localRestricted = new Set(this.localRestrictedFoods());
     const changes = new Map(this.pendingChanges());
+    console.log('[PreferencesService] Current state - localAllowed:', [...localAllowed], 'localRestricted:', [...localRestricted], 'pendingChanges:', [...changes.entries()]);
 
     const wasAllowed = localAllowed.has(foodId);
     const wasRestricted = localRestricted.has(foodId);
@@ -202,6 +204,7 @@ export class PreferencesService {
     this.localAllowedFoods.set(localAllowed);
     this.localRestrictedFoods.set(localRestricted);
     this.pendingChanges.set(changes);
+    console.log('[PreferencesService] After toggle - localAllowed:', [...this.localAllowedFoods()], 'pendingChanges:', [...this.pendingChanges().entries()]);
   }
 
   /**
@@ -262,8 +265,10 @@ export class PreferencesService {
    */
   saveAllChanges(): Observable<void> {
     const changes = Array.from(this.pendingChanges().values());
+    console.log('[PreferencesService] saveAllChanges called, pending changes:', changes);
 
     if (changes.length === 0) {
+      console.log('[PreferencesService] No changes to save');
       return of(undefined);
     }
 
@@ -286,31 +291,44 @@ export class PreferencesService {
       // 'remove' type only deletes, doesn't create
     }
 
+    console.log('[PreferencesService] toDelete:', toDelete);
+    console.log('[PreferencesService] toCreate:', toCreate);
+
     // Chain operations: delete first, then create, then refresh
     let operation$: Observable<unknown> = of(null);
 
     // Bulk delete if needed
     if (toDelete.length > 0) {
+      console.log('[PreferencesService] Adding DELETE operation');
       operation$ = this.http.request<{ deleted: number }>('DELETE', `${this.baseUrl}/user/preferences`, {
         body: { preferenceIds: toDelete }
-      });
+      }).pipe(
+        tap(res => console.log('[PreferencesService] DELETE response:', res))
+      );
     }
 
     // Bulk create if needed (chain after delete)
     if (toCreate.length > 0) {
+      console.log('[PreferencesService] Adding POST operation');
       operation$ = operation$.pipe(
-        switchMap(() => this.http.post<CreatePreferenceResponse>(`${this.baseUrl}/user/preferences`, { items: toCreate }))
+        switchMap(() => this.http.post<CreatePreferenceResponse>(`${this.baseUrl}/user/preferences`, { items: toCreate }).pipe(
+          tap(res => console.log('[PreferencesService] POST response:', res))
+        ))
       );
     }
 
     // Clear pending changes and refresh from server
     return operation$.pipe(
       tap(() => {
-        // Clear pending changes immediately
+        console.log('[PreferencesService] Operations complete, clearing pending changes');
         this.pendingChanges.set(new Map());
       }),
       // Refresh from server to get accurate preferenceIds
-      switchMap(() => this.getAllPreferences()),
+      switchMap(() => {
+        console.log('[PreferencesService] Refreshing from server');
+        return this.getAllPreferences();
+      }),
+      tap(() => console.log('[PreferencesService] Refresh complete')),
       // Map to void
       map(() => undefined)
     );
