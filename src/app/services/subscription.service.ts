@@ -190,6 +190,34 @@ export class SubscriptionService {
   }
 
   /**
+   * Deactivate user account (soft delete)
+   * This cancels any active subscription and marks the account as inactive
+   * @returns Observable with deactivation confirmation
+   */
+  deactivateAccount(): Observable<{
+    success: boolean;
+    message: string;
+    subscriptionCanceled: boolean;
+    deactivatedAt?: string;
+  }> {
+    return this.http.delete<{
+      success: boolean;
+      message: string;
+      subscriptionCanceled: boolean;
+      deactivatedAt?: string;
+    }>(`${this.API_BASE_URL}/user`).pipe(
+      tap(() => {
+        // Clear subscription status after deactivation
+        this.clearStatus();
+      }),
+      catchError(error => {
+        console.error('Error deactivating account:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
    * Refresh subscription status from backend
    */
   refreshStatus(): void {

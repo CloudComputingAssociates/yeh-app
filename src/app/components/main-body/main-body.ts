@@ -48,13 +48,13 @@ import { NotificationComponent } from '../notification/notification';
                 <app-today />
               } @else if (tab.id === 'plan') {
                 <app-plan />
-              } @else if (tab.id === 'progress') {
-                <div class="placeholder-content">
-                  <p class="placeholder-text">Progress view - Coming soon</p>
-                </div>
               } @else if (tab.id === 'shop') {
                 <div class="placeholder-content">
-                  <p class="placeholder-text">Shop view - Coming soon</p>
+                  <p class="placeholder-text">Shopping List - Coming soon</p>
+                </div>
+              } @else if (tab.id === 'review') {
+                <div class="placeholder-content">
+                  <p class="placeholder-text">Review - Coming soon</p>
                 </div>
               } @else if (tab.id === 'preferences') {
                 <app-preferences-panel />
