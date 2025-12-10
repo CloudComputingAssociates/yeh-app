@@ -2,5 +2,10 @@
 // Development environment configuration
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080' // Update this to match your backend API URL
+  apiUrl: 'http://localhost:8080',
+  auth0: {
+    domain: 'dev-sj1bmj8255bwte7r.us.auth0.com',
+    clientId: '9KHWGCfSSg9wUr1oREiUYIgP15EDIppJ',
+    audience: 'https://yehapi.cloudcomputingassociates.net'
+  }
 };

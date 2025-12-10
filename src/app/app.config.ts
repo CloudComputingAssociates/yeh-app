@@ -14,11 +14,11 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([authHttpInterceptorFn])
     ),
     provideAuth0({
-      domain: 'dev-sj1bmj8255bwte7r.us.auth0.com',
-      clientId: '9KHWGCfSSg9wUr1oREiUYIgP15EDIppJ',
+      domain: environment.auth0.domain,
+      clientId: environment.auth0.clientId,
       authorizationParams: {
         redirect_uri: window.location.origin,
-        audience: 'https://yehapi.cloudcomputingassociates.net'
+        audience: environment.auth0.audience
       },
       useRefreshTokens: true,
       cacheLocation: 'localstorage',
