@@ -262,6 +262,10 @@ export class PreferencesService {
   /**
    * Save all pending changes to the server
    * Returns observable that completes when all changes are saved
+   *
+   * The API supports upsert via POST - it will insert or update based on foodId.
+   * So for state flips (Allowed↔Restricted), we just POST with the new allowed value.
+   * DELETE is only needed for actual removals (user removes preference entirely).
    */
   saveAllChanges(): Observable<void> {
     const changes = Array.from(this.pendingChanges().values());
@@ -272,48 +276,51 @@ export class PreferencesService {
       return of(undefined);
     }
 
-    // Separate into deletes and creates
+    // Separate into deletes and upserts
+    // DELETE: only for 'remove' type (user wants to completely remove the preference)
+    // UPSERT (POST): for add-allowed and add-restricted (API handles insert or update)
     const toDelete: number[] = [];
-    const toCreate: CreatePreferenceItem[] = [];
+    const toUpsert: CreatePreferenceItem[] = [];
 
     for (const change of changes) {
-      // If there's an original preference to remove, delete it first
-      if (change.originalPreferenceId) {
-        toDelete.push(change.originalPreferenceId);
-      }
-
-      // Add new preferences
-      if (change.type === 'add-allowed') {
-        toCreate.push({ foodId: change.foodId, allowed: true });
+      if (change.type === 'remove') {
+        // User wants to remove the preference entirely
+        if (change.originalPreferenceId) {
+          toDelete.push(change.originalPreferenceId);
+        }
+      } else if (change.type === 'add-allowed') {
+        // Add or flip to allowed - API will upsert
+        toUpsert.push({ foodId: change.foodId, allowed: true });
       } else if (change.type === 'add-restricted') {
-        toCreate.push({ foodId: change.foodId, allowed: false });
+        // Add or flip to restricted - API will upsert
+        toUpsert.push({ foodId: change.foodId, allowed: false });
       }
-      // 'remove' type only deletes, doesn't create
     }
 
     console.log('[PreferencesService] toDelete:', toDelete);
-    console.log('[PreferencesService] toCreate:', toCreate);
+    console.log('[PreferencesService] toUpsert:', toUpsert);
 
-    // Chain operations: delete first, then create, then refresh
+    // Chain operations: delete first (if any), then upsert (if any), then refresh
     let operation$: Observable<unknown> = of(null);
 
-    // Bulk delete if needed
+    // Bulk delete if needed (only for actual removals)
     if (toDelete.length > 0) {
       console.log('[PreferencesService] Adding DELETE operation');
-      operation$ = this.http.request<{ deleted: number }>('DELETE', `${this.baseUrl}/user/preferences`, {
+      // Note: trailing slash required for bulk delete endpoint
+      operation$ = this.http.request<{ deleted: number }>('DELETE', `${this.baseUrl}/user/preferences/`, {
         body: { preferenceIds: toDelete }
       }).pipe(
         tap(res => console.log('[PreferencesService] DELETE response:', res))
       );
     }
 
-    // Bulk create if needed (chain after delete)
-    if (toCreate.length > 0) {
-      const requestBody = { items: toCreate };
-      console.log('[PreferencesService] Adding POST operation, request body:', JSON.stringify(requestBody));
+    // Bulk upsert if needed (chain after delete)
+    if (toUpsert.length > 0) {
+      const requestBody = { items: toUpsert };
+      console.log('[PreferencesService] Adding POST (upsert) operation, request body:', JSON.stringify(requestBody));
       operation$ = operation$.pipe(
         switchMap(() => this.http.post<CreatePreferenceResponse>(`${this.baseUrl}/user/preferences`, requestBody).pipe(
-          tap(res => console.log('[PreferencesService] POST response:', res))
+          tap(res => console.log('[PreferencesService] POST (upsert) response:', res))
         ))
       );
     }
