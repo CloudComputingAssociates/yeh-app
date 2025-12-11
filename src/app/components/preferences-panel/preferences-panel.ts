@@ -16,7 +16,6 @@ import { forkJoin } from 'rxjs';
   template: `
     <div class="panel-container">
       <div class="panel-header">
-        <h2 class="panel-title">Preferences</h2>
         <div class="header-buttons">
           <button
             class="save-btn"
@@ -43,51 +42,56 @@ import { forkJoin } from 'rxjs';
       }
 
       <div class="panel-content">
-        <!-- Planning Section -->
-        <div class="planning-section">
-          <h3 class="section-title">Planning</h3>
-          <div class="settings-grid">
-            <!-- Default Food List -->
-            <div class="setting-row">
-              <label class="setting-label">Default</label>
-              <select
-                class="setting-select"
-                [ngModel]="userSettingsService.defaultFoodList()"
-                (ngModelChange)="onDefaultFoodListChange($event)">
-                <option value="yeh">YEH Foods</option>
-                <option value="myfoods">My Foods</option>
-              </select>
+        <!-- Settings Section with grouped boxes -->
+        <div class="settings-section">
+          <!-- On startup grouping -->
+          <div class="settings-group">
+            <div class="group-header">On startup</div>
+            <div class="group-content">
+              <div class="setting-row">
+                <label class="setting-label">Show list</label>
+                <select
+                  class="setting-select"
+                  [ngModel]="userSettingsService.defaultFoodList()"
+                  (ngModelChange)="onDefaultFoodListChange($event)">
+                  <option value="yeh">YEH Approved</option>
+                  <option value="myfoods">My Foods</option>
+                </select>
+              </div>
             </div>
+          </div>
 
-            <!-- Meals Per Day -->
-            <div class="setting-row">
-              <label class="setting-label">Meals</label>
-              <select
-                class="setting-select"
-                [ngModel]="userSettingsService.mealsPerDay()"
-                (ngModelChange)="onMealsPerDayChange($event)">
-                <option [ngValue]="1">1 meal</option>
-                <option [ngValue]="2">2 meals</option>
-                <option [ngValue]="3">3 meals</option>
-                <option [ngValue]="4">4 meals</option>
-                <option [ngValue]="5">5 meals</option>
-                <option [ngValue]="6">6 meals</option>
-              </select>
-            </div>
-
-            <!-- Fasting Type -->
-            <div class="setting-row">
-              <label class="setting-label">Fasting</label>
-              <select
-                class="setting-select"
-                [ngModel]="userSettingsService.fastingType()"
-                (ngModelChange)="onFastingTypeChange($event)">
-                <option value="none">None</option>
-                <option value="16:8">16:8</option>
-                <option value="18:6">18:6</option>
-                <option value="20:4">20:4</option>
-                <option value="omad">OMAD</option>
-              </select>
+          <!-- Food Plan preferences grouping -->
+          <div class="settings-group">
+            <div class="group-header">Food Plan preferences</div>
+            <div class="group-content vertical">
+              <div class="setting-row">
+                <label class="setting-label">Meals</label>
+                <select
+                  class="setting-select"
+                  [ngModel]="userSettingsService.mealsPerDay()"
+                  (ngModelChange)="onMealsPerDayChange($event)">
+                  <option [ngValue]="1">1 meal</option>
+                  <option [ngValue]="2">2 meals</option>
+                  <option [ngValue]="3">3 meals</option>
+                  <option [ngValue]="4">4 meals</option>
+                  <option [ngValue]="5">5 meals</option>
+                  <option [ngValue]="6">6 meals</option>
+                </select>
+              </div>
+              <div class="setting-row">
+                <label class="setting-label">Fasting</label>
+                <select
+                  class="setting-select"
+                  [ngModel]="userSettingsService.fastingType()"
+                  (ngModelChange)="onFastingTypeChange($event)">
+                  <option value="none">None</option>
+                  <option value="16:8">16:8</option>
+                  <option value="18:6">18:6</option>
+                  <option value="20:4">20:4</option>
+                  <option value="omad">OMAD</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>

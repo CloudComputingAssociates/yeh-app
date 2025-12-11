@@ -19,17 +19,10 @@
 .panel-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 12px 16px;
   flex-shrink: 0;
   border-bottom: 1px solid #4a4a4a;
-
-  .panel-title {
-    color: #4da6ff;  // Blue - label
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0;
-  }
 
   .header-buttons {
     display: flex;
@@ -190,33 +183,49 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 16px;
   min-height: 0;
   overflow: hidden;
 
-  // Planning Section - fixed height at top
-  .planning-section {
+  // Settings Section with grouped boxes
+  .settings-section {
     width: 100%;
     flex-shrink: 0;
-    background: rgba(77, 166, 255, 0.08);
-    border: 1px solid rgba(77, 166, 255, 0.2);
-    border-radius: 8px;
-    padding: 12px 16px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
 
-    .section-title {
-      color: #4da6ff;
-      font-size: 13px;
+  .settings-group {
+    background: #2a2a2a;
+    border: 1px solid #4a4a4a;
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 160px;
+
+    .group-header {
+      background: #3a3a3a;
+      color: #ffffff;
+      font-size: 11px;
       font-weight: 600;
-      margin: 0 0 12px 0;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      padding: 8px 12px;
+      border-bottom: 1px solid #4a4a4a;
     }
 
-    .settings-grid {
+    .group-content {
+      padding: 12px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px 24px;
+      align-items: center;
+      gap: 8px;
+
+      &.vertical {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
     }
 
     .setting-row {
@@ -229,7 +238,7 @@
       color: rgba(255, 255, 255, 0.8);
       font-size: 12px;
       font-weight: 500;
-      min-width: 50px;
+      min-width: 55px;
     }
 
     .setting-select {
@@ -247,6 +256,7 @@
       background-repeat: no-repeat;
       background-position: right 6px center;
       min-width: 100px;
+      flex: 1;
 
       &:hover {
         background-color: #4a4a4a;
@@ -352,27 +362,36 @@
     padding: 12px;
     gap: 12px;
 
-    .planning-section {
-      padding: 10px 12px;
+    .settings-section {
+      gap: 10px;
+    }
 
-      .section-title {
-        font-size: 12px;
-        margin-bottom: 10px;
+    .settings-group {
+      min-width: 140px;
+
+      .group-header {
+        font-size: 10px;
+        padding: 6px 10px;
       }
 
-      .settings-grid {
-        gap: 10px 16px;
+      .group-content {
+        padding: 10px;
+        gap: 6px;
+
+        &.vertical {
+          gap: 8px;
+        }
       }
 
       .setting-label {
         font-size: 11px;
-        min-width: 45px;
+        min-width: 50px;
       }
 
       .setting-select {
         font-size: 11px;
         padding: 5px 20px 5px 6px;
-        min-width: 85px;
+        min-width: 80px;
       }
     }
 
