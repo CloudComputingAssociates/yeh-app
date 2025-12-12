@@ -187,8 +187,9 @@
     width: 100%;
     flex-shrink: 0;
     display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
+    gap: 12px;
+    flex-wrap: nowrap;
+    align-items: flex-start;
   }
 
   .settings-group {
@@ -196,7 +197,8 @@
     border: 1px solid #4a4a4a;
     border-radius: 8px;
     overflow: hidden;
-    min-width: 160px;
+    flex-shrink: 1;
+    min-width: 0;
 
     .group-header {
       background: #3a3a3a;
@@ -223,14 +225,14 @@
     .setting-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .setting-label {
       color: #4da6ff;
       font-size: 12px;
       font-weight: 500;
-      min-width: 55px;
+      flex-shrink: 0;
     }
 
     .setting-select {
@@ -240,14 +242,14 @@
       background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 100%);
       border: 1px solid #5a5a5a;
       border-radius: 4px;
-      padding: 6px 24px 6px 8px;
+      padding: 6px 22px 6px 8px;
       cursor: pointer;
       outline: none;
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 6px center;
-      min-width: 100px;
+      min-width: 0;
       flex: 1;
 
       &:hover {
@@ -343,35 +345,33 @@
     gap: 12px;
 
     .settings-section {
-      gap: 10px;
+      gap: 6px;
     }
 
     .settings-group {
-      min-width: 140px;
-
       .group-header {
-        font-size: 11px;
-        padding: 6px 10px;
+        font-size: 10px;
+        padding: 4px 6px;
       }
 
       .group-content {
-        padding: 10px;
-        gap: 6px;
+        padding: 6px;
+        gap: 4px;
 
         &.vertical {
-          gap: 8px;
+          gap: 6px;
         }
       }
 
       .setting-label {
-        font-size: 11px;
-        min-width: 50px;
+        font-size: 10px;
+        min-width: 40px;
       }
 
       .setting-select {
-        font-size: 11px;
-        padding: 5px 20px 5px 6px;
-        min-width: 80px;
+        font-size: 10px;
+        padding: 4px 16px 4px 4px;
+        background-position: right 4px center;
       }
     }
 
