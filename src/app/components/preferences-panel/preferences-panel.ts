@@ -82,16 +82,22 @@ import { forkJoin } from 'rxjs';
             </div>
           </div>
 
-          <!-- Action buttons -->
+          <!-- Action buttons - icon style -->
           <div class="action-buttons">
             <button
-              class="save-btn"
+              class="icon-btn save-btn"
               [class.has-changes]="hasAnyChanges()"
               [disabled]="!hasAnyChanges() || isSaving()"
-              (click)="save()">
-              {{ isSaving() ? 'Saving...' : 'Save' }}
+              (click)="save()"
+              title="Save changes">
+              ✓
             </button>
-            <button class="close-btn" (click)="close()">Close</button>
+            <button
+              class="icon-btn close-btn"
+              (click)="close()"
+              title="Close">
+              ✕
+            </button>
           </div>
         </div>
 
