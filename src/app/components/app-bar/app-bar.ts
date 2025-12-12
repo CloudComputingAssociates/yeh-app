@@ -20,6 +20,8 @@ import { ProfileMenuComponent } from '../profile-menu/profile-menu';
           <mat-icon>menu</mat-icon>
         </button>
 
+        <span class="app-title">you eating healthy</span>
+
         <app-profile-menu />
       </div>
     </header>

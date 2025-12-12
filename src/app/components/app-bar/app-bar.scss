@@ -36,6 +36,16 @@
     }
   }
 
+  // App title - "you eating healthy"
+  .app-title {
+    flex: 1;
+    color: #4da6ff;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
   // Profile menu wrapper
   app-profile-menu {
     flex-shrink: 0;
@@ -85,6 +95,10 @@
       min-height: 28px;  // Reduced from 56px
     }
 
+    .app-title {
+      font-size: 16px;
+    }
+
     .profile-button {
       width: 36px;
       height: 36px;
@@ -97,6 +111,10 @@
     .app-bar-content {
       padding: 3px 8px 3px 2px;
       min-height: 26px;  // Reduced from 52px
+    }
+
+    .app-title {
+      font-size: 14px;
     }
 
     .profile-button {
