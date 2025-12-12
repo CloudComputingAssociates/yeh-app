@@ -81,12 +81,6 @@
     }
   }
 
-  .close-btn {
-    &:hover:not(:disabled) {
-      background: linear-gradient(180deg, #8a4a4a 0%, #6a3535 100%);
-      border-top-color: #9a5a5a;
-    }
-  }
 }
 
 // Confirmation dialog overlay
@@ -233,7 +227,7 @@
     }
 
     .setting-label {
-      color: #4da6ff;
+      color: #ffffff;
       font-size: 12px;
       font-weight: 500;
       flex-shrink: 0;

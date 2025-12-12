@@ -82,7 +82,7 @@ import { forkJoin } from 'rxjs';
             </div>
           </div>
 
-          <!-- Action buttons - icon style -->
+          <!-- Save button - icon style -->
           <div class="action-buttons">
             <button
               class="icon-btn save-btn"
@@ -91,12 +91,6 @@ import { forkJoin } from 'rxjs';
               (click)="save()"
               title="Save changes">
               ✓
-            </button>
-            <button
-              class="icon-btn close-btn"
-              (click)="close()"
-              title="Close">
-              ✕
             </button>
           </div>
         </div>

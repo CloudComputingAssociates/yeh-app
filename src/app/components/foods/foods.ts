@@ -73,7 +73,7 @@ export interface AddFoodEvent {
               <mat-radio-button value="yeh-approved">YEH</mat-radio-button>
               <mat-radio-button value="my-favorites">MyFoods</mat-radio-button>
               <mat-radio-button value="my-restricted">Restricted</mat-radio-button>
-              <mat-radio-button value="clear">Search</mat-radio-button>
+              <mat-radio-button value="clear">All</mat-radio-button>
             </mat-radio-group>
           </div>
         } @else {

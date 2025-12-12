@@ -50,11 +50,11 @@
     gap: 5px;
 
     .macro-title {
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 16px;
+      font-weight: 700;
       color: #4da6ff;  // Blue - label
       line-height: 1;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
 
     .custom-progress-container {
@@ -216,7 +216,8 @@
 
     .macro-item {
       .macro-title {
-        font-size: 12px;
+        font-size: 13px;
+        font-weight: 700;
       }
 
       .custom-progress-container .custom-progress-track {
@@ -251,7 +252,8 @@
 
     .macro-item {
       .macro-title {
-        font-size: 11px;
+        font-size: 12px;
+        font-weight: 700;
       }
 
       .value-label {
