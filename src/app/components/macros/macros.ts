@@ -67,9 +67,10 @@ export interface MacroDisplayData {
               </div>
             }
 
-            <!-- Mode Toggle (Right) - Arrow button with label -->
+            <!-- Mode Toggle (Right) - Label on top, arrow button below -->
             <div class="mode-toggle-container">
               @if (!isPlanningMode()) {
+                <span class="mode-label">{{ currentTimePeriod === 'day' ? 'Day' : 'Week' }}</span>
                 <button
                   type="button"
                   class="arrow-btn"
@@ -78,8 +79,8 @@ export interface MacroDisplayData {
                   matTooltipPosition="below">
                   ▶
                 </button>
-                <span class="mode-label">{{ currentTimePeriod === 'day' ? 'Day' : 'Week' }}</span>
               } @else {
+                <span class="mode-label">{{ getPlanningModeLabel() }}</span>
                 <button
                   type="button"
                   class="arrow-btn"
@@ -88,7 +89,6 @@ export interface MacroDisplayData {
                   matTooltipPosition="below">
                   ▶
                 </button>
-                <span class="mode-label">{{ getPlanningModeLabel() }}</span>
               }
             </div>
 
