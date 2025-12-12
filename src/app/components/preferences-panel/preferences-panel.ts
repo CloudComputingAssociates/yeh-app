@@ -15,19 +15,6 @@ import { forkJoin } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="panel-container">
-      <div class="panel-header">
-        <div class="header-buttons">
-          <button
-            class="save-btn"
-            [class.has-changes]="hasAnyChanges()"
-            [disabled]="!hasAnyChanges() || isSaving()"
-            (click)="save()">
-            {{ isSaving() ? 'Saving...' : 'Save' }}
-          </button>
-          <button class="close-btn" (click)="close()">Close</button>
-        </div>
-      </div>
-
       <!-- Confirmation dialog -->
       @if (showConfirmDialog()) {
         <div class="confirm-overlay" (click)="cancelClose()">
@@ -42,14 +29,14 @@ import { forkJoin } from 'rxjs';
       }
 
       <div class="panel-content">
-        <!-- Settings Section with grouped boxes -->
+        <!-- Settings Section with grouped boxes and buttons -->
         <div class="settings-section">
           <!-- On startup grouping -->
           <div class="settings-group">
-            <div class="group-header">On startup</div>
+            <div class="group-header">On Startup</div>
             <div class="group-content">
               <div class="setting-row">
-                <label class="setting-label">Show list</label>
+                <label class="setting-label">Foods</label>
                 <select
                   class="setting-select"
                   [ngModel]="userSettingsService.defaultFoodList()"
@@ -61,9 +48,9 @@ import { forkJoin } from 'rxjs';
             </div>
           </div>
 
-          <!-- Food Plan preferences grouping -->
+          <!-- Food Plan grouping -->
           <div class="settings-group">
-            <div class="group-header">Food Plan preferences</div>
+            <div class="group-header">Food Plan</div>
             <div class="group-content vertical">
               <div class="setting-row">
                 <label class="setting-label">Meals</label>
@@ -93,6 +80,18 @@ import { forkJoin } from 'rxjs';
                 </select>
               </div>
             </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="action-buttons">
+            <button
+              class="save-btn"
+              [class.has-changes]="hasAnyChanges()"
+              [disabled]="!hasAnyChanges() || isSaving()"
+              (click)="save()">
+              {{ isSaving() ? 'Saving...' : 'Save' }}
+            </button>
+            <button class="close-btn" (click)="close()">Close</button>
           </div>
         </div>
 

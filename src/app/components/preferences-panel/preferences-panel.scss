@@ -16,18 +16,12 @@
   flex-direction: column;
 }
 
-.panel-header {
+// Action buttons inside settings section
+.action-buttons {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 12px 16px;
-  flex-shrink: 0;
-  border-bottom: 1px solid #4a4a4a;
-
-  .header-buttons {
-    display: flex;
-    gap: 8px;
-  }
+  gap: 8px;
+  align-items: flex-start;
+  margin-left: auto;
 
   .save-btn,
   .close-btn {
@@ -206,11 +200,9 @@
 
     .group-header {
       background: #3a3a3a;
-      color: #ffffff;
-      font-size: 11px;
+      color: #4da6ff;
+      font-size: 12px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
       padding: 8px 12px;
       border-bottom: 1px solid #4a4a4a;
     }
@@ -235,7 +227,7 @@
     }
 
     .setting-label {
-      color: rgba(255, 255, 255, 0.8);
+      color: #4da6ff;
       font-size: 12px;
       font-weight: 500;
       min-width: 55px;
@@ -302,8 +294,6 @@
           font-size: 13px;
           font-weight: 600;
           margin: 0 0 8px 0;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
           flex-shrink: 0;
         }
 
@@ -319,17 +309,7 @@
 
 // Mobile responsive
 @media (max-width: 480px) {
-  .panel-header {
-    padding: 10px 12px;
-
-    .panel-title {
-      font-size: 14px;
-    }
-
-    .header-buttons {
-      gap: 6px;
-    }
-
+  .action-buttons {
     .save-btn,
     .close-btn {
       font-size: 10px;
@@ -370,7 +350,7 @@
       min-width: 140px;
 
       .group-header {
-        font-size: 10px;
+        font-size: 11px;
         padding: 6px 10px;
       }
 

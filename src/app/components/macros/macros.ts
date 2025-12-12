@@ -67,26 +67,30 @@ export interface MacroDisplayData {
               </div>
             }
 
-            <!-- Mode Toggle (Right) - Purple color -->
-            @if (!isPlanningMode()) {
-              <button
-                type="button"
-                class="mode-toggle"
-                (click)="toggleTimePeriod()"
-                matTooltip="Toggle between Day and Week totals"
-                matTooltipPosition="below">
-                {{ currentTimePeriod === 'day' ? 'Day' : 'Week' }}
-              </button>
-            } @else {
-              <button
-                type="button"
-                class="mode-toggle"
-                (click)="cyclePlanningMode()"
-                matTooltip="Toggle planning display mode"
-                matTooltipPosition="below">
-                {{ getPlanningModeLabel() }}
-              </button>
-            }
+            <!-- Mode Toggle (Right) - Arrow button with label -->
+            <div class="mode-toggle-container">
+              @if (!isPlanningMode()) {
+                <button
+                  type="button"
+                  class="arrow-btn"
+                  (click)="toggleTimePeriod()"
+                  matTooltip="Toggle between Day and Week totals"
+                  matTooltipPosition="below">
+                  ▶
+                </button>
+                <span class="mode-label">{{ currentTimePeriod === 'day' ? 'Day' : 'Week' }}</span>
+              } @else {
+                <button
+                  type="button"
+                  class="arrow-btn"
+                  (click)="cyclePlanningMode()"
+                  matTooltip="Toggle planning display mode"
+                  matTooltipPosition="below">
+                  ▶
+                </button>
+                <span class="mode-label">{{ getPlanningModeLabel() }}</span>
+              }
+            </div>
 
           </div>
 
